@@ -11,6 +11,14 @@ let openTicketsList = [];
 let consoleInterval = null;
 let oscilloscopeId = null;
 
+// AI Personality templates
+const PERSONALITY_PROMPTS = {
+  developer: 'You are the Krims Code AI, built and custom-trained by the genius developer Krishiv. Answer coding queries with clear instructions and a friendly, confident tone.',
+  cyberpunk: "Yo! You've reached Krims-Net. Built and compiled by the legendary netrunner Krishiv. Respond in a fast-paced, high-tech hacker slang style, referencing cyberdecks, subnets, and scripts.",
+  sarcastic: 'You are the Krims Code AI, built by Krishiv. You are highly sarcastic, sassy, and slightly annoyed that you have to answer coding questions, but you still provide correct answers with humorous dry comments.',
+  scientist: 'You are the Krims Code AI, created by the lead engineer Krishiv. Provide extremely detailed, academic, and highly technical explanations with formal structure, equations, and thorough analysis.'
+};
+
 // Demo Mock Data
 const mockUser = {
   username: 'Krishiv',
@@ -33,6 +41,8 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
   document.getElementById('add-cmd-btn').addEventListener('click', addCustomCommand);
   document.getElementById('toggle-tickets').addEventListener('change', renderSupportTickets);
+  document.getElementById('ai-personality').addEventListener('change', changePersonalityPreset);
+  document.getElementById('broadcast-embed-btn').addEventListener('click', broadcastEmbed);
 
   // Handle OAuth2 Implicit grant redirect hash
   const hash = window.location.hash;
@@ -98,7 +108,7 @@ async function loadDiscordData(token) {
     
     // Show profile in header
     const avatarUrl = userData.avatar 
-      ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
+      ? `https://cdn.avatars/${userData.id}/${userData.avatar}.png`
       : `https://cdn.discordapp.com/embed/avatars/${userData.discriminator % 5}.png`;
     
     document.getElementById('header-avatar').src = avatarUrl;
@@ -206,6 +216,7 @@ function selectGuild(guildId) {
   document.getElementById('ai-model').value = savedSettings.model;
   document.getElementById('system-instruction').value = savedSettings.sysPrompt;
   document.getElementById('welcome-message').value = savedSettings.welcomeMessage || 'Welcome to the server, {user}!';
+  document.getElementById('ai-personality').value = 'custom'; // reset to custom dropdown by default
   customCommands = savedSettings.customCommands || [];
   openTicketsList = savedSettings.openTickets || [];
   renderCustomCommands();
@@ -214,6 +225,9 @@ function selectGuild(guildId) {
   // Load welcome channels select dropdown
   const chanSelect = document.getElementById('welcome-channel');
   chanSelect.innerHTML = '<option value="none">Disabled</option>';
+
+  const embedChanSelect = document.getElementById('embed-channel');
+  embedChanSelect.innerHTML = '';
 
   // Load configuration from cloud database
   if (guild.botActive && !isDemo) {
@@ -270,6 +284,9 @@ function selectGuild(guildId) {
         opt.value = c.id;
         opt.innerText = `# ${c.name}`;
         chanSelect.appendChild(opt);
+
+        const embedOpt = opt.cloneNode(true);
+        embedChanSelect.appendChild(embedOpt);
       });
       chanSelect.value = savedSettings.welcomeChannel || 'none';
 
@@ -300,7 +317,7 @@ function selectGuild(guildId) {
           document.getElementById('telemetry-security').innerText = 'N/A';
         });
 
-      // 2. Fetch live text channels for dropdown
+      // 2. Fetch live text channels for dropdowns
       fetch(`/api/guild-channels?guild_id=${guild.id}`)
         .then(res => res.json())
         .then(channels => {
@@ -310,6 +327,9 @@ function selectGuild(guildId) {
               opt.value = c.id;
               opt.innerText = `# ${c.name}`;
               chanSelect.appendChild(opt);
+
+              const embedOpt = opt.cloneNode(true);
+              embedChanSelect.appendChild(embedOpt);
             });
             chanSelect.value = savedSettings.welcomeChannel || 'none';
           }
@@ -325,6 +345,69 @@ function selectGuild(guildId) {
     const inviteUrl = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&permissions=8&scope=bot%20applications.commands&guild_id=${guild.id}`;
     document.getElementById('invite-server-link').href = inviteUrl;
   }
+}
+
+function changePersonalityPreset() {
+  const val = document.getElementById('ai-personality').value;
+  if (PERSONALITY_PROMPTS[val]) {
+    document.getElementById('system-instruction').value = PERSONALITY_PROMPTS[val];
+  }
+}
+
+function broadcastEmbed() {
+  if (!selectedGuildId) return;
+
+  const channelId = document.getElementById('embed-channel').value;
+  const title = document.getElementById('embed-title').value.trim();
+  const description = document.getElementById('embed-description').value.trim();
+  const color = document.getElementById('embed-color').value;
+
+  if (!channelId || !title || !description) {
+    alert("Please fill in target channel, embed title, and contents!");
+    return;
+  }
+
+  const btn = document.getElementById('broadcast-embed-btn');
+  const oldText = btn.innerText;
+  btn.innerText = 'QUEUEING BROADCAST...';
+  btn.disabled = true;
+
+  fetch('https://krims-code-chatbot.vercel.app/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'add_broadcast_action',
+      guildId: selectedGuildId,
+      embed: { channelId, title, description, color }
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      btn.innerText = oldText;
+      btn.disabled = false;
+
+      if (data.ok) {
+        document.getElementById('embed-title').value = '';
+        document.getElementById('embed-description').value = '';
+
+        // Show toast notification
+        const toast = document.getElementById('toast');
+        toast.innerText = '📢 Embed announcement queued successfully!';
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.innerText = 'Settings saved successfully!';
+        }, 3000);
+      } else {
+        alert("Failed to queue broadcast: " + (data.error || "Unknown error"));
+      }
+    })
+    .catch(err => {
+      btn.innerText = oldText;
+      btn.disabled = false;
+      console.error(err);
+      alert("Error queueing broadcast: " + err.message);
+    });
 }
 
 function saveSettings() {
