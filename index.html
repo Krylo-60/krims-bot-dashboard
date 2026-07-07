@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krims Code | Bot Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="logo-container">
+        <div class="logo-badge">K</div>
+        <div class="logo-text">KRIMS COMMAND</div>
+      </div>
+      <div class="user-profile" id="header-profile" style="display: none;">
+        <img src="" class="user-avatar" id="header-avatar" alt="Avatar">
+        <span style="font-weight: 500;" id="header-username">--</span>
+        <button class="logout-btn" id="logout-btn">LOGOUT</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Screen 1: Login Screen -->
+      <div class="login-container" id="login-screen">
+        <div class="login-icon">👾</div>
+        <h2 style="font-family: 'Orbitron', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: 1px;">AI BOT PORTAL</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.5;">
+          Authorize your Discord account to invite, manage, and configure prefix settings and AI modules on your servers.
+        </p>
+        <button class="login-btn" id="login-btn">
+          <svg width="20" height="20" viewBox="0 0 127.14 96.36" fill="currentColor" style="margin-right: 0.5rem;"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.88-.65,1.72-1.34,2.51-2a75.58,75.58,0,0,0,73,0c.8.71,1.63,1.4,2.51,2a68.43,68.43,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129.07,49.19,122.9,26.43,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/></svg>
+          LOGIN WITH DISCORD
+        </button>
+        <span class="demo-link" id="demo-link">Or enter Demo Simulator mode</span>
+      </div>
+
+      <!-- Screen 2: Dashboard Panel -->
+      <div id="dashboard-screen" style="display: none;">
+        <div style="margin-bottom: 2rem;">
+          <h1 style="font-family: 'Orbitron', sans-serif; font-size: 2.2rem; letter-spacing: 1px; margin-bottom: 0.5rem;" id="welcome-title">GUILD COMMAND CENTER</h1>
+          <p style="color: var(--text-muted);">Manage parameters, configure AI system prompts, and toggle modules on your Discord servers.</p>
+        </div>
+
+        <div class="dashboard-layout">
+          <!-- Sidebar: Guild list -->
+          <div class="card" style="padding: 1.2rem;">
+            <h3 style="font-family: 'Orbitron', sans-serif; font-size: 0.95rem; letter-spacing: 1px; margin-bottom: 1.2rem; color: var(--cyan);">YOUR SERVERS</h3>
+            <div class="guilds-list" id="guilds-container">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Main Workspace: Config settings -->
+          <div class="card" id="config-panel" style="display: none;">
+            <h2 class="config-title">
+              <span id="config-guild-name">Server Settings</span>
+            </h2>
+            
+            <div class="config-grid">
+              <!-- Column 1: Bot Settings -->
+              <div>
+                <h3 style="font-family: 'Orbitron', sans-serif; font-size: 0.9rem; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; margin-bottom: 1.2rem;">⚙️ INTERACTION</h3>
+                
+                <div class="setting-group">
+                  <label class="setting-label" for="bot-prefix">Command Prefix</label>
+                  <input type="text" id="bot-prefix" class="input-field" placeholder="e.g. !">
+                </div>
+
+                <div class="setting-group">
+                  <label class="setting-label">AI Chat Module</label>
+                  <div class="toggle-container">
+                    <span>Enable AI conversation responses</span>
+                    <label class="switch">
+                      <input type="checkbox" id="toggle-chat">
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-group">
+                  <label class="setting-label">Ticket Creation System</label>
+                  <div class="toggle-container">
+                    <span>Enable 🎫 ticket command modules</span>
+                    <label class="switch">
+                      <input type="checkbox" id="toggle-tickets">
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Column 2: AI Settings -->
+              <div>
+                <h3 style="font-family: 'Orbitron', sans-serif; font-size: 0.9rem; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; margin-bottom: 1.2rem;">🤖 AI ROUTER MODEL</h3>
+                
+                <div class="setting-group">
+                  <label class="setting-label" for="ai-model">Model Engine</label>
+                  <select id="ai-model" class="input-field select-field">
+                    <option value="gemini">Google Gemini 2.5 (Fast & Smart)</option>
+                    <option value="groq">Groq Llama 3.3 (High-Speed Reasoning)</option>
+                    <option value="krims-local">Krims-Local-Engine (JS Trigram fallback)</option>
+                  </select>
+                </div>
+
+                <div class="setting-group">
+                  <label class="setting-label" for="system-instruction">Custom Identity / System Prompt</label>
+                  <textarea id="system-instruction" class="input-field" style="height: 110px; resize: none; font-family: inherit; font-size: 0.85rem; line-height: 1.4;" placeholder="Instructions for the AI identity..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div id="bot-active-controls">
+              <button class="save-btn" id="save-settings-btn">SAVE SETTINGS</button>
+            </div>
+            <div id="bot-invite-controls" style="display: none;">
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5;">
+                This bot has not been added to this server yet. Authorize and invite the bot to gain access to configuration parameters.
+              </p>
+              <a href="" id="invite-server-link" target="_blank" class="invite-large-btn">AUTHORIZE & INVITE BOT</a>
+            </div>
+          </div>
+
+          <!-- Empty state placeholder -->
+          <div class="card" id="config-empty-state" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5rem; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">⚙️</div>
+            <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--text-muted);">SELECT A SERVER</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 320px; margin-top: 0.5rem;">
+              Click on one of your administrative servers in the list to customize prefix settings and configure AI modules.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="toast" id="toast">
+      <span>🟢</span> <span id="toast-message">Settings saved successfully!</span>
+    </div>
+
+    <div class="footer">
+      KRIMS CODE BOT CONTROL PANEL • SYSTEM ONLINE
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
