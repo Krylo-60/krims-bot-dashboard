@@ -213,6 +213,7 @@ function selectGuild(guildId) {
     welcomeMessage: 'Welcome to the server, {user}!',
     primaryColor: '#00f2ff',
     rankColor: '#00f2ff',
+    voiceLeveling: true,
     customCommands: [],
     openTickets: []
   };
@@ -221,6 +222,9 @@ function selectGuild(guildId) {
   document.getElementById('bot-prefix').value = savedSettings.prefix;
   document.getElementById('toggle-chat').checked = savedSettings.aiEnabled;
   document.getElementById('toggle-tickets').checked = savedSettings.ticketsEnabled;
+  if (document.getElementById('toggle-voice-xp')) {
+    document.getElementById('toggle-voice-xp').checked = savedSettings.voiceLeveling !== false;
+  }
   document.getElementById('ai-model').value = savedSettings.model;
   document.getElementById('system-instruction').value = savedSettings.sysPrompt;
   document.getElementById('welcome-message').value = savedSettings.welcomeMessage || 'Welcome to the server, {user}!';
@@ -260,6 +264,9 @@ function selectGuild(guildId) {
           chanSelect.value = cloudSettings.welcomeChannel || 'none';
           if (cloudSettings.primaryColor || cloudSettings.rankColor) {
             setGuildColors(cloudSettings.primaryColor || '#00f2ff', cloudSettings.rankColor || '#00f2ff');
+          }
+          if (document.getElementById('toggle-voice-xp')) {
+            document.getElementById('toggle-voice-xp').checked = cloudSettings.voiceLeveling !== false;
           }
           customCommands = cloudSettings.customCommands || [];
           openTicketsList = cloudSettings.openTickets || [];
@@ -437,9 +444,10 @@ function saveSettings() {
   const welcomeMessage = document.getElementById('welcome-message').value;
   const primaryColor = document.getElementById('primary-color-picker')?.value || '#00f2ff';
   const rankColor = document.getElementById('rank-color-picker')?.value || '#00f2ff';
+  const voiceLeveling = document.getElementById('toggle-voice-xp') ? document.getElementById('toggle-voice-xp').checked : true;
 
   const settingsKey = `krims_settings_${selectedGuildId}`;
-  const settings = { prefix, aiEnabled, ticketsEnabled, model, sysPrompt, welcomeChannel, welcomeMessage, primaryColor, rankColor, customCommands, openTickets: openTicketsList };
+  const settings = { prefix, aiEnabled, ticketsEnabled, model, sysPrompt, welcomeChannel, welcomeMessage, primaryColor, rankColor, voiceLeveling, customCommands, openTickets: openTicketsList };
   
   localStorage.setItem(settingsKey, JSON.stringify(settings));
 
