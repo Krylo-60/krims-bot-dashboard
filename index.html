@@ -1239,8 +1239,8 @@
         <span class="unsaved-text">Careful — you have unsaved changes!</span>
       </div>
       <div class="unsaved-actions">
-        <button type="button" class="btn-reset" id="reset-settings-btn">Reset</button>
-        <button type="button" class="btn-save-floating" id="save-settings-btn">Save Changes</button>
+        <button type="button" class="btn-reset" id="reset-settings-btn" onclick="window.resetSettings && window.resetSettings()">Reset</button>
+        <button type="button" class="btn-save-floating" id="save-settings-btn" onclick="window.saveSettings && window.saveSettings()">Save Changes</button>
       </div>
     </div>
 

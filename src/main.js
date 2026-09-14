@@ -11,6 +11,7 @@ let customCommands = [];
 let openTicketsList = [];
 let currentLoadedSettings = {};
 let hasUnsavedChanges = false;
+let isResetting = false;
 
 // AI Personality templates
 const PERSONALITY_PROMPTS = {
@@ -33,8 +34,7 @@ const mockGuilds = [
   { id: '444444', name: 'Gaming Arena', icon: null, botActive: false }
 ];
 
-// Initialize listeners on DOM load
-window.addEventListener('DOMContentLoaded', () => {
+function initDashboardApp() {
   // Initialize Dashboard Theme
   initDashboardTheme();
 
@@ -63,8 +63,23 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('login-btn')?.addEventListener('click', loginWithDiscord);
   document.getElementById('demo-link')?.addEventListener('click', startDemoMode);
   document.getElementById('logout-btn')?.addEventListener('click', logout);
-  document.getElementById('save-settings-btn')?.addEventListener('click', saveSettings);
-  document.getElementById('reset-settings-btn')?.addEventListener('click', resetSettings);
+
+  const saveBtn = document.getElementById('save-settings-btn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      saveSettings();
+    });
+  }
+
+  const resetBtn = document.getElementById('reset-settings-btn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      resetSettings();
+    });
+  }
+
   document.getElementById('add-cmd-btn')?.addEventListener('click', addCustomCommand);
   document.getElementById('ai-personality')?.addEventListener('change', changePersonalityPreset);
   document.getElementById('broadcast-embed-btn')?.addEventListener('click', broadcastEmbed);
@@ -95,7 +110,14 @@ window.addEventListener('DOMContentLoaded', () => {
   } else if (demoModeActive === 'true') {
     startDemoMode();
   }
-});
+}
+
+// Bootstrap safely whether DOM is still loading or already parsed
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', initDashboardApp);
+} else {
+  initDashboardApp();
+}
 
 // ==========================================
 // TAB NAVIGATION
@@ -602,6 +624,9 @@ function populateFormSettings(s) {
   const prefixEl = document.getElementById('bot-prefix');
   if (prefixEl) prefixEl.value = s.prefix || '!';
 
+  // Bot Footer
+  setValue('bot-embed-footer', s.botEmbedFooter || s.embedFooter || 'Krylo Team • Bot Broadcast');
+
   // AutoMod
   const autoModMaster = document.getElementById('toggle-automod');
   if (autoModMaster) autoModMaster.checked = s.automodEnabled !== false;
@@ -611,26 +636,55 @@ function populateFormSettings(s) {
   setCheckbox('toggle-anti-caps', !!s.antiCaps);
   setCheckbox('toggle-bad-words', s.badWords !== false);
   setSelect('automod-action', s.automodAction || 'timeout-5');
+  setSelect('mod-log-channel', s.modLogChannel || 'none');
 
   // Welcome
   setCheckbox('toggle-welcome-master', s.welcomeEnabled !== false);
   setValue('welcome-message', s.welcomeMessage || 'Welcome to the server, {user}!');
   setCheckbox('toggle-welcome-dm', !!s.welcomeDm);
+  setSelect('welcome-channel', s.welcomeChannel || 'none');
 
   // Tickets
   setCheckbox('toggle-tickets', !!s.ticketsEnabled);
+  setSelect('ticket-channel', s.ticketChannel || 'none');
 
   // Levels & Voice XP
   setCheckbox('toggle-levels-master', s.levelingEnabled !== false);
   setCheckbox('toggle-voice-xp', s.voiceLeveling !== false);
   setCheckbox('toggle-text-xp', s.textLeveling !== false);
   setValue('level-message', s.levelMessage || '🎉 GG {user}, you just leveled up to **Level {level}**!');
+  setSelect('level-channel', s.levelChannel || 'current');
 
   // AI
   setCheckbox('toggle-chat', s.aiEnabled !== false);
   setSelect('ai-model', s.model || 'auto');
   setValue('system-instruction', s.sysPrompt || PERSONALITY_PROMPTS.developer);
-  setSelect('ai-personality', 'custom');
+
+  // Match AI personality preset if prompt matches standard templates
+  let matchedPersonality = 'custom';
+  if (s.sysPrompt) {
+    for (const [key, prompt] of Object.entries(PERSONALITY_PROMPTS)) {
+      if (s.sysPrompt.trim() === prompt.trim()) {
+        matchedPersonality = key;
+        break;
+      }
+    }
+  }
+  setSelect('ai-personality', matchedPersonality);
+
+  // Embed Studio
+  setSelect('embed-channel', s.embedChannel || '');
+  setValue('embed-title', s.embedTitle || '🚀 KryloSMP Community Announcement');
+  setValue('embed-description', s.embedDesc || 'Welcome to the official KryloSMP discord server! Check out the rules in #rules and get started.');
+  setValue('embed-footer', s.embedFooter || s.botEmbedFooter || 'Krylo Team • Bot Broadcast');
+
+  // Sync Live Embed Studio Preview Box
+  const previewTitle = document.getElementById('preview-embed-title');
+  const previewDesc = document.getElementById('preview-embed-desc');
+  const previewFooter = document.getElementById('preview-embed-footer-text');
+  if (previewTitle) previewTitle.innerText = s.embedTitle || '🚀 KryloSMP Community Announcement';
+  if (previewDesc) previewDesc.innerText = s.embedDesc || 'Welcome to the official KryloSMP discord server! Check out the rules in #rules and get started.';
+  if (previewFooter) previewFooter.innerText = s.embedFooter || s.botEmbedFooter || 'Krylo Team • Bot Broadcast';
 
   // Overview Sync
   setCheckbox('overview-toggle-levels', s.levelingEnabled !== false);
@@ -796,16 +850,23 @@ function broadcastEmbed() {
 // UNSAVED CHANGES FLOATING BAR
 // ==========================================
 function initUnsavedChangesWatchers() {
-  const inputs = document.querySelectorAll('#bot-active-controls input, #bot-active-controls select, #bot-active-controls textarea');
+  const inputs = document.querySelectorAll(
+    '#bot-active-controls input, #bot-active-controls select, #bot-active-controls textarea, #tab-embeds input, #tab-embeds select, #tab-embeds textarea'
+  );
   inputs.forEach(el => {
-    el.addEventListener('change', showUnsavedChangesBar);
-    if (el.tagName === 'INPUT' && el.type === 'text') {
-      el.addEventListener('input', showUnsavedChangesBar);
+    el.addEventListener('change', () => {
+      if (!isResetting) showUnsavedChangesBar();
+    });
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.addEventListener('input', () => {
+        if (!isResetting) showUnsavedChangesBar();
+      });
     }
   });
 }
 
 function showUnsavedChangesBar() {
+  if (isResetting) return;
   const bar = document.getElementById('unsaved-changes-bar');
   if (bar) bar.classList.add('visible');
   hasUnsavedChanges = true;
@@ -818,17 +879,49 @@ function hideUnsavedChangesBar() {
 }
 
 function resetSettings() {
-  if (currentLoadedSettings && Object.keys(currentLoadedSettings).length > 0) {
-    populateFormSettings(currentLoadedSettings);
+  isResetting = true;
+
+  if (!selectedGuildId) {
+    selectedGuildId = localStorage.getItem('krims_last_guild_id') || (guilds[0] ? guilds[0].id : '111111');
   }
+
+  const settingsKey = `krims_settings_${selectedGuildId}`;
+  let targetSettings = currentLoadedSettings;
+  
+  try {
+    const rawSaved = localStorage.getItem(settingsKey);
+    if (rawSaved) {
+      const parsed = JSON.parse(rawSaved);
+      if (parsed && typeof parsed === 'object') {
+        targetSettings = { ...targetSettings, ...parsed };
+      }
+    }
+  } catch (e) {
+    console.warn("Could not read saved settings from localStorage:", e);
+  }
+
+  if (targetSettings && Object.keys(targetSettings).length > 0) {
+    currentLoadedSettings = { ...targetSettings };
+    populateFormSettings(targetSettings);
+  }
+
   hideUnsavedChangesBar();
+  setTimeout(() => {
+    isResetting = false;
+    hideUnsavedChangesBar();
+  }, 60);
+
   showToast('↩️ Changes reset to last saved state');
 }
 
 function saveSettings() {
-  if (!selectedGuildId) return;
+  if (!selectedGuildId) {
+    selectedGuildId = localStorage.getItem('krims_last_guild_id') || (guilds[0] ? guilds[0].id : '111111');
+  }
 
   const prefix = document.getElementById('bot-prefix')?.value || '!';
+  const botEmbedFooter = document.getElementById('bot-embed-footer')?.value || 'Krylo Team • Bot Broadcast';
+
   const automodEnabled = document.getElementById('toggle-automod')?.checked ?? true;
   const antiInvite = document.getElementById('toggle-anti-invite')?.checked ?? true;
   const antiSpam = document.getElementById('toggle-anti-spam')?.checked ?? true;
@@ -858,8 +951,14 @@ function saveSettings() {
   const primaryColor = document.getElementById('primary-color-picker')?.value || '#00f2ff';
   const rankColor = document.getElementById('rank-color-picker')?.value || '#00f2ff';
 
+  const embedChannel = document.getElementById('embed-channel')?.value || '';
+  const embedTitle = document.getElementById('embed-title')?.value || '🚀 KryloSMP Community Announcement';
+  const embedDesc = document.getElementById('embed-description')?.value || 'Welcome to the official KryloSMP discord server!';
+  const embedFooter = document.getElementById('embed-footer')?.value || botEmbedFooter;
+
   const settings = {
     prefix,
+    botEmbedFooter,
     automodEnabled,
     antiInvite,
     antiSpam,
@@ -883,6 +982,10 @@ function saveSettings() {
     sysPrompt,
     primaryColor,
     rankColor,
+    embedChannel,
+    embedTitle,
+    embedDesc,
+    embedFooter,
     customCommands,
     openTickets: openTicketsList
   };
@@ -896,12 +999,16 @@ function saveSettings() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'save_config', guildId: selectedGuildId, config: settings })
-    }).catch(e => console.error("Cloud save error:", e));
+    }).catch(e => console.warn("Cloud save sync warning:", e));
   }
 
   hideUnsavedChangesBar();
   showToast('🟢 Settings saved successfully!');
 }
+
+// Expose on window for direct HTML event bindings
+window.saveSettings = saveSettings;
+window.resetSettings = resetSettings;
 
 function showToast(message) {
   const toast = document.getElementById('toast');
