@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Initialize Dashboard Theme
   initDashboardTheme();
 
-  // Navigation & Tab Routing (Carl / Arcane / Dyno style)
+  // Navigation & Tab Routing
   initTabNavigation();
 
   // Search Filter in Sidebar
@@ -97,7 +97,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// TAB NAVIGATION (Carl-bot / Dyno style)
+// TAB NAVIGATION
 // ==========================================
 function initTabNavigation() {
   const navItems = document.querySelectorAll('.nav-item[data-tab]');
@@ -618,7 +618,7 @@ function initOverviewTogglesSync() {
 }
 
 // ==========================================
-// LIVE EMBED STUDIO (Carl-bot style)
+// LIVE EMBED STUDIO
 // ==========================================
 function initLiveEmbedStudio() {
   const titleInput = document.getElementById('embed-title');
@@ -720,7 +720,7 @@ function broadcastEmbed() {
 }
 
 // ==========================================
-// UNSAVED CHANGES FLOATING BAR (Dyno / Carl style)
+// UNSAVED CHANGES FLOATING BAR
 // ==========================================
 function initUnsavedChangesWatchers() {
   const inputs = document.querySelectorAll('#bot-active-controls input, #bot-active-controls select, #bot-active-controls textarea');

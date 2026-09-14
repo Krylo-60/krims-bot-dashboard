@@ -47,7 +47,7 @@
           <div class="theme-presets" id="theme-presets-bar">
             <button type="button" class="theme-dot active" data-color="#00f2ff" style="background: #00f2ff;" title="Cyber Cyan"></button>
             <button type="button" class="theme-dot" data-color="#5865F2" style="background: #5865F2;" title="Discord Blurple"></button>
-            <button type="button" class="theme-dot" data-color="#8b5cf6" style="background: #8b5cf6;" title="Arcane Violet"></button>
+            <button type="button" class="theme-dot" data-color="#8b5cf6" style="background: #8b5cf6;" title="Royal Violet"></button>
             <button type="button" class="theme-dot" data-color="#10b981" style="background: #10b981;" title="Emerald Matrix"></button>
             <button type="button" class="theme-dot" data-color="#f59e0b" style="background: #f59e0b;" title="Solar Amber"></button>
             <button type="button" class="theme-dot" data-color="#f43f5e" style="background: #f43f5e;" title="Crimson Rose"></button>
@@ -97,7 +97,7 @@
 
       <!-- Screen 2: Dashboard Workspace -->
       <div class="dashboard-shell" id="dashboard-screen" style="display: none;">
-        <!-- Left Sidebar Navigation (Carl / Arcane / Dyno style) -->
+        <!-- Left Sidebar Navigation -->
         <aside class="dashboard-sidebar" id="sidebar">
           <!-- Active Server Card -->
           <div class="sidebar-server-card" id="sidebar-server-box">
@@ -151,7 +151,7 @@
             <button type="button" class="nav-item" data-tab="tab-levels">
               <span class="nav-icon">⭐</span>
               <span class="nav-label">Levels & Voice XP</span>
-              <span class="nav-badge xp">ARCANE</span>
+              <span class="nav-badge xp">24/7 XP</span>
             </button>
             <button type="button" class="nav-item" data-tab="tab-embeds">
               <span class="nav-icon">📢</span>
@@ -244,7 +244,7 @@
                 </div>
               </div>
 
-              <!-- Quick Control Center (Dyno / Carl style) -->
+              <!-- Quick Control Center -->
               <div class="card module-box">
                 <div class="card-header">
                   <div class="card-title-group">
@@ -379,7 +379,7 @@
               </div>
             </section>
 
-            <!-- TAB 3: AUTOMOD & MODERATION (Dyno / Carl-bot style) -->
+            <!-- TAB 3: AUTOMOD & MODERATION -->
             <section class="tab-pane" id="tab-automod">
               <div class="tab-header">
                 <div>
@@ -551,7 +551,7 @@
               </div>
             </section>
 
-            <!-- TAB 5: TICKETS & SUPPORT (Dyno style) -->
+            <!-- TAB 5: TICKETS & SUPPORT -->
             <section class="tab-pane" id="tab-tickets">
               <div class="tab-header">
                 <div>
@@ -600,7 +600,7 @@
               </div>
             </section>
 
-            <!-- TAB 6: LEVELS & VOICE XP (Arcane style!) -->
+            <!-- TAB 6: LEVELS & VOICE XP -->
             <section class="tab-pane" id="tab-levels">
               <div class="tab-header">
                 <div>
@@ -619,74 +619,102 @@
               </div>
 
               <div class="levels-dashboard-grid">
-                <!-- Left Column: Settings -->
-                <div class="levels-settings-column">
+                <!-- Left Column: Leveling Settings -->
+                <div class="levels-config-col">
+                  <!-- Voice Lounge XP Settings -->
                   <div class="card module-box">
                     <div class="card-header">
                       <div class="card-title-group">
                         <span class="card-icon">🎙️</span>
                         <div>
                           <h3>Voice Lounge Leveling (24/7)</h3>
-                          <p>Awards automated XP to active users hanging out in voice lounges.</p>
+                          <p>Award XP automatically to active members in voice lounges.</p>
                         </div>
                       </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <span class="setting-title">Voice XP Gain Rate</span>
+                        <p class="setting-desc">Amount of XP granted to active members per minute in voice.</p>
+                      </div>
+                      <div class="setting-input-wrap">
+                        <div class="input-unit-group">
+                          <input type="number" id="voice-xp-rate" class="form-input" min="1" max="100" value="15">
+                          <span class="input-unit">XP / min</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <span class="setting-title">Deafened / Muted Penalty</span>
+                        <p class="setting-desc">Prevent deafened or self-muted users from farming voice XP.</p>
+                      </div>
                       <label class="switch">
-                        <input type="checkbox" id="toggle-voice-xp" checked>
+                        <input type="checkbox" id="voice-anti-cheat" checked>
                         <span class="slider"></span>
                       </label>
                     </div>
-                    <div class="xp-rate-info-box">
-                      <div class="rate-badge">
-                        <span class="rate-title">VOICE XP RATE:</span>
-                        <span class="rate-val" id="voice-xp-rate-val">15 XP / Minute</span>
-                      </div>
-                      <p class="rate-note">
-                        🛡️ <strong>Anti-Cheat Active:</strong> Bot ignores muted/deafened users, AFK channels, and rooms with only 1 user.
-                      </p>
-                    </div>
                   </div>
 
+                  <!-- Text Chat XP Settings -->
                   <div class="card module-box">
                     <div class="card-header">
                       <div class="card-title-group">
                         <span class="card-icon">💬</span>
                         <div>
-                          <h3>Text Chat Leveling</h3>
-                          <p>Awards 15–25 XP per text message (60 second anti-spam cooldown).</p>
+                          <h3>Text Chat XP Engine</h3>
+                          <p>Configure message experience rewards and spam-cooldown guards.</p>
                         </div>
                       </div>
-                      <label class="switch">
-                        <input type="checkbox" id="toggle-text-xp" checked>
-                        <span class="slider"></span>
-                      </label>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <span class="setting-title">XP per Message</span>
+                        <p class="setting-desc">Randomized range granted per valid text chat message.</p>
+                      </div>
+                      <div class="setting-input-wrap">
+                        <input type="text" id="text-xp-rate" class="form-input" value="15 - 25 XP" readonly>
+                      </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <span class="setting-title">Chat Cooldown</span>
+                        <p class="setting-desc">Prevents chat message spamming from earning XP too fast.</p>
+                      </div>
+                      <div class="setting-input-wrap">
+                        <div class="input-unit-group">
+                          <input type="number" id="text-xp-cooldown" class="form-input" min="5" max="300" value="60">
+                          <span class="input-unit">seconds</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
+                  <!-- Level-Up Announcements -->
                   <div class="card module-box">
                     <div class="card-header">
                       <div class="card-title-group">
-                        <span class="card-icon">🎉</span>
+                        <span class="card-icon">📢</span>
                         <div>
-                          <h3>Level Up Announcements</h3>
-                          <p>Where to celebrate when a user levels up.</p>
+                          <h3>Level-Up Celebration</h3>
+                          <p>Broadcast celebrations whenever a member earns a new level.</p>
                         </div>
                       </div>
                     </div>
                     <div class="setting-row">
                       <div class="setting-meta">
-                        <label for="level-channel" class="setting-title">Level Up Channel</label>
-                        <p class="setting-desc">Channel where level-up embed badges are sent.</p>
+                        <label for="level-channel" class="setting-title">Announcement Channel</label>
+                        <p class="setting-desc">Where congratulatory messages are published.</p>
                       </div>
                       <div class="setting-input-wrap">
                         <select id="level-channel" class="form-select">
-                          <option value="none">Current Channel (Where user talked)</option>
+                          <option value="current">Current Channel (Where message was sent)</option>
                         </select>
                       </div>
                     </div>
-
                     <div class="setting-row">
                       <div class="setting-meta">
-                        <label for="level-message" class="setting-title">Level Up Message</label>
+                        <label for="level-message" class="setting-title">Celebration Template</label>
                         <p class="setting-desc">Use <code>{user}</code> and <code>{level}</code>.</p>
                       </div>
                       <div class="setting-input-wrap full-width">
@@ -695,7 +723,7 @@
                     </div>
                   </div>
 
-                  <!-- Role Rewards Milestone Table (Arcane style) -->
+                  <!-- Role Rewards Milestone Table -->
                   <div class="card module-box">
                     <div class="card-header">
                       <div class="card-title-group">
@@ -714,59 +742,81 @@
                       </div>
                       <div class="role-reward-item">
                         <div class="reward-level-tag">LEVEL 25</div>
-                        <div class="reward-role-tag" style="border-color: #8b5cf6; color: #8b5cf6;">🌟 Elite Active</div>
+                        <div class="reward-role-tag" style="border-color: #8b5cf6; color: #8b5cf6;">🌟 Elite VIP</div>
                         <span class="reward-auto-badge">Auto-Granted</span>
                       </div>
                       <div class="role-reward-item">
                         <div class="reward-level-tag">LEVEL 50</div>
-                        <div class="reward-role-tag" style="border-color: #f59e0b; color: #f59e0b;">👑 Server Champion</div>
+                        <div class="reward-role-tag" style="border-color: #f59e0b; color: #f59e0b;">👑 Krylo Champion</div>
                         <span class="reward-auto-badge">Auto-Granted</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- Right Column: Live Rank Card Preview -->
-                <div class="levels-preview-column">
-                  <div class="card preview-box sticky-preview">
-                    <div class="preview-header">
-                      <span>LIVE DISCORD !RANK CARD PREVIEW</span>
-                      <span class="preview-live-dot">● LIVE</span>
-                    </div>
-                    <div class="discord-rank-preview" id="discord-rank-preview">
-                      <div class="rank-card-inner">
-                        <div class="rank-avatar-mock" id="rank-avatar-mock">
-                          <span>👤</span>
+                <!-- Right Column: Rank Card Live Simulator -->
+                <div class="rank-card-preview-col">
+                  <div class="card module-box sticky-box">
+                    <div class="card-header">
+                      <div class="card-title-group">
+                        <span class="card-icon">🪪</span>
+                        <div>
+                          <h3>Live Rank Card Preview</h3>
+                          <p>Interactive 1:1 preview of the <code>!rank</code> profile graphic.</p>
                         </div>
-                        <div class="rank-details">
-                          <div class="rank-header-row">
-                            <span class="rank-username">Server Member</span>
-                            <span class="rank-tag-mock" id="rank-tag-mock">RANK #1 • LVL 14</span>
+                      </div>
+                    </div>
+                    
+                    <div class="rank-card-simulator">
+                      <div class="rank-card-bg">
+                        <div class="rank-card-inner">
+                          <div class="rank-avatar-col">
+                            <div class="rank-avatar-frame">
+                              <img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" id="rank-sim-avatar">
+                              <span class="rank-status-dot"></span>
+                            </div>
                           </div>
-                          <div class="rank-bar-bg">
-                            <div class="rank-bar-fill" id="rank-bar-fill" style="width: 72%;"></div>
-                          </div>
-                          <div class="rank-stats-row">
-                            <span>XP PROGRESS</span>
-                            <span class="rank-xp-mock" id="rank-xp-mock">4,250 / 6,000 XP</span>
+                          <div class="rank-details-col">
+                            <div class="rank-header-row">
+                              <div class="rank-username-box">
+                                <span class="rank-sim-user" id="rank-sim-user">Krylo Member</span>
+                                <span class="rank-sim-discrim">#0001</span>
+                              </div>
+                              <div class="rank-badges-box">
+                                <div class="rank-metric-chip">
+                                  <span class="rank-metric-label">RANK</span>
+                                  <span class="rank-metric-val">#1</span>
+                                </div>
+                                <div class="rank-metric-chip highlight">
+                                  <span class="rank-metric-label">LEVEL</span>
+                                  <span class="rank-metric-val" id="rank-sim-level">12</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div class="rank-bar-meta">
+                              <span class="rank-xp-current" id="rank-sim-xp">2,450 XP</span>
+                              <span class="rank-xp-target">/ 3,200 XP</span>
+                            </div>
+                            <div class="rank-progress-track">
+                              <div class="rank-progress-fill" id="rank-sim-fill" style="width: 76%;"></div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <p class="preview-caption">
-                      This card preview dynamically reflects the glowing accent color configured in your Server Branding tab.
-                    </p>
+                    <p class="sim-note">✨ Changes to colors and titles in the Branding tab update this card instantly.</p>
                   </div>
                 </div>
               </div>
             </section>
 
-            <!-- TAB 7: EMBED BROADCASTER (Carl-bot style!) -->
+            <!-- TAB 7: EMBED BROADCASTER -->
             <section class="tab-pane" id="tab-embeds">
               <div class="tab-header">
                 <div>
                   <h2>📢 Visual Embed Broadcaster</h2>
-                  <p class="tab-sub">Carl-bot style interactive embed designer. Build rich announcements with instant live preview and broadcast directly to Discord!</p>
+                  <p class="tab-sub">Interactive visual embed designer. Build rich announcements with instant live preview and broadcast directly to Discord!</p>
                 </div>
               </div>
 
@@ -796,7 +846,7 @@
                       <select id="embed-color" class="form-select">
                         <option value="#00f2ff">Cyber Cyan (#00f2ff)</option>
                         <option value="#5865F2">Discord Blurple (#5865F2)</option>
-                        <option value="#8b5cf6">Arcane Purple (#8b5cf6)</option>
+                        <option value="#8b5cf6">Royal Purple (#8b5cf6)</option>
                         <option value="#10b981">Emerald Green (#10b981)</option>
                         <option value="#f59e0b">Solar Gold (#f59e0b)</option>
                         <option value="#ef4444">Crimson Red (#ef4444)</option>
@@ -1109,7 +1159,7 @@
                     <div class="quick-swatches-grid" id="embed-swatches">
                       <span class="swatch-btn" data-color="#00f2ff" style="background:#00f2ff;" title="Cyber Cyan"></span>
                       <span class="swatch-btn" data-color="#5865F2" style="background:#5865F2;" title="Blurple"></span>
-                      <span class="swatch-btn" data-color="#8b5cf6" style="background:#8b5cf6;" title="Arcane Violet"></span>
+                      <span class="swatch-btn" data-color="#8b5cf6" style="background:#8b5cf6;" title="Royal Violet"></span>
                       <span class="swatch-btn" data-color="#10b981" style="background:#10b981;" title="Emerald Green"></span>
                       <span class="swatch-btn" data-color="#f59e0b" style="background:#f59e0b;" title="Solar Gold"></span>
                       <span class="swatch-btn" data-color="#ef4444" style="background:#ef4444;" title="Crimson Red"></span>
@@ -1123,7 +1173,7 @@
                     <div class="card-title-group">
                       <span class="card-icon">🌟</span>
                       <div>
-                        <h3>Rank Card Arcane Glow</h3>
+                        <h3>Rank Card Cyber Glow</h3>
                         <p>The glowing gradient accent applied to member <code>!rank</code> cards.</p>
                       </div>
                     </div>
@@ -1135,7 +1185,7 @@
                     <div class="quick-swatches-grid" id="rank-swatches">
                       <span class="swatch-btn" data-color="#00f2ff" style="background:#00f2ff;" title="Cyber Cyan"></span>
                       <span class="swatch-btn" data-color="#5865F2" style="background:#5865F2;" title="Blurple"></span>
-                      <span class="swatch-btn" data-color="#8b5cf6" style="background:#8b5cf6;" title="Arcane Violet"></span>
+                      <span class="swatch-btn" data-color="#8b5cf6" style="background:#8b5cf6;" title="Royal Violet"></span>
                       <span class="swatch-btn" data-color="#10b981" style="background:#10b981;" title="Emerald Green"></span>
                       <span class="swatch-btn" data-color="#f59e0b" style="background:#f59e0b;" title="Solar Gold"></span>
                       <span class="swatch-btn" data-color="#ef4444" style="background:#ef4444;" title="Crimson Red"></span>
@@ -1151,7 +1201,7 @@
       </div>
     </main>
 
-    <!-- Floating Unsaved Changes Bar (Classic Dyno / Carl / Discord style) -->
+    <!-- Floating Unsaved Changes Bar -->
     <div class="unsaved-changes-banner" id="unsaved-changes-bar">
       <div class="unsaved-content">
         <span class="unsaved-alert-icon">⚠️</span>
@@ -1185,7 +1235,7 @@
     </div>
 
     <footer class="bottom-footer">
-      <span>KRIMS BOT DASHBOARD</span> • <span>INSPIRED BY CARL-BOT, ARCANE & DYNO</span> • <span>ALL SYSTEMS OPERATIONAL</span>
+      <span>KRIMS BOT DASHBOARD</span> • <span>POWERED BY KRYLO ENTERPRISE</span> • <span>ALL SYSTEMS OPERATIONAL</span>
     </footer>
   </div>
   <script type="module" src="/src/main.js"></script>
