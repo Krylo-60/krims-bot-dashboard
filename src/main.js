@@ -942,7 +942,7 @@ function broadcastEmbed() {
 // ==========================================
 function initUnsavedChangesWatchers() {
   const inputs = document.querySelectorAll(
-    '#bot-active-controls input, #bot-active-controls select, #bot-active-controls textarea, #tab-embeds input, #tab-embeds select, #tab-embeds textarea'
+    '#bot-active-controls input, #bot-active-controls select, #bot-active-controls textarea, #tab-embeds input, #tab-embeds select, #tab-embeds textarea, #tab-economy input, #tab-economy select, #tab-welcome input, #tab-welcome select, #tab-welcome textarea, #tab-reaction-roles input, #tab-reaction-roles select, #tab-reaction-roles textarea'
   );
   inputs.forEach(el => {
     el.addEventListener('change', () => {
