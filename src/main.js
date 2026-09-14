@@ -391,19 +391,26 @@ function broadcastEmbed() {
 
   const btn = document.getElementById('broadcast-embed-btn');
   const oldText = btn.innerText;
-  btn.innerText = 'QUEUEING BROADCAST...';
+  btn.innerText = 'POSTING BROADCAST...';
   btn.disabled = true;
 
-  fetch('https://krims-code-chatbot.vercel.app/api/chat', {
+  // Direct serverless broadcast to Discord channel via Bot Token
+  fetch('/api/broadcast', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      action: 'add_broadcast_action',
       guildId: selectedGuildId,
-      embed: { channelId, title, description, color }
+      channelId,
+      title,
+      description,
+      color
     })
   })
-    .then(res => res.json())
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to broadcast');
+      return data;
+    })
     .then(data => {
       btn.innerText = oldText;
       btn.disabled = false;
@@ -414,21 +421,50 @@ function broadcastEmbed() {
 
         // Show toast notification
         const toast = document.getElementById('toast');
-        toast.innerText = '📢 Embed announcement queued successfully!';
+        toast.innerText = '📢 Embed posted to Discord successfully!';
         toast.classList.add('show');
         setTimeout(() => {
           toast.classList.remove('show');
           toast.innerText = 'Settings saved successfully!';
         }, 3000);
       } else {
-        alert("Failed to queue broadcast: " + (data.error || "Unknown error"));
+        alert("Failed to broadcast: " + (data.error || "Unknown error"));
       }
     })
     .catch(err => {
-      btn.innerText = oldText;
-      btn.disabled = false;
-      console.error(err);
-      alert("Error queueing broadcast: " + err.message);
+      // Fallback to legacy queuing if direct broadcast route fails
+      fetch('https://krims-code-chatbot.vercel.app/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'add_broadcast_action',
+          guildId: selectedGuildId,
+          embed: { channelId, title, description, color }
+        })
+      })
+        .then(r => r.json())
+        .then(fallbackData => {
+          btn.innerText = oldText;
+          btn.disabled = false;
+          if (fallbackData.ok) {
+            document.getElementById('embed-title').value = '';
+            document.getElementById('embed-description').value = '';
+            const toast = document.getElementById('toast');
+            toast.innerText = '📢 Broadcast queued successfully!';
+            toast.classList.add('show');
+            setTimeout(() => {
+              toast.classList.remove('show');
+              toast.innerText = 'Settings saved successfully!';
+            }, 3000);
+          } else {
+            alert("Broadcast error: " + err.message);
+          }
+        })
+        .catch(() => {
+          btn.innerText = oldText;
+          btn.disabled = false;
+          alert("Error sending broadcast: " + err.message);
+        });
     });
 }
 
