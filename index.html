@@ -15,10 +15,25 @@
         <div class="logo-badge">K</div>
         <div class="logo-text">KRIMS COMMAND</div>
       </div>
-      <div class="user-profile" id="header-profile" style="display: none;">
-        <img src="" class="user-avatar" id="header-avatar" alt="Avatar">
-        <span style="font-weight: 500;" id="header-username">--</span>
-        <button class="logout-btn" id="logout-btn">LOGOUT</button>
+      <div class="header-right-controls" style="display: flex; align-items: center; gap: 1.25rem;">
+        <div class="theme-switcher-bar" title="Customize Dashboard Accent Color">
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;">THEME:</span>
+          <div class="theme-presets" id="theme-presets-bar">
+            <button type="button" class="theme-dot active" data-color="#00f2ff" style="background: #00f2ff;" title="Cyber Cyan"></button>
+            <button type="button" class="theme-dot" data-color="#7000ff" style="background: #7000ff;" title="Arcane Purple"></button>
+            <button type="button" class="theme-dot" data-color="#ff007f" style="background: #ff007f;" title="Neon Pink"></button>
+            <button type="button" class="theme-dot" data-color="#00ff66" style="background: #00ff66;" title="Emerald Matrix"></button>
+            <button type="button" class="theme-dot" data-color="#ffaa00" style="background: #ffaa00;" title="Solar Gold"></button>
+          </div>
+          <div class="color-picker-mini-wrapper">
+            <input type="color" id="dash-custom-color" value="#00f2ff" title="Pick Custom Dashboard Color">
+          </div>
+        </div>
+        <div class="user-profile" id="header-profile" style="display: none;">
+          <img src="" class="user-avatar" id="header-avatar" alt="Avatar">
+          <span style="font-weight: 500;" id="header-username">--</span>
+          <button class="logout-btn" id="logout-btn">LOGOUT</button>
+        </div>
       </div>
     </header>
 
@@ -239,6 +254,102 @@
                   <textarea id="embed-description" class="input-field" style="height: 90px; resize: none; font-family: inherit; font-size: 0.85rem; line-height: 1.4;" placeholder="Type your markdown-formatted embed content here..."></textarea>
                 </div>
                 <button type="button" class="save-btn" id="broadcast-embed-btn" style="margin: 0; padding: 0.7rem 2rem; font-size: 0.85rem; background: var(--cyan); color: #000; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 242, 255, 0.4); font-weight: bold; cursor: pointer; display: block; width: 100%;">BROADCAST EMBED MESSAGE</button>
+              </div>
+
+              <!-- Bot Brand & Accent Color Customization Card -->
+              <div class="card" id="color-customization-card" style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255,255,255,0.03);">
+                <h3 style="font-family: 'Orbitron', sans-serif; font-size: 0.95rem; color: var(--cyan); letter-spacing: 1.5px; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; justify-content: space-between;">
+                  <span>🎨 BOT BRAND & ACCENT COLOR CUSTOMIZATION</span>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">LIVE PREVIEW</span>
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.4; text-align: left;">
+                  Customize your server's unique bot branding. Choose the embed theme color for announcements and command cards, plus the glowing accent color rendered on graphical rank cards.
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                  <!-- Embed Primary Color Selector -->
+                  <div class="color-picker-box">
+                    <label class="setting-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                      <span>Embed & Notice Color</span>
+                      <span id="embed-color-hex" class="hex-badge">#00f2ff</span>
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                      <input type="color" id="primary-color-picker" class="palette-picker-large" value="#00f2ff">
+                      <div class="quick-swatches" id="embed-swatches">
+                        <span class="swatch-btn" data-color="#00f2ff" style="background:#00f2ff;" title="Cyan"></span>
+                        <span class="swatch-btn" data-color="#7000ff" style="background:#7000ff;" title="Purple"></span>
+                        <span class="swatch-btn" data-color="#ff007f" style="background:#ff007f;" title="Pink"></span>
+                        <span class="swatch-btn" data-color="#00ff66" style="background:#00ff66;" title="Green"></span>
+                        <span class="swatch-btn" data-color="#ffaa00" style="background:#ffaa00;" title="Gold"></span>
+                        <span class="swatch-btn" data-color="#ff3333" style="background:#ff3333;" title="Red"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Rank Card Accent Color Selector -->
+                  <div class="color-picker-box">
+                    <label class="setting-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                      <span>Rank Card Arcane Accent</span>
+                      <span id="rank-color-hex" class="hex-badge">#00f2ff</span>
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                      <input type="color" id="rank-color-picker" class="palette-picker-large" value="#00f2ff">
+                      <div class="quick-swatches" id="rank-swatches">
+                        <span class="swatch-btn" data-color="#00f2ff" style="background:#00f2ff;" title="Cyan"></span>
+                        <span class="swatch-btn" data-color="#7000ff" style="background:#7000ff;" title="Purple"></span>
+                        <span class="swatch-btn" data-color="#ff007f" style="background:#ff007f;" title="Pink"></span>
+                        <span class="swatch-btn" data-color="#00ff66" style="background:#00ff66;" title="Green"></span>
+                        <span class="swatch-btn" data-color="#ffaa00" style="background:#ffaa00;" title="Gold"></span>
+                        <span class="swatch-btn" data-color="#ff3333" style="background:#ff3333;" title="Red"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Live Preview Displays -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left;">
+                  <!-- Live Embed Preview -->
+                  <div class="live-preview-container">
+                    <div class="preview-tag">LIVE DISCORD EMBED PREVIEW</div>
+                    <div class="discord-embed-preview" id="discord-embed-preview" style="border-left: 4px solid #00f2ff;">
+                      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: bold; color: var(--text);">Krims Code AI</span>
+                        <span style="font-size: 0.6rem; background: #5865F2; color: #fff; padding: 0.1rem 0.3rem; border-radius: 3px; font-weight: bold;">BOT</span>
+                      </div>
+                      <div class="preview-embed-title" id="preview-embed-title" style="color: #00f2ff; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.35rem;">
+                        ⚡ KryloSMP Community Announcement
+                      </div>
+                      <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                        This preview demonstrates how bot embeds and notifications will appear in your server with your selected brand accent!
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Live Rank Card Mini Preview -->
+                  <div class="live-preview-container">
+                    <div class="preview-tag">LIVE !RANK CARD PREVIEW</div>
+                    <div class="discord-rank-preview" id="discord-rank-preview">
+                      <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <div class="rank-avatar-mock" id="rank-avatar-mock" style="border-color: #00f2ff; box-shadow: 0 0 10px rgba(0,242,255,0.4);">
+                          <span>👤</span>
+                        </div>
+                        <div style="flex: 1;">
+                          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.2rem;">
+                            <span style="font-weight: 700; font-size: 0.9rem; color: #fff;">Server Member</span>
+                            <span style="font-size: 0.75rem; color: #00f2ff; font-family: 'JetBrains Mono', monospace;" id="rank-tag-mock">RANK #1 • LVL 14</span>
+                          </div>
+                          <div class="rank-bar-bg">
+                            <div class="rank-bar-fill" id="rank-bar-fill" style="width: 72%; background: linear-gradient(90deg, #00f2ff, #7000ff); box-shadow: 0 0 8px #00f2ff;"></div>
+                          </div>
+                          <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-muted); margin-top: 0.25rem; font-family: 'JetBrains Mono', monospace;">
+                            <span>XP PROGRESS</span>
+                            <span id="rank-xp-mock" style="color: #00f2ff;">4,250 / 6,000 XP</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <button class="save-btn" id="save-settings-btn">SAVE SETTINGS</button>

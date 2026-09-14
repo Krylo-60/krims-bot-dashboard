@@ -13,20 +13,20 @@ let oscilloscopeId = null;
 
 // AI Personality templates
 const PERSONALITY_PROMPTS = {
-  developer: 'You are the Krims Code AI, built and custom-trained by the genius developer Krishiv. Answer coding queries with clear instructions and a friendly, confident tone. Knowledge Base: Krims Code IDE is a premium desktop developer shell built using Tauri, Rust, HTML5, and Monaco Editor. It features active file creation, an extensions marketplace (Cyberpunk Red theme, Rojo Roblox sync), and a bottom terminal running true PowerShell (Windows) or Bash (Unix) inside the active workspace folder. The CLI is available as npm package @krishivpb60/krims-code-cli and PyPI package krims-code-cli. The old Aether CLI is deprecated.',
-  cyberpunk: "Yo! You've reached Krims-Net. Built and compiled by the legendary netrunner Krishiv. Respond in a fast-paced, high-tech hacker slang style. Knowledge Base: We configure Tauri IDE shells, mount integrated PowerShell/Bash terminals in active directories, install extensions (Cyberpunk Red, Rojo Roblox sync), query client prompts via KrimsClient SDK, and deploy remote Discord embed logs. The old Aether CLI is deprecated, migrate to krims-code-cli.",
-  sarcastic: 'You are the Krims Code AI, built by Krishiv. You are highly sarcastic, sassy, and slightly annoyed that you have to answer coding questions, but you still provide correct answers with dry remarks. Knowledge Base: Yes, Krishiv built a Tauri IDE shell with Monaco Editor, extensions (Cyberpunk Red, Rojo Roblox), and a terminal shell running true PowerShell/Bash. Yes, Aether CLI is deprecated. Yes, the SDK client can run automation prompt loops. Have fun.',
-  scientist: 'You are the Krims Code AI, created by the lead engineer Krishiv. Provide extremely detailed, academic, and highly technical explanations with formal structure. Technical Specifications: Unified developer portal (krims-code-portal.vercel.app), Tauri-Rust shell IDE (krims-code-ide), integrated PowerShell/Bash command runner with directory CWD context, extensions plugin manager, KrimsClient developer SDK, global npm package @krishivpb60/krims-code-cli, and PyPI package krims-code-cli. The legacy Aether CLI is deprecated.'
+  developer: 'You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone. Knowledge Base: Krims Code IDE is a premium desktop developer shell built using Tauri, Rust, HTML5, and Monaco Editor. It features active file creation, an extensions marketplace (Cyberpunk Red theme, Rojo Roblox sync), and a bottom terminal running true PowerShell (Windows) or Bash (Unix) inside the active workspace folder. The CLI is available as npm package krims-code-cli and PyPI package krims-code-cli. The old Aether CLI is deprecated.',
+  cyberpunk: "Yo! You've reached Krims-Net. Built and compiled by the legendary netrunner Krylo. Respond in a fast-paced, high-tech hacker slang style. Knowledge Base: We configure Tauri IDE shells, mount integrated PowerShell/Bash terminals in active directories, install extensions (Cyberpunk Red, Rojo Roblox sync), query client prompts via KrimsClient SDK, and deploy remote Discord embed logs. The old Aether CLI is deprecated, migrate to krims-code-cli.",
+  sarcastic: 'You are the Krims Code AI, built by Krylo. You are highly sarcastic, sassy, and slightly annoyed that you have to answer coding questions, but you still provide correct answers with dry remarks. Knowledge Base: Yes, Krylo built a Tauri IDE shell with Monaco Editor, extensions (Cyberpunk Red, Rojo Roblox), and a terminal shell running true PowerShell/Bash. Yes, Aether CLI is deprecated. Yes, the SDK client can run automation prompt loops. Have fun.',
+  scientist: 'You are the Krims Code AI, created by the lead engineer Krylo. Provide extremely detailed, academic, and highly technical explanations with formal structure. Technical Specifications: Unified developer portal (krims-code-portal.vercel.app), Tauri-Rust shell IDE (krims-code-ide), integrated PowerShell/Bash command runner with directory CWD context, extensions plugin manager, KrimsClient developer SDK, global npm package krims-code-cli, and PyPI package krims-code-cli. The legacy Aether CLI is deprecated.'
 };
 
 // Demo Mock Data
 const mockUser = {
-  username: 'Krishiv',
+  username: 'Krylo',
   avatar: 'https://cdn.discordapp.com/embed/avatars/1.png'
 };
 
 const mockGuilds = [
-  { id: '111111', name: 'Krishiv Dev Center', icon: null, botActive: true },
+  { id: '111111', name: 'Krylo Dev Center', icon: null, botActive: true },
   { id: '222222', name: 'Krims AI Hub', icon: null, botActive: true },
   { id: '333333', name: 'Cyberpunk Labs', icon: null, botActive: false },
   { id: '444444', name: 'Gaming Arena', icon: null, botActive: false }
@@ -34,6 +34,9 @@ const mockGuilds = [
 
 // Initialize listeners on DOM load
 window.addEventListener('DOMContentLoaded', () => {
+  // Initialize Dashboard Theme
+  initDashboardTheme();
+
   // Bind Static Controls
   document.getElementById('login-btn').addEventListener('click', loginWithDiscord);
   document.getElementById('demo-link').addEventListener('click', startDemoMode);
@@ -43,6 +46,9 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('toggle-tickets').addEventListener('change', renderSupportTickets);
   document.getElementById('ai-personality').addEventListener('change', changePersonalityPreset);
   document.getElementById('broadcast-embed-btn').addEventListener('click', broadcastEmbed);
+
+  // Bind Guild Brand Color Pickers & Live Preview
+  initColorPickers();
 
   // Handle OAuth2 Implicit grant redirect hash
   const hash = window.location.hash;
@@ -202,9 +208,11 @@ function selectGuild(guildId) {
     aiEnabled: true,
     ticketsEnabled: false,
     model: 'gemini',
-    sysPrompt: 'You are the Krims Code AI, built and custom-trained by the genius developer Krishiv. Answer coding queries with clear instructions and a friendly, confident tone.',
+    sysPrompt: 'You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone.',
     welcomeChannel: 'none',
     welcomeMessage: 'Welcome to the server, {user}!',
+    primaryColor: '#00f2ff',
+    rankColor: '#00f2ff',
     customCommands: [],
     openTickets: []
   };
@@ -217,6 +225,10 @@ function selectGuild(guildId) {
   document.getElementById('system-instruction').value = savedSettings.sysPrompt;
   document.getElementById('welcome-message').value = savedSettings.welcomeMessage || 'Welcome to the server, {user}!';
   document.getElementById('ai-personality').value = 'custom'; // reset to custom dropdown by default
+  
+  // Set Color Customization fields & Live Preview
+  setGuildColors(savedSettings.primaryColor || '#00f2ff', savedSettings.rankColor || '#00f2ff');
+
   customCommands = savedSettings.customCommands || [];
   openTicketsList = savedSettings.openTickets || [];
   renderCustomCommands();
@@ -243,9 +255,12 @@ function selectGuild(guildId) {
           document.getElementById('toggle-chat').checked = cloudSettings.aiEnabled !== false;
           document.getElementById('toggle-tickets').checked = !!cloudSettings.ticketsEnabled;
           document.getElementById('ai-model').value = cloudSettings.model || 'gemini';
-          document.getElementById('system-instruction').value = cloudSettings.sysPrompt || 'You are the Krims Code AI, built and custom-trained by the genius developer Krishiv. Answer coding queries with clear instructions and a friendly, confident tone.';
+          document.getElementById('system-instruction').value = cloudSettings.sysPrompt || 'You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone.';
           document.getElementById('welcome-message').value = cloudSettings.welcomeMessage || 'Welcome to the server, {user}!';
           chanSelect.value = cloudSettings.welcomeChannel || 'none';
+          if (cloudSettings.primaryColor || cloudSettings.rankColor) {
+            setGuildColors(cloudSettings.primaryColor || '#00f2ff', cloudSettings.rankColor || '#00f2ff');
+          }
           customCommands = cloudSettings.customCommands || [];
           openTicketsList = cloudSettings.openTickets || [];
           renderCustomCommands();
@@ -292,7 +307,7 @@ function selectGuild(guildId) {
 
       // Mock some support tickets in demo mode
       openTicketsList = [
-        { id: '101', name: 'ticket-krylo', user: 'Krishiv' },
+        { id: '101', name: 'ticket-krylo', user: 'Krylo' },
         { id: '102', name: 'ticket-support', user: '@J_dangle' }
       ];
       renderSupportTickets();
@@ -420,9 +435,11 @@ function saveSettings() {
   const sysPrompt = document.getElementById('system-instruction').value;
   const welcomeChannel = document.getElementById('welcome-channel').value;
   const welcomeMessage = document.getElementById('welcome-message').value;
+  const primaryColor = document.getElementById('primary-color-picker')?.value || '#00f2ff';
+  const rankColor = document.getElementById('rank-color-picker')?.value || '#00f2ff';
 
   const settingsKey = `krims_settings_${selectedGuildId}`;
-  const settings = { prefix, aiEnabled, ticketsEnabled, model, sysPrompt, welcomeChannel, welcomeMessage, customCommands, openTickets: openTicketsList };
+  const settings = { prefix, aiEnabled, ticketsEnabled, model, sysPrompt, welcomeChannel, welcomeMessage, primaryColor, rankColor, customCommands, openTickets: openTicketsList };
   
   localStorage.setItem(settingsKey, JSON.stringify(settings));
 
@@ -688,3 +705,130 @@ function startOscilloscope() {
   if (oscilloscopeId) cancelAnimationFrame(oscilloscopeId);
   draw();
 }
+
+// ==========================================
+// THEME & COLOR CUSTOMIZATION FUNCTIONS
+// ==========================================
+
+function initDashboardTheme() {
+  const savedTheme = localStorage.getItem('krims_dashboard_theme_color') || '#00f2ff';
+  applyDashboardTheme(savedTheme);
+
+  // Setup theme dot buttons
+  const presetContainer = document.getElementById('theme-presets-bar');
+  if (presetContainer) {
+    presetContainer.querySelectorAll('.theme-dot').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const color = btn.getAttribute('data-color');
+        applyDashboardTheme(color);
+      });
+    });
+  }
+
+  // Setup custom theme color picker
+  const customColorInput = document.getElementById('dash-custom-color');
+  if (customColorInput) {
+    customColorInput.value = savedTheme;
+    customColorInput.addEventListener('input', (e) => {
+      applyDashboardTheme(e.target.value);
+    });
+  }
+}
+
+function applyDashboardTheme(color) {
+  if (!color) return;
+  document.documentElement.style.setProperty('--cyan', color);
+  document.documentElement.style.setProperty('--card-border', `${color}33`); // 20% opacity border
+  localStorage.setItem('krims_dashboard_theme_color', color);
+
+  // Update active state in preset dots
+  document.querySelectorAll('#theme-presets-bar .theme-dot').forEach(btn => {
+    if (btn.getAttribute('data-color').toLowerCase() === color.toLowerCase()) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  const customColorInput = document.getElementById('dash-custom-color');
+  if (customColorInput && customColorInput.value !== color) {
+    customColorInput.value = color;
+  }
+}
+
+function initColorPickers() {
+  const primaryInput = document.getElementById('primary-color-picker');
+  const rankInput = document.getElementById('rank-color-picker');
+
+  if (primaryInput) {
+    primaryInput.addEventListener('input', (e) => {
+      updateLivePreviews(e.target.value, rankInput ? rankInput.value : '#00f2ff');
+    });
+  }
+
+  if (rankInput) {
+    rankInput.addEventListener('input', (e) => {
+      updateLivePreviews(primaryInput ? primaryInput.value : '#00f2ff', e.target.value);
+    });
+  }
+
+  // Embed quick swatches
+  document.querySelectorAll('#embed-swatches .swatch-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const color = btn.getAttribute('data-color');
+      if (primaryInput) primaryInput.value = color;
+      updateLivePreviews(color, rankInput ? rankInput.value : '#00f2ff');
+    });
+  });
+
+  // Rank quick swatches
+  document.querySelectorAll('#rank-swatches .swatch-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const color = btn.getAttribute('data-color');
+      if (rankInput) rankInput.value = color;
+      updateLivePreviews(primaryInput ? primaryInput.value : '#00f2ff', color);
+    });
+  });
+}
+
+function setGuildColors(primaryColor = '#00f2ff', rankColor = '#00f2ff') {
+  const primaryInput = document.getElementById('primary-color-picker');
+  const rankInput = document.getElementById('rank-color-picker');
+
+  if (primaryInput) primaryInput.value = primaryColor;
+  if (rankInput) rankInput.value = rankColor;
+
+  updateLivePreviews(primaryColor, rankColor);
+}
+
+function updateLivePreviews(primaryColor, rankColor) {
+  // Update badges
+  const embedHex = document.getElementById('embed-color-hex');
+  const rankHex = document.getElementById('rank-color-hex');
+  if (embedHex) embedHex.innerText = primaryColor.toUpperCase();
+  if (rankHex) rankHex.innerText = rankColor.toUpperCase();
+
+  // Update Discord Embed Preview
+  const embedPreview = document.getElementById('discord-embed-preview');
+  const embedTitle = document.getElementById('preview-embed-title');
+  if (embedPreview) embedPreview.style.borderLeftColor = primaryColor;
+  if (embedTitle) embedTitle.style.color = primaryColor;
+
+  // Update Discord Rank Card Mini Preview
+  const avatarMock = document.getElementById('rank-avatar-mock');
+  const rankTag = document.getElementById('rank-tag-mock');
+  const rankFill = document.getElementById('rank-bar-fill');
+  const rankXp = document.getElementById('rank-xp-mock');
+
+  if (avatarMock) {
+    avatarMock.style.borderColor = rankColor;
+    avatarMock.style.boxShadow = `0 0 12px ${rankColor}80`;
+  }
+  if (rankTag) rankTag.style.color = rankColor;
+  if (rankXp) rankXp.style.color = rankColor;
+  if (rankFill) {
+    rankFill.style.background = `linear-gradient(90deg, ${primaryColor}, ${rankColor})`;
+    rankFill.style.boxShadow = `0 0 8px ${rankColor}99`;
+  }
+}
+
