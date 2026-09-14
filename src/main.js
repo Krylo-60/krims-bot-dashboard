@@ -68,6 +68,9 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('ai-personality')?.addEventListener('change', changePersonalityPreset);
   document.getElementById('broadcast-embed-btn')?.addEventListener('click', broadcastEmbed);
   document.getElementById('refresh-tickets-btn')?.addEventListener('click', renderSupportTickets);
+  document.getElementById('premium-waitlist-btn')?.addEventListener('click', () => {
+    showToast('👑 You are on the waitlist for Premium Custom Allocation!');
+  });
 
   // Sync Overview toggles with dedicated tabs
   initOverviewTogglesSync();
@@ -372,7 +375,7 @@ function selectGuild(guildId) {
     automodAction: 'timeout-5',
     ticketsEnabled: false,
     ticketChannel: 'none',
-    model: 'gemini',
+    model: 'auto',
     sysPrompt: 'You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone.',
     welcomeEnabled: true,
     welcomeChannel: 'none',
@@ -552,7 +555,7 @@ function populateFormSettings(s) {
 
   // AI
   setCheckbox('toggle-chat', s.aiEnabled !== false);
-  setSelect('ai-model', s.model || 'gemini');
+  setSelect('ai-model', s.model || 'auto');
   setValue('system-instruction', s.sysPrompt || PERSONALITY_PROMPTS.developer);
   setSelect('ai-personality', 'custom');
 
@@ -776,7 +779,7 @@ function saveSettings() {
   const levelMessage = document.getElementById('level-message')?.value || '🎉 GG {user}, you just leveled up to **Level {level}**!';
 
   const aiEnabled = document.getElementById('toggle-chat')?.checked ?? true;
-  const model = document.getElementById('ai-model')?.value || 'gemini';
+  const model = document.getElementById('ai-model')?.value || 'auto';
   const sysPrompt = document.getElementById('system-instruction')?.value || '';
 
   const primaryColor = document.getElementById('primary-color-picker')?.value || '#00f2ff';

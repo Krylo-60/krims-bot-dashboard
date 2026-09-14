@@ -953,16 +953,59 @@
               </div>
 
               <div class="card module-box">
+                <div class="card-header">
+                  <div class="card-title-group">
+                    <span class="card-icon">⚡</span>
+                    <div>
+                      <h3>Resource Allocation & Engine</h3>
+                      <p>Dynamically routes prompts to available compute resources with zero cold-start delay.</p>
+                    </div>
+                  </div>
+                  <span class="auto-badge-pill">
+                    <span class="status-pulse"></span>
+                    <span>AUTO-BALANCED</span>
+                  </span>
+                </div>
+
+                <!-- Live Auto-Resource Status Banner -->
+                <div class="auto-resource-banner">
+                  <div class="resource-banner-header">
+                    <span class="resource-title">CURRENT ALLOCATION: <strong>DYNAMIC AUTO-ROUTING</strong></span>
+                    <span class="resource-sub">Automatically optimizes across available quotas</span>
+                  </div>
+                  <div class="resource-pools-grid">
+                    <div class="pool-chip active">
+                      <span class="pool-dot green">●</span>
+                      <span class="pool-name">Google Gemini 2.5</span>
+                      <span class="pool-status">Online (Healthy)</span>
+                    </div>
+                    <div class="pool-chip active">
+                      <span class="pool-dot green">●</span>
+                      <span class="pool-name">Groq Llama 3.3</span>
+                      <span class="pool-status">Online (Low Latency)</span>
+                    </div>
+                    <div class="pool-chip standby">
+                      <span class="pool-dot cyan">●</span>
+                      <span class="pool-name">Local JS Trigrams</span>
+                      <span class="pool-status">Standby Fallback</span>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="setting-row">
                   <div class="setting-meta">
-                    <label for="ai-model" class="setting-title">AI Engine Model</label>
-                    <p class="setting-desc">Choose the foundational LLM that powers intelligent chat replies.</p>
+                    <label for="ai-model" class="setting-title">Compute & Model Engine</label>
+                    <p class="setting-desc">Auto-allocation uses available resources dynamically. Custom allocation is available in Premium.</p>
                   </div>
                   <div class="setting-input-wrap">
                     <select id="ai-model" class="form-select">
-                      <option value="gemini" selected>Google Gemini 2.5 (Fast, Smart & Creative)</option>
-                      <option value="groq">Groq Llama 3.3 70B (Ultra Low-Latency)</option>
-                      <option value="krims-local">Krims Local Trigram (Offline Fallback)</option>
+                      <option value="auto" selected>⚡ Smart Auto-Allocation (Recommended - Dynamically uses available resources)</option>
+                      <option value="gemini">Google Gemini 2.5 Flash (Balanced Standard Pool)</option>
+                      <option value="groq">Groq Llama 3.3 70B (High-Speed Reasoning)</option>
+                      <option value="krims-local">Krims Local JS Engine (Low-Resource Fallback)</option>
+                      <option value="premium-gpu" disabled>👑 Dedicated GPU Cluster (Premium - Coming Soon)</option>
+                      <option value="premium-custom" disabled>👑 Custom Model Weights Allocation (Premium - Coming Soon)</option>
+                      <option value="premium-claude" disabled>👑 Claude 3.5 Sonnet / GPT-4o Dedicated (Premium - Coming Soon)</option>
                     </select>
                   </div>
                 </div>
@@ -985,12 +1028,56 @@
 
                 <div class="setting-row">
                   <div class="setting-meta">
-                    <label for="system-instruction" class="setting-title">Custom Identity / System Instructions</label>
-                    <p class="setting-desc">Define rules, tone of voice, knowledge base, and behavior constraints for the bot.</p>
+                    <label for="system-instruction" class="setting-title">Custom Identity / System Prompt</label>
+                    <p class="setting-desc">Define instructions, tone of voice, knowledge base, and behavior constraints for the bot.</p>
                   </div>
                   <div class="setting-input-wrap full-width">
-                    <textarea id="system-instruction" class="form-textarea" rows="4" placeholder="You are the Krims Code AI, built and custom-trained by Krylo..."></textarea>
+                    <textarea id="system-instruction" class="form-textarea" rows="4" placeholder="You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone.">You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone.</textarea>
                   </div>
+                </div>
+              </div>
+
+              <!-- Premium Tier: Custom Allocation (Coming Soon) Card -->
+              <div class="card module-box premium-allocation-card">
+                <div class="card-header">
+                  <div class="card-title-group">
+                    <span class="card-icon">👑</span>
+                    <div>
+                      <h3>Custom Resource Allocation (Premium Tier)</h3>
+                      <p>Dedicated compute, custom fine-tuned weights, and zero-throttling isolated instances.</p>
+                    </div>
+                  </div>
+                  <span class="coming-soon-badge">COMING SOON</span>
+                </div>
+                <p class="premium-desc">
+                  Upgrade your server to reserve dedicated compute nodes. Choose exact model checkpoints, upload fine-tuned LoRA weights, customize context window sizes up to 128k, and guarantee 0ms queuing even during peak Discord traffic.
+                </p>
+                <div class="premium-perks-grid">
+                  <div class="perk-card">
+                    <span class="perk-icon">⚡</span>
+                    <span class="perk-title">Dedicated Compute</span>
+                    <span class="perk-sub">Isolated GPU worker nodes</span>
+                  </div>
+                  <div class="perk-card">
+                    <span class="perk-icon">🧠</span>
+                    <span class="perk-title">Custom Weights</span>
+                    <span class="perk-sub">Fine-tuned LoRA & embeddings</span>
+                  </div>
+                  <div class="perk-card">
+                    <span class="perk-icon">♾️</span>
+                    <span class="perk-title">Infinite Quotas</span>
+                    <span class="perk-sub">No rate-limits or throttling</span>
+                  </div>
+                  <div class="perk-card">
+                    <span class="perk-icon">🔒</span>
+                    <span class="perk-title">Private Vault</span>
+                    <span class="perk-sub">Dedicated server sandbox</span>
+                  </div>
+                </div>
+                <div class="premium-action-bar">
+                  <button type="button" class="btn-premium-waitlist" id="premium-waitlist-btn">
+                    ✨ Notify Me When Custom Allocation Launches
+                  </button>
                 </div>
               </div>
             </section>
