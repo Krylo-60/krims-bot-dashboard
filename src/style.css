@@ -92,15 +92,21 @@ body {
   width: 38px;
   height: 38px;
   background: linear-gradient(135deg, var(--cyan), var(--purple));
-  color: #050810;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
-  font-size: 1.25rem;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 16px var(--cyan-glow);
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
   border-radius: var(--radius-sm);
-  box-shadow: 0 0 16px var(--cyan-glow);
 }
 
 .brand-details {
@@ -299,10 +305,19 @@ body {
 }
 
 .login-hero-icon {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   display: inline-block;
   animation: floatIcon 3s ease-in-out infinite;
+}
+
+.login-logo-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid var(--cyan);
+  box-shadow: 0 0 24px var(--cyan-glow);
+  object-fit: cover;
+  display: block;
 }
 
 @keyframes floatIcon {
@@ -614,9 +629,27 @@ body {
   margin-top: auto;
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.sidebar-brand-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sidebar-footer-logo {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.bot-version {
   font-size: 0.65rem;
   color: var(--text-dim);
-  text-align: center;
   font-family: 'JetBrains Mono', monospace;
 }
 
@@ -1296,14 +1329,17 @@ input:checked + .slider:before {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
-  color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 1.1rem;
+  overflow: hidden;
   flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+}
+
+.discord-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
 
 .discord-msg-body {
