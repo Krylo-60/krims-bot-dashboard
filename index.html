@@ -135,8 +135,13 @@
             <div class="nav-category-header">MANAGEMENT & SAFETY</div>
             <button type="button" class="nav-item" data-tab="tab-automod">
               <span class="nav-icon">🛡️</span>
-              <span class="nav-label">AutoMod & Moderation</span>
-              <span class="nav-badge" id="automod-nav-badge">SHIELD</span>
+              <span class="nav-label">AutoMod & Safety Shield</span>
+              <span class="nav-badge" id="automod-nav-badge">v5 SHIELD</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="tab-reaction-roles">
+              <span class="nav-icon">🎭</span>
+              <span class="nav-label">Reaction Roles</span>
+              <span class="nav-badge" style="background: rgba(0, 242, 255, 0.2); color: var(--neon-cyan);">ROLES</span>
             </button>
             <button type="button" class="nav-item" data-tab="tab-welcome">
               <span class="nav-icon">👋</span>
@@ -153,6 +158,11 @@
               <span class="nav-label">Levels & Voice XP</span>
               <span class="nav-badge xp">24/7 XP</span>
             </button>
+            <button type="button" class="nav-item" data-tab="tab-economy">
+              <span class="nav-icon">💰</span>
+              <span class="nav-label">Economy & KSMP Store</span>
+              <span class="nav-badge" style="background: rgba(245, 158, 11, 0.2); color: #fde68a;">KC COINS</span>
+            </button>
             <button type="button" class="nav-item" data-tab="tab-embeds">
               <span class="nav-icon">📢</span>
               <span class="nav-label">Embed Broadcaster</span>
@@ -166,7 +176,8 @@
             <div class="nav-category-header">AI & CUSTOMIZATION</div>
             <button type="button" class="nav-item" data-tab="tab-ai">
               <span class="nav-icon">🤖</span>
-              <span class="nav-label">AI Chatbot Model</span>
+              <span class="nav-label">Krims AI v5 Model</span>
+              <span class="nav-badge" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7;">v5.0</span>
             </button>
             <button type="button" class="nav-item" data-tab="tab-branding">
               <span class="nav-icon">🎨</span>
@@ -178,7 +189,7 @@
           <div class="sidebar-footer">
             <div class="sidebar-brand-pill">
               <img src="/logo.png" alt="Krims Bot Logo" class="sidebar-footer-logo">
-              <div class="bot-version">KRIMS BOT v3.2 • ACTIVE</div>
+              <div class="bot-version">KRIMS BOT v5.0 • ACTIVE</div>
             </div>
           </div>
         </aside>
@@ -452,6 +463,52 @@
                       <span class="slider"></span>
                     </label>
                   </div>
+
+                  <!-- Zero-Tolerance Auto-Quarantine Shield Toggle -->
+                  <div class="toggle-row" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); padding: 12px; margin-top: 10px;">
+                    <div class="toggle-meta">
+                      <span class="toggle-title" style="color: #fca5a5;">🛡️ Zero-Tolerance Bot Account Safety & Auto-Quarantine</span>
+                      <span class="toggle-sub" style="color: #fecaca;">Instantly isolates and shuts off bot commands in this server if extreme TOS-violating words, raid attempts, or token-risk actions are detected, ensuring the bot is never in danger of Discord bans.</span>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" id="toggle-auto-quarantine" checked>
+                      <span class="slider" style="background: #ef4444;"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Zero-Tolerance Anti-Ban & Auto-Blacklist Protection Card -->
+              <div class="card module-box" style="border-left: 4px solid var(--neon-cyan);">
+                <div class="card-header">
+                  <div class="card-title-group">
+                    <span class="card-icon">🛡️</span>
+                    <div>
+                      <h3>Krylo Zero-Tolerance Bot Account Protection Shield</h3>
+                      <p>Active defense layer preventing bot account/token suspension from hostile server actions.</p>
+                    </div>
+                  </div>
+                  <span class="badge-status-online" style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--green); color: var(--green); font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+                    ● AUTO-QUARANTINE ARMED
+                  </span>
+                </div>
+                <div class="setting-row">
+                  <div class="setting-meta">
+                    <span class="setting-title">Server Quarantine Protocol</span>
+                    <p class="setting-desc">If any member or administrator posts extreme blacklisted words, severe TOS violations, or attempt token-abuse exploits, Krims Bot v5 immediately revokes command execution in this guild.</p>
+                  </div>
+                  <div class="setting-input-wrap">
+                    <span style="font-size: 0.82rem; font-weight: 700; color: var(--neon-cyan);">🛡️ Status: Protected (0 Discord Flags)</span>
+                  </div>
+                </div>
+                <div class="setting-row">
+                  <div class="setting-meta">
+                    <label for="quarantine-keywords" class="setting-title">Custom Critical Words & Raid Blacklist</label>
+                    <p class="setting-desc">Comma-separated triggers that cause instant automated command lockout and quarantine.</p>
+                  </div>
+                  <div class="setting-input-wrap full-width">
+                    <input type="text" id="quarantine-keywords" class="form-input" placeholder="e.g. raid, nuke, discord.gg/scam, token-grabber" value="raid, nuke, scam, token-grab, grabber, mass-dm">
+                  </div>
                 </div>
               </div>
 
@@ -491,6 +548,108 @@
                       <option value="kick">Kick User from Server</option>
                     </select>
                   </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- TAB 3.5: REACTION ROLES & ONBOARDING SELECTOR -->
+            <section class="tab-pane" id="tab-reaction-roles">
+              <div class="tab-header">
+                <div>
+                  <h2>🎭 Reaction Roles & Onboarding Selector</h2>
+                  <p class="tab-sub">Allow members to click reaction emojis or interactive buttons to self-assign roles (Java/Bedrock, PvP/Builder, notifications).</p>
+                </div>
+                <div class="header-actions">
+                  <label class="switch-with-label">
+                    <span>Module Active</span>
+                    <span class="switch">
+                      <input type="checkbox" id="toggle-reaction-roles" checked>
+                      <span class="slider"></span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Setup Reaction Role Menu Card -->
+              <div class="card module-box">
+                <div class="card-header">
+                  <div class="card-title-group">
+                    <span class="card-icon">⚙️</span>
+                    <div>
+                      <h3>Onboarding Menu Configuration</h3>
+                      <p>Select the channel and customize the onboarding prompt embed.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="setting-row">
+                  <div class="setting-meta">
+                    <label for="reaction-role-channel" class="setting-title">Target Channel</label>
+                    <p class="setting-desc">Where the bot will post and listen for reaction role interactions.</p>
+                  </div>
+                  <div class="setting-input-wrap">
+                    <select id="reaction-role-channel" class="form-select">
+                      <option value="none">#roles</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="setting-row">
+                  <div class="setting-meta">
+                    <label for="reaction-role-title" class="setting-title">Menu Embed Title</label>
+                    <p class="setting-desc">The main banner title of the self-assignable role message.</p>
+                  </div>
+                  <div class="setting-input-wrap full-width">
+                    <input type="text" id="reaction-role-title" class="form-input" value="✨ KSMP Server Onboarding & Role Selection">
+                  </div>
+                </div>
+
+                <div class="setting-row">
+                  <div class="setting-meta">
+                    <label for="reaction-role-desc" class="setting-title">Instructions & Description</label>
+                    <p class="setting-desc">Guide users on which buttons or reactions grant which privileges.</p>
+                  </div>
+                  <div class="setting-input-wrap full-width">
+                    <textarea id="reaction-role-desc" class="form-textarea" rows="3">Click the buttons below to assign your Minecraft client edition, preferred gameplay styles, and notification pings for KSMP events!</textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Configured Reaction Role Options Grid -->
+              <div class="card module-box">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                  <div class="card-title-group">
+                    <span class="card-icon">🎮</span>
+                    <div>
+                      <h3>Configured Onboarding Roles</h3>
+                      <p>Members can toggle these roles on and off with a single click.</p>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-primary" id="add-reaction-role-btn" style="padding: 6px 14px; font-size: 0.8rem;">
+                    ➕ Add Role Option
+                  </button>
+                </div>
+
+                <div class="reaction-roles-grid" id="reaction-roles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                  <!-- Dynamically populated / default presets -->
+                </div>
+
+                <!-- Live Discord Button Mockup Preview -->
+                <div style="margin-top: 1.5rem; padding: 1.2rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                  <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Discord Client Preview</div>
+                  <div style="border-left: 4px solid var(--neon-cyan); background: #181c28; padding: 14px; border-radius: 4px; margin-bottom: 12px;">
+                    <div id="preview-rr-title" style="font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 4px;">✨ KSMP Server Onboarding & Role Selection</div>
+                    <div id="preview-rr-desc" style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">Click the buttons below to assign your Minecraft client edition, preferred gameplay styles, and notification pings for KSMP events!</div>
+                  </div>
+                  <div id="preview-rr-buttons" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <!-- Rendered clickable mockup buttons -->
+                  </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                  <button type="button" class="btn-primary" id="deploy-reaction-roles-btn" style="background: var(--green); color: #050810; box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);">
+                    🚀 Deploy Reaction Role Message to Discord
+                  </button>
                 </div>
               </div>
             </section>
@@ -547,6 +706,83 @@
                     <input type="checkbox" id="toggle-welcome-dm">
                     <span class="slider"></span>
                   </label>
+                </div>
+              </div>
+
+              <!-- Advanced Graphical Welcome Card Designer -->
+              <div class="card module-box">
+                <div class="card-header">
+                  <div class="card-title-group">
+                    <span class="card-icon">🖼️</span>
+                    <div>
+                      <h3>Advanced Graphical Welcome Card Designer</h3>
+                      <p>Custom dynamic graphical banners generated with member avatar, server name, and join counter.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; margin-top: 0.5rem;" class="welcome-designer-grid">
+                  <!-- Configuration Controls -->
+                  <div class="welcome-controls">
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <label for="welcome-card-theme" class="setting-title">Card Theme / Background</label>
+                        <p class="setting-desc">Visual artistic styling rendered on the canvas.</p>
+                      </div>
+                      <div class="setting-input-wrap">
+                        <select id="welcome-card-theme" class="form-select">
+                          <option value="cyber-cyan">Cyberpunk Grid (Cyan Glow)</option>
+                          <option value="ksmp-space">KSMP Deep Space Nebula (Purple)</option>
+                          <option value="matrix-green">Emerald Matrix (Green)</option>
+                          <option value="obsidian-dark">Obsidian Dark Minimalist</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <label for="welcome-card-heading" class="setting-title">Top Heading Text</label>
+                        <p class="setting-desc">Primary welcome banner header.</p>
+                      </div>
+                      <div class="setting-input-wrap full-width">
+                        <input type="text" id="welcome-card-heading" class="form-input" value="WELCOME TO KSMP">
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <label for="welcome-card-sub" class="setting-title">Subtext / Join Tag</label>
+                        <p class="setting-desc">Dynamic member count display.</p>
+                      </div>
+                      <div class="setting-input-wrap full-width">
+                        <input type="text" id="welcome-card-sub" class="form-input" value="You are our #{count}th Member!">
+                      </div>
+                    </div>
+
+                    <div class="toggle-row">
+                      <div class="toggle-meta">
+                        <span class="toggle-title">✨ Glowing Avatar Ring</span>
+                        <span class="toggle-sub">Draws an animated neon ring around the joining user's avatar.</span>
+                      </div>
+                      <label class="switch">
+                        <input type="checkbox" id="welcome-avatar-glow" checked>
+                        <span class="slider"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Live Canvas Simulation -->
+                  <div class="welcome-preview-box">
+                    <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px;">Live Welcome Card Preview</div>
+                    <div id="welcome-canvas-mock" class="welcome-banner-canvas cyber-cyan" style="height: 190px; border-radius: 8px; border: 1px solid var(--border-color-glow); padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; background: linear-gradient(135deg, #0a0f1d, #030712); box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
+                      <div id="welcome-mock-avatar-wrap" style="width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--neon-cyan); box-shadow: 0 0 16px rgba(0,242,255,0.6); overflow: hidden; margin-bottom: 8px; background: #5865F2; display: flex; align-items: center; justify-content: center;">
+                        <img src="https://cdn.discordapp.com/embed/avatars/1.png" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                      </div>
+                      <div id="welcome-preview-title" style="font-weight: 900; font-size: 1.05rem; letter-spacing: 0.08em; color: #fff; text-shadow: 0 0 10px rgba(0,242,255,0.6);">WELCOME TO KSMP</div>
+                      <div id="welcome-preview-username" style="font-weight: 700; font-size: 0.85rem; color: var(--neon-cyan); margin-top: 2px;">Krylo_plays#0001</div>
+                      <div id="welcome-preview-counter" style="font-size: 0.72rem; color: var(--text-dim); margin-top: 4px; background: rgba(0,0,0,0.4); padding: 2px 8px; border-radius: 10px;">You are our #1,248th Member!</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </section>
@@ -723,9 +959,9 @@
                     </div>
                   </div>
 
-                  <!-- Role Rewards Milestone Table -->
+                  <!-- Role Rewards Milestone Table (Customizable in Free, Pro, Premium) -->
                   <div class="card module-box">
-                    <div class="card-header">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                       <div class="card-title-group">
                         <span class="card-icon">🏆</span>
                         <div>
@@ -733,23 +969,38 @@
                           <p>Roles auto-granted to users when they reach specific levels.</p>
                         </div>
                       </div>
+                      <!-- Tier Switcher Pills -->
+                      <div class="tier-pill-group" id="milestone-tier-selector">
+                        <button type="button" class="tier-pill-btn active" data-tier="free" id="tier-btn-free">Free</button>
+                        <button type="button" class="tier-pill-btn" data-tier="pro" id="tier-btn-pro">⚡ Pro</button>
+                        <button type="button" class="tier-pill-btn" data-tier="premium" id="tier-btn-premium">👑 Premium</button>
+                      </div>
                     </div>
-                    <div class="role-rewards-list">
-                      <div class="role-reward-item">
-                        <div class="reward-level-tag">LEVEL 10</div>
-                        <div class="reward-role-tag" style="border-color: #00f2ff; color: #00f2ff;">⚡ Veteran Member</div>
-                        <span class="reward-auto-badge">Auto-Granted</span>
+
+                    <!-- Tier Quota & Feature Banner -->
+                    <div class="tier-status-banner" id="tier-status-banner">
+                      <div class="tier-status-info">
+                        <span class="tier-badge-label tier-free" id="tier-badge-label">FREE TIER</span>
+                        <span class="tier-quota-text" id="tier-quota-text">2 / 2 Milestones Configured</span>
                       </div>
-                      <div class="role-reward-item">
-                        <div class="reward-level-tag">LEVEL 25</div>
-                        <div class="reward-role-tag" style="border-color: #8b5cf6; color: #8b5cf6;">🌟 Elite VIP</div>
-                        <span class="reward-auto-badge">Auto-Granted</span>
+                      <div class="tier-perk-summary" id="tier-perk-summary">
+                        Basic milestone rewards (Up to 2 roles). Switch to Pro for 10 slots + stacking, or Premium for unlimited + XP boosters!
                       </div>
-                      <div class="role-reward-item">
-                        <div class="reward-level-tag">LEVEL 50</div>
-                        <div class="reward-role-tag" style="border-color: #f59e0b; color: #f59e0b;">👑 Krylo Champion</div>
-                        <span class="reward-auto-badge">Auto-Granted</span>
-                      </div>
+                    </div>
+
+                    <!-- Dynamic Role Rewards List -->
+                    <div class="role-rewards-list" id="role-rewards-list">
+                      <!-- Populated dynamically by main.js -->
+                    </div>
+
+                    <!-- Actions & Add Milestone Button -->
+                    <div class="role-rewards-action-bar" style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                      <button type="button" class="btn-add-milestone" id="add-milestone-btn">
+                        ➕ Add Milestone Role Reward
+                      </button>
+                      <span class="tier-upgrade-hint" id="tier-upgrade-hint">
+                        💡 Click <strong>⚡ Pro</strong> or <strong>👑 Premium</strong> above to unlock higher tiers & perks!
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -806,6 +1057,144 @@
                       </div>
                     </div>
                     <p class="sim-note">✨ Changes to colors and titles in the Branding tab update this card instantly.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- TAB 6.5: ECONOMY & STORE MANAGER -->
+            <section class="tab-pane" id="tab-economy">
+              <div class="tab-header">
+                <div>
+                  <h2>💰 KSMP Economy & Store Manager</h2>
+                  <p class="tab-sub">Configure KryloCoins (KC) currency rewards, daily streaks, casino betting caps, and community store catalog.</p>
+                </div>
+                <div class="header-actions">
+                  <label class="switch-with-label">
+                    <span>Economy Active</span>
+                    <span class="switch">
+                      <input type="checkbox" id="toggle-economy-master" checked>
+                      <span class="slider"></span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Economy Earning Rates Card -->
+              <div class="card module-box">
+                <div class="card-header">
+                  <div class="card-title-group">
+                    <span class="card-icon">🪙</span>
+                    <div>
+                      <h3>KryloCoins (KC) Reward Engines</h3>
+                      <p>Control how members earn currency through active chat, voice, and daily activity.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="setting-row">
+                  <div class="setting-meta">
+                    <label for="eco-msg-reward" class="setting-title">Text Message Earnings</label>
+                    <p class="setting-desc">KryloCoins granted per active chat message (60-second cooldown).</p>
+                  </div>
+                  <div class="setting-input-wrap">
+                    <div class="input-unit-group">
+                      <input type="number" id="eco-msg-reward" class="form-input" min="1" max="100" value="10">
+                      <span class="input-unit">KC / msg</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="setting-row">
+                  <div class="setting-meta">
+                    <label for="eco-voice-reward" class="setting-title">Voice Lounge Earnings</label>
+                    <p class="setting-desc">KryloCoins granted to active unmuted members in voice lounges.</p>
+                  </div>
+                  <div class="setting-input-wrap">
+                    <div class="input-unit-group">
+                      <input type="number" id="eco-voice-reward" class="form-input" min="1" max="250" value="25">
+                      <span class="input-unit">KC / 5 min</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="setting-row">
+                  <div class="setting-meta">
+                    <label for="eco-daily-streak" class="setting-title">Daily Streak Base Bonus</label>
+                    <p class="setting-desc">Base reward granted when running <code>!daily</code> (increases by +20 KC per consecutive day).</p>
+                  </div>
+                  <div class="setting-input-wrap">
+                    <div class="input-unit-group">
+                      <input type="number" id="eco-daily-streak" class="form-input" min="50" max="1000" value="100">
+                      <span class="input-unit">KC / day</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="setting-row">
+                  <div class="setting-meta">
+                    <label for="eco-casino-max" class="setting-title">Casino & Coinflip Max Bet</label>
+                    <p class="setting-desc">Safety ceiling preventing coin inflation and massive gambling losses.</p>
+                  </div>
+                  <div class="setting-input-wrap">
+                    <div class="input-unit-group">
+                      <input type="number" id="eco-casino-max" class="form-input" min="100" max="50000" value="1000">
+                      <span class="input-unit">KC max bet</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- KSMP Server Store Items Catalog -->
+              <div class="card module-box">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                  <div class="card-title-group">
+                    <span class="card-icon">🛍️</span>
+                    <div>
+                      <h3>KSMP Store Catalog Items</h3>
+                      <p>Perks and items players can purchase with their earned KryloCoins via <code>!shop</code>.</p>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-primary" id="add-store-item-btn" style="padding: 6px 14px; font-size: 0.8rem;">
+                    ➕ Add Shop Item
+                  </button>
+                </div>
+
+                <div class="store-items-grid" id="store-items-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                  <div class="role-reward-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="font-weight: 800; font-size: 0.9rem; color: #fff;">⚡ 7-Day Flight Pass</span>
+                      <span style="font-weight: 700; color: #f59e0b; font-size: 0.85rem;">5,000 KC</span>
+                    </div>
+                    <span style="font-size: 0.76rem; color: var(--text-dim);">Grants /fly in non-PvP zones on KSMP for 7 days.</span>
+                    <span class="reward-auto-badge" style="align-self: flex-start;">Auto-Delivered</span>
+                  </div>
+
+                  <div class="role-reward-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="font-weight: 800; font-size: 0.9rem; color: #fff;">🎨 Custom Chat Color Tag</span>
+                      <span style="font-weight: 700; color: #f59e0b; font-size: 0.85rem;">2,500 KC</span>
+                    </div>
+                    <span style="font-size: 0.76rem; color: var(--text-dim);">Unlock custom glowing hex chat colors in Discord and KSMP.</span>
+                    <span class="reward-auto-badge" style="align-self: flex-start;">Auto-Delivered</span>
+                  </div>
+
+                  <div class="role-reward-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="font-weight: 800; font-size: 0.9rem; color: #fff;">💎 KSMP Diamond Crate Key</span>
+                      <span style="font-weight: 700; color: #f59e0b; font-size: 0.85rem;">7,500 KC</span>
+                    </div>
+                    <span style="font-size: 0.76rem; color: var(--text-dim);">Opens the legendary spawn diamond loot crate on KSMP.</span>
+                    <span class="reward-auto-badge" style="align-self: flex-start;">Auto-Delivered</span>
+                  </div>
+
+                  <div class="role-reward-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="font-weight: 800; font-size: 0.9rem; color: #fff;">👑 VIP Rank for 30 Days</span>
+                      <span style="font-weight: 700; color: #f59e0b; font-size: 0.85rem;">15,000 KC</span>
+                    </div>
+                    <span style="font-size: 0.76rem; color: var(--text-dim);">Unlocks @VIP Discord role and priority queue in KSMP.</span>
+                    <span class="reward-auto-badge" style="align-self: flex-start;">Auto-Delivered</span>
                   </div>
                 </div>
               </div>
@@ -1255,6 +1644,98 @@
           <p class="modal-sub" id="server-modal-desc">Which server would you like to set up or manage with Krims Bot?</p>
           <div class="guilds-list modal-guilds-list" id="guilds-container">
             <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Configure Milestone Role Reward Modal (Free / Pro / Premium) -->
+    <div class="modal-overlay" id="milestone-modal" style="display: none;">
+      <div class="modal-card" style="max-width: 520px;">
+        <div class="modal-header">
+          <h3 id="milestone-modal-title">🏆 Configure Milestone Role Reward</h3>
+          <button type="button" class="modal-close-btn" id="close-milestone-modal-btn">✕</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="milestone-edit-id" value="">
+          
+          <div class="form-group" style="margin-bottom: 1.1rem;">
+            <label for="milestone-level" class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px; display: block;">Required Level</label>
+            <input type="number" id="milestone-level" class="form-input" min="1" max="500" value="10" placeholder="E.g. 10, 25, 50" style="font-weight: bold; font-size: 1rem; color: var(--neon-cyan);">
+            <small style="color: var(--text-dim); font-size: 0.75rem; margin-top: 4px; display: block;">Level required for the bot to auto-grant this role to active members.</small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.1rem;">
+            <label for="milestone-role-name" class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px; display: block;">Role Name</label>
+            <input type="text" id="milestone-role-name" class="form-input" placeholder="E.g. Veteran Member" value="Veteran Member">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.1rem;">
+            <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px; display: block;">Role Badge Icon & Color</label>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <select id="milestone-icon" class="form-select" style="max-width: 85px; font-size: 1.1rem; text-align: center;">
+                <option value="⚡">⚡</option>
+                <option value="🌟">🌟</option>
+                <option value="👑">👑</option>
+                <option value="🔥">🔥</option>
+                <option value="💎">💎</option>
+                <option value="🛡️">🛡️</option>
+                <option value="🚀">🚀</option>
+                <option value="⚔️">⚔️</option>
+                <option value="🎯">🎯</option>
+              </select>
+              <input type="color" id="milestone-color" class="form-input" style="width: 48px; height: 38px; padding: 2px; cursor: pointer;" value="#00f2ff">
+              <div id="milestone-swatches" style="display: flex; gap: 8px; align-items: center;">
+                <span class="swatch-btn" data-color="#00f2ff" style="background: #00f2ff; width: 22px; height: 22px; border-radius: 4px; cursor: pointer; display: inline-block;" title="Cyan"></span>
+                <span class="swatch-btn" data-color="#8b5cf6" style="background: #8b5cf6; width: 22px; height: 22px; border-radius: 4px; cursor: pointer; display: inline-block;" title="Purple"></span>
+                <span class="swatch-btn" data-color="#f59e0b" style="background: #f59e0b; width: 22px; height: 22px; border-radius: 4px; cursor: pointer; display: inline-block;" title="Gold"></span>
+                <span class="swatch-btn" data-color="#10b981" style="background: #10b981; width: 22px; height: 22px; border-radius: 4px; cursor: pointer; display: inline-block;" title="Emerald"></span>
+                <span class="swatch-btn" data-color="#ec4899" style="background: #ec4899; width: 22px; height: 22px; border-radius: 4px; cursor: pointer; display: inline-block;" title="Pink"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRO TIER FEATURE: Role Stacking -->
+          <div class="tier-feature-box pro-feature-box" id="milestone-pro-box" style="margin-bottom: 1.1rem; padding: 12px; background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-weight: 700; font-size: 0.8rem; color: #a78bfa;">⚡ PRO FEATURE: Role Behavior</span>
+              <span class="tier-pill-mini" id="pro-lock-badge" style="font-size: 0.65rem; background: rgba(139, 92, 246, 0.25); color: #c4b5fd; padding: 2px 6px; border-radius: 3px; font-weight: bold;">PRO TIER</span>
+            </div>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; cursor: pointer; color: var(--text-color);">
+              <input type="checkbox" id="milestone-stack-roles" checked>
+              <span>Stack roles (keep previously earned milestone roles)</span>
+            </label>
+            <p id="pro-feature-locked-msg" style="display: none; font-size: 0.72rem; color: var(--text-dim); margin-top: 4px;">Locked on Free Tier. Upgrade to Pro or Premium to configure role stacking.</p>
+          </div>
+
+          <!-- PREMIUM TIER PERKS: DM & XP Multipliers -->
+          <div class="tier-feature-box premium-feature-box" id="milestone-premium-box" style="margin-bottom: 1.3rem; padding: 12px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-weight: 700; font-size: 0.8rem; color: #fbbf24;">👑 PREMIUM PERKS</span>
+              <span class="tier-pill-mini" id="premium-lock-badge" style="font-size: 0.65rem; background: rgba(245, 158, 11, 0.25); color: #fde68a; padding: 2px 6px; border-radius: 3px; font-weight: bold;">PREMIUM TIER</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; cursor: pointer; color: var(--text-color);">
+                <input type="checkbox" id="milestone-dm-notify">
+                <span>Send direct message (DM) to user upon reaching this level</span>
+              </label>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: var(--text-color);">
+                <span>XP Multiplier Boost:</span>
+                <select id="milestone-xp-boost" class="form-select" style="max-width: 140px; font-size: 0.8rem; padding: 4px 8px;">
+                  <option value="1.0x">1.0x (Standard)</option>
+                  <option value="1.25x">1.25x (+25% XP)</option>
+                  <option value="1.5x">1.5x (+50% XP)</option>
+                  <option value="2.0x">2.0x (Double XP)</option>
+                </select>
+              </div>
+              <p id="premium-feature-locked-msg" style="display: none; font-size: 0.72rem; color: var(--text-dim); margin-top: 4px;">Locked on Free & Pro. Switch to Premium to activate custom XP boosts and auto-DM alerts.</p>
+            </div>
+          </div>
+
+          <!-- Modal Actions -->
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn-cancel" id="close-milestone-cancel-btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600;">Cancel</button>
+            <button type="button" class="btn-primary" id="save-milestone-btn" style="background: var(--neon-cyan); color: #050810; border: none; padding: 8px 18px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 800; box-shadow: 0 0 12px rgba(0, 242, 255, 0.3);">Save Milestone</button>
           </div>
         </div>
       </div>

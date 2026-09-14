@@ -1280,6 +1280,115 @@ input:checked + .slider:before {
   line-height: 1.4;
 }
 
+/* Tier Pill Switcher */
+.tier-pill-group {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 3px;
+}
+
+.tier-pill-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.tier-pill-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tier-pill-btn.active[data-tier="free"] {
+  background: rgba(0, 242, 255, 0.15);
+  color: var(--neon-cyan);
+  border: 1px solid rgba(0, 242, 255, 0.4);
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+}
+
+.tier-pill-btn.active[data-tier="pro"] {
+  background: rgba(139, 92, 246, 0.25);
+  color: #c4b5fd;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.35);
+}
+
+.tier-pill-btn.active[data-tier="premium"] {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(234, 88, 12, 0.3));
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+}
+
+/* Tier Status & Quota Banner */
+.tier-status-banner {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tier-status-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tier-badge-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.tier-badge-label.tier-free {
+  background: rgba(0, 242, 255, 0.12);
+  color: var(--neon-cyan);
+  border: 1px solid rgba(0, 242, 255, 0.3);
+}
+
+.tier-badge-label.tier-pro {
+  background: rgba(139, 92, 246, 0.2);
+  color: #c4b5fd;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+}
+
+.tier-badge-label.tier-premium {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+}
+
+.tier-quota-text {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.tier-perk-summary {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Role Rewards List & Items */
 .role-rewards-list {
   display: flex;
   flex-direction: column;
@@ -1294,6 +1403,12 @@ input:checked + .slider:before {
   border: 1px solid var(--border-color);
   padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.role-reward-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .reward-level-tag {
@@ -1301,20 +1416,116 @@ input:checked + .slider:before {
   font-weight: 800;
   color: var(--text-muted);
   letter-spacing: 0.05em;
+  min-width: 75px;
 }
 
 .reward-role-tag {
   font-size: 0.82rem;
   font-weight: 600;
-  padding: 0.25rem 0.6rem;
+  padding: 0.25rem 0.65rem;
   border-radius: 4px;
   border: 1px solid currentColor;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reward-perk-badges-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.reward-perk-pill {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-dim);
+}
+
+.reward-perk-pill.perk-pro {
+  background: rgba(139, 92, 246, 0.15);
+  color: #c4b5fd;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.reward-perk-pill.perk-premium {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .reward-auto-badge {
   font-size: 0.68rem;
   font-weight: 700;
   color: var(--green);
+  margin-right: 10px;
+}
+
+.reward-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-reward-action {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reward-action:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-reward-action.btn-del:hover {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.btn-add-milestone {
+  background: rgba(0, 242, 255, 0.1);
+  color: var(--neon-cyan);
+  border: 1px dashed var(--neon-cyan);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add-milestone:hover:not(:disabled) {
+  background: rgba(0, 242, 255, 0.2);
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-add-milestone:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-style: solid;
+  border-color: var(--border-color);
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tier-upgrade-hint {
+  font-size: 0.78rem;
+  color: var(--text-dim);
 }
 
 /* ==========================================================================

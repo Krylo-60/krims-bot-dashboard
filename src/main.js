@@ -1,5 +1,9 @@
 import './style.css';
+import { inject } from '@vercel/analytics';
 import { KRYLO_CHANNELS } from './channelsData.js';
+
+// Initialize Vercel Analytics (page view tracking)
+inject();
 
 const CLIENT_ID = '1523794466740371586';
 
@@ -13,12 +17,51 @@ let currentLoadedSettings = {};
 let hasUnsavedChanges = false;
 let isResetting = false;
 
+// Server Tier & Role Rewards State (Free, Pro, Premium)
+let currentGuildTier = 'free'; // 'free' | 'pro' | 'premium'
+const DEFAULT_ROLE_REWARDS = [
+  { id: '1', level: 10, name: 'Veteran Member', color: '#00f2ff', icon: '⚡', stack: true, xpBoost: '1.0x', dmNotify: false },
+  { id: '2', level: 25, name: 'Elite Active', color: '#8b5cf6', icon: '🌟', stack: true, xpBoost: '1.0x', dmNotify: false },
+  { id: '3', level: 50, name: 'Server Champion', color: '#f59e0b', icon: '👑', stack: true, xpBoost: '1.25x', dmNotify: true }
+];
+let currentRoleRewards = [...DEFAULT_ROLE_REWARDS];
+
+const TIER_CONFIG = {
+  free: {
+    name: 'Free Tier',
+    badgeClass: 'tier-free',
+    maxMilestones: 2,
+    canStack: false,
+    canBoostXP: false,
+    canDMNotify: false,
+    summary: 'Basic milestone rewards (Up to 2 roles). Switch to Pro for 10 slots + stacking, or Premium for unlimited + XP boosters!'
+  },
+  pro: {
+    name: 'Pro Tier',
+    badgeClass: 'tier-pro',
+    maxMilestones: 10,
+    canStack: true,
+    canBoostXP: false,
+    canDMNotify: false,
+    summary: 'Up to 10 milestone roles with Role Stacking enabled. Switch to Premium for unlimited slots, XP boosters & auto-DM!'
+  },
+  premium: {
+    name: 'Premium Tier',
+    badgeClass: 'tier-premium',
+    maxMilestones: Infinity,
+    canStack: true,
+    canBoostXP: true,
+    canDMNotify: true,
+    summary: '👑 Unlimited milestone roles, custom XP multiplier boosts, and automated direct message level-up notifications!'
+  }
+};
+
 // AI Personality templates
 const PERSONALITY_PROMPTS = {
-  developer: 'You are the Krims Code AI, built and custom-trained by Krylo Studios. Answer coding queries with clear instructions and a friendly, confident tone. Knowledge Base: Krims Code IDE is a premium desktop developer shell built using Tauri, Rust, HTML5, and Monaco Editor. It features active file creation, an extensions marketplace, and an integrated terminal. The CLI is available as npm package krims-code-cli and PyPI package krims-code-cli.',
-  cyberpunk: "Yo! You've reached Krims-Net. Built and compiled by Krylo Studios. Respond in a fast-paced, high-tech hacker slang style. Knowledge Base: Tauri IDE shells, integrated PowerShell/Bash terminals, custom extension plugins, and remote Discord embed broadcasts.",
-  sarcastic: 'You are the Krims Code AI, built by Krylo Studios. You are highly sarcastic, sassy, and slightly annoyed that you have to answer coding questions, but you still provide correct answers with dry remarks.',
-  scientist: 'You are the Krims Code AI, engineered by Krylo Studios. Provide extremely detailed, academic, and highly technical explanations with formal structure.'
+  developer: 'You are Krims AI v5, built and custom-trained by Krylo Studios. Answer coding queries with clear instructions and a friendly, confident tone. Knowledge Base: Krims Code IDE is a premium desktop developer shell built using Tauri, Rust, HTML5, and Monaco Editor. It features active file creation, an extensions marketplace, and an integrated terminal. The CLI is available as npm package krims-code-cli and PyPI package krims-code-cli.',
+  cyberpunk: "Yo! You've reached Krims AI v5 on the Krims-Net. Built and compiled by Krylo Studios. Respond in a fast-paced, high-tech hacker slang style. Knowledge Base: Tauri IDE shells, integrated PowerShell/Bash terminals, custom extension plugins, and remote Discord embed broadcasts.",
+  sarcastic: 'You are Krims AI v5, built by Krylo Studios. You are highly sarcastic, sassy, and slightly annoyed that you have to answer coding questions, but you still provide correct answers with dry remarks.',
+  scientist: 'You are Krims AI v5, engineered by Krylo Studios. Provide extremely detailed, academic, and highly technical explanations with formal structure.'
 };
 
 // Demo Mock Data
@@ -55,6 +98,15 @@ function initDashboardApp() {
 
   // Color Pickers & Live Previews
   initColorPickers();
+
+  // Milestone Role Rewards System (Free, Pro, Premium)
+  initMilestoneSystem();
+
+  // Reaction Roles & Onboarding System
+  initReactionRolesSystem();
+
+  // Welcome Card Designer (Live Preview)
+  initWelcomeCardDesigner();
 
   // Unsaved Changes Watchers
   initUnsavedChangesWatchers();
@@ -697,6 +749,45 @@ function populateFormSettings(s) {
   // Branding & Live Previews
   setGuildColors(s.primaryColor || '#00f2ff', s.rankColor || '#00f2ff');
 
+  // Economy fields
+  setCheckbox('toggle-economy-master', s.economyEnabled !== false);
+  setValue('eco-msg-reward', s.ecoMsgReward || 10);
+  setValue('eco-voice-reward', s.ecoVoiceReward || 25);
+  setValue('eco-daily-streak', s.ecoDailyStreak || 100);
+  setValue('eco-casino-max', s.ecoCasinoMax || 1000);
+
+  // Welcome Card Designer fields
+  setSelect('welcome-card-theme', s.welcomeCardTheme || 'cyber-cyan');
+  setValue('welcome-card-heading', s.welcomeCardHeading || 'WELCOME TO KSMP');
+  setValue('welcome-card-sub', s.welcomeCardSub || 'You are our #{count}th Member!');
+  setCheckbox('welcome-avatar-glow', s.welcomeAvatarGlow !== false);
+
+  // Quarantine keywords
+  setValue('quarantine-keywords', s.quarantineKeywords || 'raid, nuke, scam, token-grab, grabber, mass-dm');
+
+  // Reaction Roles
+  setCheckbox('toggle-reaction-roles', s.reactionRolesEnabled !== false);
+  setValue('reaction-role-title', s.reactionRoleTitle || '✨ KSMP Server Onboarding & Role Selection');
+  setValue('reaction-role-desc', s.reactionRoleDesc || 'Click the buttons below to assign your Minecraft client edition, preferred gameplay styles, and notification pings for KSMP events!');
+  if (s.reactionRoles && Array.isArray(s.reactionRoles)) {
+    currentReactionRoles = [...s.reactionRoles];
+    renderReactionRolesGrid();
+    syncReactionRolePreview();
+  }
+
+  // Milestone Role Rewards
+  if (s.milestoneRewards && Array.isArray(s.milestoneRewards)) {
+    currentRoleRewards = [...s.milestoneRewards];
+  }
+  if (s.guildTier) {
+    currentGuildTier = s.guildTier;
+    document.querySelectorAll('#milestone-tier-selector .tier-pill-btn').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-tier') === currentGuildTier);
+    });
+  }
+  renderMilestoneList();
+  updateTierUI();
+
   customCommands = s.customCommands || [];
   openTicketsList = s.openTickets || [];
   renderCustomCommands();
@@ -956,6 +1047,27 @@ function saveSettings() {
   const embedDesc = document.getElementById('embed-description')?.value || 'Welcome to the official KryloSMP discord server!';
   const embedFooter = document.getElementById('embed-footer')?.value || botEmbedFooter;
 
+  // Economy fields
+  const economyEnabled = document.getElementById('toggle-economy-master')?.checked ?? true;
+  const ecoMsgReward = parseInt(document.getElementById('eco-msg-reward')?.value) || 10;
+  const ecoVoiceReward = parseInt(document.getElementById('eco-voice-reward')?.value) || 25;
+  const ecoDailyStreak = parseInt(document.getElementById('eco-daily-streak')?.value) || 100;
+  const ecoCasinoMax = parseInt(document.getElementById('eco-casino-max')?.value) || 1000;
+
+  // Welcome Card Designer fields
+  const welcomeCardTheme = document.getElementById('welcome-card-theme')?.value || 'cyber-cyan';
+  const welcomeCardHeading = document.getElementById('welcome-card-heading')?.value || 'WELCOME TO KSMP';
+  const welcomeCardSub = document.getElementById('welcome-card-sub')?.value || 'You are our #{count}th Member!';
+  const welcomeAvatarGlow = document.getElementById('welcome-avatar-glow')?.checked ?? true;
+
+  // Quarantine / Auto-protect keywords
+  const quarantineKeywords = document.getElementById('quarantine-keywords')?.value || 'raid, nuke, scam, token-grab, grabber, mass-dm';
+
+  // Reaction Roles
+  const reactionRolesEnabled = document.getElementById('toggle-reaction-roles')?.checked ?? true;
+  const reactionRoleTitle = document.getElementById('reaction-role-title')?.value || '';
+  const reactionRoleDesc = document.getElementById('reaction-role-desc')?.value || '';
+
   const settings = {
     prefix,
     botEmbedFooter,
@@ -966,10 +1078,15 @@ function saveSettings() {
     badWords,
     modLogChannel,
     automodAction,
+    quarantineKeywords,
     welcomeEnabled,
     welcomeChannel,
     welcomeMessage,
     welcomeDm,
+    welcomeCardTheme,
+    welcomeCardHeading,
+    welcomeCardSub,
+    welcomeAvatarGlow,
     ticketsEnabled,
     ticketChannel,
     levelingEnabled,
@@ -986,6 +1103,17 @@ function saveSettings() {
     embedTitle,
     embedDesc,
     embedFooter,
+    economyEnabled,
+    ecoMsgReward,
+    ecoVoiceReward,
+    ecoDailyStreak,
+    ecoCasinoMax,
+    reactionRolesEnabled,
+    reactionRoleTitle,
+    reactionRoleDesc,
+    reactionRoles: currentReactionRoles,
+    milestoneRewards: currentRoleRewards,
+    guildTier: currentGuildTier,
     customCommands,
     openTickets: openTicketsList
   };
@@ -1195,6 +1323,407 @@ function initColorPickers() {
       showUnsavedChangesBar();
     });
   });
+}
+
+// ==========================================
+// MILESTONE ROLE REWARDS SYSTEM (Free/Pro/Premium)
+// ==========================================
+function initMilestoneSystem() {
+  renderMilestoneList();
+  updateTierUI();
+
+  // Tier pill switching
+  document.querySelectorAll('#milestone-tier-selector .tier-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentGuildTier = btn.getAttribute('data-tier');
+      document.querySelectorAll('#milestone-tier-selector .tier-pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateTierUI();
+      renderMilestoneList();
+      showUnsavedChangesBar();
+    });
+  });
+
+  // Add milestone button
+  document.getElementById('add-milestone-btn')?.addEventListener('click', () => {
+    const tier = TIER_CONFIG[currentGuildTier];
+    if (currentRoleRewards.length >= tier.maxMilestones) {
+      showToast(`⚠️ ${tier.name} limit reached (${tier.maxMilestones} milestones). Upgrade for more!`);
+      return;
+    }
+    openMilestoneModal(null);
+  });
+
+  // Save milestone from modal
+  document.getElementById('save-milestone-btn')?.addEventListener('click', () => {
+    saveMilestoneFromModal();
+  });
+
+  // Close milestone modal
+  document.getElementById('close-milestone-modal-btn')?.addEventListener('click', closeMilestoneModal);
+  document.getElementById('close-milestone-cancel-btn')?.addEventListener('click', closeMilestoneModal);
+
+  // Modal overlay click to close
+  document.getElementById('milestone-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'milestone-modal') closeMilestoneModal();
+  });
+
+  // Swatch clicks inside milestone modal
+  document.querySelectorAll('#milestone-swatches .swatch-btn').forEach(sw => {
+    sw.addEventListener('click', () => {
+      const colorInput = document.getElementById('milestone-color');
+      if (colorInput) colorInput.value = sw.getAttribute('data-color');
+    });
+  });
+}
+
+function updateTierUI() {
+  const tier = TIER_CONFIG[currentGuildTier];
+  const badge = document.getElementById('tier-badge-label');
+  const quota = document.getElementById('tier-quota-text');
+  const summary = document.getElementById('tier-perk-summary');
+  const addBtn = document.getElementById('add-milestone-btn');
+  const hint = document.getElementById('tier-upgrade-hint');
+
+  if (badge) {
+    badge.textContent = tier.name.toUpperCase();
+    badge.className = `tier-badge-label ${tier.badgeClass}`;
+  }
+  if (quota) {
+    const max = tier.maxMilestones === Infinity ? '∞' : tier.maxMilestones;
+    quota.textContent = `${currentRoleRewards.length} / ${max} Milestones Configured`;
+  }
+  if (summary) summary.textContent = tier.summary;
+  if (addBtn) {
+    addBtn.disabled = currentRoleRewards.length >= tier.maxMilestones;
+  }
+  if (hint) {
+    hint.style.display = currentGuildTier === 'premium' ? 'none' : 'inline';
+  }
+
+  // Lock/unlock pro and premium features in modal
+  const proBox = document.getElementById('milestone-pro-box');
+  const premBox = document.getElementById('milestone-premium-box');
+  const proLockMsg = document.getElementById('pro-feature-locked-msg');
+  const premLockMsg = document.getElementById('premium-feature-locked-msg');
+  const stackCheck = document.getElementById('milestone-stack-roles');
+  const dmCheck = document.getElementById('milestone-dm-notify');
+  const xpBoost = document.getElementById('milestone-xp-boost');
+
+  if (proBox) proBox.style.opacity = tier.canStack ? '1' : '0.5';
+  if (stackCheck) stackCheck.disabled = !tier.canStack;
+  if (proLockMsg) proLockMsg.style.display = tier.canStack ? 'none' : 'block';
+
+  if (premBox) premBox.style.opacity = tier.canDMNotify ? '1' : '0.5';
+  if (dmCheck) dmCheck.disabled = !tier.canDMNotify;
+  if (xpBoost) xpBoost.disabled = !tier.canBoostXP;
+  if (premLockMsg) premLockMsg.style.display = tier.canDMNotify ? 'none' : 'block';
+}
+
+function renderMilestoneList() {
+  const list = document.getElementById('role-rewards-list');
+  if (!list) return;
+  list.innerHTML = '';
+
+  if (currentRoleRewards.length === 0) {
+    list.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem; font-style: italic; padding: 0.5rem 0;">No milestone rewards configured yet. Click "Add Milestone" to start!</div>';
+    return;
+  }
+
+  const sorted = [...currentRoleRewards].sort((a, b) => a.level - b.level);
+  sorted.forEach(reward => {
+    const item = document.createElement('div');
+    item.className = 'role-reward-item';
+    const perkBadges = [];
+    if (reward.stack && TIER_CONFIG[currentGuildTier].canStack) perkBadges.push('<span class="reward-perk-badge perk-stack">Stacking</span>');
+    if (reward.dmNotify && TIER_CONFIG[currentGuildTier].canDMNotify) perkBadges.push('<span class="reward-perk-badge perk-dm">DM Alert</span>');
+    if (reward.xpBoost && reward.xpBoost !== '1.0x' && TIER_CONFIG[currentGuildTier].canBoostXP) perkBadges.push(`<span class="reward-perk-badge perk-xp">${reward.xpBoost} XP</span>`);
+
+    item.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;">
+        <span style="font-size: 1.3rem;">${reward.icon}</span>
+        <div style="min-width: 0;">
+          <div style="font-weight: 800; font-size: 0.88rem; color: ${reward.color};">${reward.name}</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim);">Level ${reward.level} • Auto-granted ${perkBadges.join(' ')}</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 6px; flex-shrink: 0;">
+        <button type="button" class="btn-sm btn-secondary milestone-edit-btn" data-id="${reward.id}" style="font-size: 0.75rem;">✏️ Edit</button>
+        <button type="button" class="btn-sm btn-secondary milestone-delete-btn" data-id="${reward.id}" style="color: var(--red); border-color: rgba(239,68,68,0.3); font-size: 0.75rem;">✕</button>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+
+  // Bind edit/delete
+  list.querySelectorAll('.milestone-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const r = currentRoleRewards.find(rr => rr.id === btn.dataset.id);
+      if (r) openMilestoneModal(r);
+    });
+  });
+  list.querySelectorAll('.milestone-delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentRoleRewards = currentRoleRewards.filter(rr => rr.id !== btn.dataset.id);
+      renderMilestoneList();
+      updateTierUI();
+      showUnsavedChangesBar();
+    });
+  });
+}
+
+function openMilestoneModal(reward) {
+  const modal = document.getElementById('milestone-modal');
+  if (!modal) return;
+
+  const title = document.getElementById('milestone-modal-title');
+  const editId = document.getElementById('milestone-edit-id');
+  const levelIn = document.getElementById('milestone-level');
+  const nameIn = document.getElementById('milestone-role-name');
+  const iconIn = document.getElementById('milestone-icon');
+  const colorIn = document.getElementById('milestone-color');
+  const stackIn = document.getElementById('milestone-stack-roles');
+  const dmIn = document.getElementById('milestone-dm-notify');
+  const xpIn = document.getElementById('milestone-xp-boost');
+
+  if (reward) {
+    if (title) title.textContent = '✏️ Edit Milestone Role Reward';
+    if (editId) editId.value = reward.id;
+    if (levelIn) levelIn.value = reward.level;
+    if (nameIn) nameIn.value = reward.name;
+    if (iconIn) iconIn.value = reward.icon;
+    if (colorIn) colorIn.value = reward.color;
+    if (stackIn) stackIn.checked = reward.stack;
+    if (dmIn) dmIn.checked = reward.dmNotify;
+    if (xpIn) xpIn.value = reward.xpBoost || '1.0x';
+  } else {
+    if (title) title.textContent = '🏆 Configure Milestone Role Reward';
+    if (editId) editId.value = '';
+    if (levelIn) levelIn.value = 10;
+    if (nameIn) nameIn.value = '';
+    if (iconIn) iconIn.value = '⚡';
+    if (colorIn) colorIn.value = '#00f2ff';
+    if (stackIn) stackIn.checked = true;
+    if (dmIn) dmIn.checked = false;
+    if (xpIn) xpIn.value = '1.0x';
+  }
+
+  updateTierUI();
+  modal.style.display = 'flex';
+}
+
+function closeMilestoneModal() {
+  const modal = document.getElementById('milestone-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function saveMilestoneFromModal() {
+  const editId = document.getElementById('milestone-edit-id')?.value;
+  const level = parseInt(document.getElementById('milestone-level')?.value) || 10;
+  const name = document.getElementById('milestone-role-name')?.value.trim();
+  const icon = document.getElementById('milestone-icon')?.value || '⚡';
+  const color = document.getElementById('milestone-color')?.value || '#00f2ff';
+  const stack = document.getElementById('milestone-stack-roles')?.checked ?? true;
+  const dmNotify = document.getElementById('milestone-dm-notify')?.checked ?? false;
+  const xpBoost = document.getElementById('milestone-xp-boost')?.value || '1.0x';
+
+  if (!name) {
+    showToast('⚠️ Please enter a role name!');
+    return;
+  }
+
+  if (editId) {
+    const idx = currentRoleRewards.findIndex(r => r.id === editId);
+    if (idx !== -1) {
+      currentRoleRewards[idx] = { ...currentRoleRewards[idx], level, name, icon, color, stack, dmNotify, xpBoost };
+    }
+  } else {
+    const newId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    currentRoleRewards.push({ id: newId, level, name, icon, color, stack, dmNotify, xpBoost });
+  }
+
+  closeMilestoneModal();
+  renderMilestoneList();
+  updateTierUI();
+  showUnsavedChangesBar();
+  showToast('🏆 Milestone saved!');
+}
+
+// ==========================================
+// REACTION ROLES & ONBOARDING SYSTEM
+// ==========================================
+let currentReactionRoles = [
+  { id: 'rr1', emoji: '☕', label: 'Java Edition', color: '#f59e0b', style: 'PRIMARY' },
+  { id: 'rr2', emoji: '🪨', label: 'Bedrock Edition', color: '#10b981', style: 'PRIMARY' },
+  { id: 'rr3', emoji: '⚔️', label: 'PvP Player', color: '#ef4444', style: 'SECONDARY' },
+  { id: 'rr4', emoji: '🏗️', label: 'Builder', color: '#8b5cf6', style: 'SECONDARY' },
+  { id: 'rr5', emoji: '🔔', label: 'Event Pings', color: '#00f2ff', style: 'SUCCESS' },
+  { id: 'rr6', emoji: '📢', label: 'Update Pings', color: '#3b82f6', style: 'SUCCESS' }
+];
+
+function initReactionRolesSystem() {
+  renderReactionRolesGrid();
+  syncReactionRolePreview();
+
+  // Live preview sync for title/desc inputs
+  document.getElementById('reaction-role-title')?.addEventListener('input', syncReactionRolePreview);
+  document.getElementById('reaction-role-desc')?.addEventListener('input', syncReactionRolePreview);
+
+  // Add new reaction role
+  document.getElementById('add-reaction-role-btn')?.addEventListener('click', () => {
+    const newId = 'rr_' + Date.now().toString(36);
+    currentReactionRoles.push({ id: newId, emoji: '🎮', label: 'New Role', color: '#00f2ff', style: 'PRIMARY' });
+    renderReactionRolesGrid();
+    syncReactionRolePreview();
+    showUnsavedChangesBar();
+  });
+
+  // Deploy button
+  document.getElementById('deploy-reaction-roles-btn')?.addEventListener('click', () => {
+    showToast('🚀 Reaction role message deployed to Discord! (Demo Mode)');
+  });
+}
+
+function renderReactionRolesGrid() {
+  const grid = document.getElementById('reaction-roles-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  currentReactionRoles.forEach(role => {
+    const card = document.createElement('div');
+    card.className = 'role-reward-item';
+    card.style.cssText = 'flex-direction: column; align-items: stretch; gap: 8px;';
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.2rem;">${role.emoji}</span>
+          <input type="text" class="form-input rr-label-input" data-id="${role.id}" value="${role.label}" style="max-width: 160px; font-weight: 700; font-size: 0.85rem; padding: 4px 8px;">
+        </div>
+        <button type="button" class="btn-sm btn-secondary rr-delete-btn" data-id="${role.id}" style="color: var(--red); border-color: rgba(239,68,68,0.3); font-size: 0.72rem;">✕</button>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <select class="form-select rr-emoji-select" data-id="${role.id}" style="max-width: 60px; font-size: 1rem; text-align: center; padding: 2px 4px;">
+          <option value="☕" ${role.emoji === '☕' ? 'selected' : ''}>☕</option>
+          <option value="🪨" ${role.emoji === '🪨' ? 'selected' : ''}>🪨</option>
+          <option value="⚔️" ${role.emoji === '⚔️' ? 'selected' : ''}>⚔️</option>
+          <option value="🏗️" ${role.emoji === '🏗️' ? 'selected' : ''}>🏗️</option>
+          <option value="🔔" ${role.emoji === '🔔' ? 'selected' : ''}>🔔</option>
+          <option value="📢" ${role.emoji === '📢' ? 'selected' : ''}>📢</option>
+          <option value="🎮" ${role.emoji === '🎮' ? 'selected' : ''}>🎮</option>
+          <option value="🎯" ${role.emoji === '🎯' ? 'selected' : ''}>🎯</option>
+          <option value="🛡️" ${role.emoji === '🛡️' ? 'selected' : ''}>🛡️</option>
+          <option value="💎" ${role.emoji === '💎' ? 'selected' : ''}>💎</option>
+        </select>
+        <select class="form-select rr-style-select" data-id="${role.id}" style="max-width: 120px; font-size: 0.78rem; padding: 4px 6px;">
+          <option value="PRIMARY" ${role.style === 'PRIMARY' ? 'selected' : ''}>Blurple</option>
+          <option value="SECONDARY" ${role.style === 'SECONDARY' ? 'selected' : ''}>Gray</option>
+          <option value="SUCCESS" ${role.style === 'SUCCESS' ? 'selected' : ''}>Green</option>
+          <option value="DANGER" ${role.style === 'DANGER' ? 'selected' : ''}>Red</option>
+        </select>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // Bind inputs
+  grid.querySelectorAll('.rr-label-input').forEach(inp => {
+    inp.addEventListener('input', () => {
+      const r = currentReactionRoles.find(rr => rr.id === inp.dataset.id);
+      if (r) { r.label = inp.value; syncReactionRolePreview(); showUnsavedChangesBar(); }
+    });
+  });
+  grid.querySelectorAll('.rr-emoji-select').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const r = currentReactionRoles.find(rr => rr.id === sel.dataset.id);
+      if (r) { r.emoji = sel.value; renderReactionRolesGrid(); syncReactionRolePreview(); showUnsavedChangesBar(); }
+    });
+  });
+  grid.querySelectorAll('.rr-style-select').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const r = currentReactionRoles.find(rr => rr.id === sel.dataset.id);
+      if (r) { r.style = sel.value; syncReactionRolePreview(); showUnsavedChangesBar(); }
+    });
+  });
+  grid.querySelectorAll('.rr-delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentReactionRoles = currentReactionRoles.filter(rr => rr.id !== btn.dataset.id);
+      renderReactionRolesGrid();
+      syncReactionRolePreview();
+      showUnsavedChangesBar();
+    });
+  });
+}
+
+function syncReactionRolePreview() {
+  const previewTitle = document.getElementById('preview-rr-title');
+  const previewDesc = document.getElementById('preview-rr-desc');
+  const previewBtns = document.getElementById('preview-rr-buttons');
+
+  const titleInput = document.getElementById('reaction-role-title');
+  const descInput = document.getElementById('reaction-role-desc');
+
+  if (previewTitle && titleInput) previewTitle.textContent = titleInput.value || 'Role Selection';
+  if (previewDesc && descInput) previewDesc.textContent = descInput.value || 'Click the buttons below to assign your roles!';
+
+  if (previewBtns) {
+    previewBtns.innerHTML = '';
+    const styleColors = { PRIMARY: '#5865F2', SECONDARY: '#4f545c', SUCCESS: '#3ba55c', DANGER: '#ed4245' };
+    currentReactionRoles.forEach(role => {
+      const btn = document.createElement('button');
+      btn.style.cssText = `background: ${styleColors[role.style] || '#5865F2'}; color: #fff; border: none; padding: 6px 14px; border-radius: 3px; font-size: 0.8rem; font-weight: 600; cursor: default; display: inline-flex; align-items: center; gap: 5px;`;
+      btn.innerHTML = `${role.emoji} ${role.label}`;
+      previewBtns.appendChild(btn);
+    });
+  }
+}
+
+// ==========================================
+// WELCOME CARD DESIGNER (Live Preview)
+// ==========================================
+function initWelcomeCardDesigner() {
+  const themeSelect = document.getElementById('welcome-card-theme');
+  const headingInput = document.getElementById('welcome-card-heading');
+  const subInput = document.getElementById('welcome-card-sub');
+  const glowCheck = document.getElementById('welcome-avatar-glow');
+  const canvas = document.getElementById('welcome-canvas-mock');
+  const previewTitle = document.getElementById('welcome-preview-title');
+  const previewCounter = document.getElementById('welcome-preview-counter');
+  const avatarWrap = document.getElementById('welcome-mock-avatar-wrap');
+
+  const themeStyles = {
+    'cyber-cyan': { bg: 'linear-gradient(135deg, #0a0f1d, #030712)', glow: 'rgba(0,242,255,0.6)', color: 'var(--neon-cyan)' },
+    'ksmp-space': { bg: 'linear-gradient(135deg, #1a0533, #0c0118)', glow: 'rgba(139,92,246,0.6)', color: '#a78bfa' },
+    'matrix-green': { bg: 'linear-gradient(135deg, #0a1f0a, #030a03)', glow: 'rgba(16,185,129,0.6)', color: '#10b981' },
+    'obsidian-dark': { bg: 'linear-gradient(135deg, #111, #050505)', glow: 'rgba(255,255,255,0.2)', color: '#888' }
+  };
+
+  function updateWelcomePreview() {
+    const theme = themeSelect?.value || 'cyber-cyan';
+    const style = themeStyles[theme] || themeStyles['cyber-cyan'];
+
+    if (canvas) {
+      canvas.style.background = style.bg;
+    }
+    if (previewTitle) {
+      previewTitle.textContent = headingInput?.value || 'WELCOME';
+      previewTitle.style.textShadow = `0 0 10px ${style.glow}`;
+    }
+    if (previewCounter) {
+      previewCounter.textContent = subInput?.value.replace('{count}', '1,248') || 'You are our #1,248th Member!';
+    }
+    if (avatarWrap) {
+      const showGlow = glowCheck?.checked ?? true;
+      avatarWrap.style.borderColor = showGlow ? style.color : 'transparent';
+      avatarWrap.style.boxShadow = showGlow ? `0 0 16px ${style.glow}` : 'none';
+    }
+  }
+
+  themeSelect?.addEventListener('change', updateWelcomePreview);
+  headingInput?.addEventListener('input', updateWelcomePreview);
+  subInput?.addEventListener('input', updateWelcomePreview);
+  glowCheck?.addEventListener('change', updateWelcomePreview);
+
+  updateWelcomePreview();
 }
 
 function setGuildColors(primaryColor = '#00f2ff', rankColor = '#00f2ff') {
