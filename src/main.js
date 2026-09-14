@@ -1,4 +1,5 @@
 import './style.css';
+import { KRYLO_CHANNELS } from './channelsData.js';
 
 const CLIENT_ID = '1523794466740371586';
 
@@ -444,24 +445,6 @@ function selectGuild(guildId) {
         document.getElementById('telemetry-security').innerText = 'Medium';
       }, 300);
 
-      const mockChannels = [
-        { id: '123', name: 'general' },
-        { id: '456', name: 'announcements' },
-        { id: '789', name: 'levels-and-rewards' },
-        { id: '101', name: 'mod-logs' },
-        { id: '102', name: 'bot-commands' }
-      ];
-
-      mockChannels.forEach(c => {
-        addChannelOption(chanSelect, c.id, `# ${c.name}`);
-        addChannelOption(embedChanSelect, c.id, `# ${c.name}`);
-        addChannelOption(modLogSelect, c.id, `# ${c.name}`);
-        addChannelOption(ticketChanSelect, c.id, `# ${c.name}`);
-        addChannelOption(levelChanSelect, c.id, `# ${c.name}`);
-      });
-
-      if (savedSettings.welcomeChannel) chanSelect.value = savedSettings.welcomeChannel;
-
       openTicketsList = [
         { id: '101', name: 'ticket-krylo', user: 'Krylo' },
         { id: '102', name: 'ticket-support', user: '@J_dangle' }
@@ -485,27 +468,23 @@ function selectGuild(guildId) {
           document.getElementById('telemetry-boosts').innerText = 'N/A';
           document.getElementById('telemetry-security').innerText = 'N/A';
         });
-
-      // 2. Fetch live text channels
-      fetch(`/api/guild-channels?guild_id=${guild.id}`)
-        .then(res => res.json())
-        .then(channels => {
-          if (Array.isArray(channels)) {
-            channels.forEach(c => {
-              addChannelOption(chanSelect, c.id, `# ${c.name}`);
-              addChannelOption(embedChanSelect, c.id, `# ${c.name}`);
-              addChannelOption(modLogSelect, c.id, `# ${c.name}`);
-              addChannelOption(ticketChanSelect, c.id, `# ${c.name}`);
-              addChannelOption(levelChanSelect, c.id, `# ${c.name}`);
-            });
-            if (savedSettings.welcomeChannel) chanSelect.value = savedSettings.welcomeChannel;
-            if (savedSettings.modLogChannel) modLogSelect.value = savedSettings.modLogChannel;
-            if (savedSettings.ticketChannel) ticketChanSelect.value = savedSettings.ticketChannel;
-            if (savedSettings.levelChannel) levelChanSelect.value = savedSettings.levelChannel;
-          }
-        })
-        .catch(err => console.error("Failed to load guild channels:", err));
     }
+
+    // 2. Fetch live channels from Discord (with full categorized fallback)
+    const targetGuildId = guild.id || '1538225337048236082';
+    fetch(`/api/guild-channels?guild_id=${targetGuildId}`)
+      .then(res => res.json())
+      .then(channels => {
+        if (Array.isArray(channels) && channels.length > 0) {
+          populateAllChannelDropdowns(channels, savedSettings);
+        } else {
+          populateAllChannelDropdowns(KRYLO_CHANNELS, savedSettings);
+        }
+      })
+      .catch(err => {
+        console.warn("Could not fetch live channels from API, using catalog fallback:", err);
+        populateAllChannelDropdowns(KRYLO_CHANNELS, savedSettings);
+      });
   } else {
     document.getElementById('bot-active-controls').style.display = 'none';
     document.getElementById('bot-invite-controls').style.display = 'flex';
@@ -516,12 +495,59 @@ function selectGuild(guildId) {
   hideUnsavedChangesBar();
 }
 
-function addChannelOption(selectEl, value, text) {
+function populateAllChannelDropdowns(channels, currentSettings = {}) {
+  const chanSelect = document.getElementById('welcome-channel');
+  const embedChanSelect = document.getElementById('embed-channel');
+  const modLogSelect = document.getElementById('mod-log-channel');
+  const ticketChanSelect = document.getElementById('ticket-channel');
+  const levelChanSelect = document.getElementById('level-channel');
+
+  renderCategorizedChannels(chanSelect, channels, { value: 'none', text: 'Disabled' });
+  renderCategorizedChannels(embedChanSelect, channels);
+  renderCategorizedChannels(modLogSelect, channels, { value: 'none', text: 'Disabled (No logs channel)' });
+  renderCategorizedChannels(ticketChanSelect, channels, { value: 'none', text: 'Disabled (No archive channel)' });
+  renderCategorizedChannels(levelChanSelect, channels, { value: 'current', text: 'Current Channel (Where user talked)' });
+
+  if (currentSettings.welcomeChannel && chanSelect) chanSelect.value = currentSettings.welcomeChannel;
+  if (currentSettings.modLogChannel && modLogSelect) modLogSelect.value = currentSettings.modLogChannel;
+  if (currentSettings.ticketChannel && ticketChanSelect) ticketChanSelect.value = currentSettings.ticketChannel;
+  if (currentSettings.levelChannel && levelChanSelect) levelChanSelect.value = currentSettings.levelChannel;
+  if (currentSettings.embedChannel && embedChanSelect) embedChanSelect.value = currentSettings.embedChannel;
+}
+
+function renderCategorizedChannels(selectEl, channels, defaultOption = null) {
   if (!selectEl) return;
-  const opt = document.createElement('option');
-  opt.value = value;
-  opt.innerText = text;
-  selectEl.appendChild(opt);
+  selectEl.innerHTML = '';
+
+  if (defaultOption) {
+    const opt = document.createElement('option');
+    opt.value = defaultOption.value;
+    opt.textContent = defaultOption.text;
+    selectEl.appendChild(opt);
+  }
+
+  // Group channels by category name
+  const categoryGroups = {};
+  channels.forEach(ch => {
+    const cat = ch.category || 'General Channels';
+    if (!categoryGroups[cat]) categoryGroups[cat] = [];
+    categoryGroups[cat].push(ch);
+  });
+
+  for (const [catName, chList] of Object.entries(categoryGroups)) {
+    const optgroup = document.createElement('optgroup');
+    optgroup.label = catName;
+
+    chList.forEach(ch => {
+      const opt = document.createElement('option');
+      opt.value = ch.id;
+      const icon = ch.icon || (ch.type === 2 ? '🔊' : ch.type === 5 ? '📢' : ch.type === 15 ? '💬' : '#');
+      opt.textContent = `${icon} ${ch.name}`;
+      optgroup.appendChild(opt);
+    });
+
+    selectEl.appendChild(optgroup);
+  }
 }
 
 function populateFormSettings(s) {

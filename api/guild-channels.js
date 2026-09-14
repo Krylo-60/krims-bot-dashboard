@@ -31,16 +31,54 @@ export default async function handler(req, res) {
       throw new Error(`Failed to fetch guild channels: ${response.status}`);
     }
 
-    const channels = await response.json();
-    // Filter for text channels (type === 0)
-    const textChannels = channels
-      .filter(c => c.type === 0)
-      .map(c => ({
-        id: c.id,
-        name: c.name
-      }));
+    const rawChannels = await response.json();
 
-    res.status(200).json(textChannels);
+    // 1. Build category mapping with positions
+    const categories = rawChannels.filter(c => c.type === 4);
+    const catMap = {};
+    categories.sort((a, b) => a.position - b.position);
+    categories.forEach(c => {
+      catMap[c.id] = { name: c.name, position: c.position };
+    });
+
+    // 2. Include all non-category channels (0: text, 2: voice, 5: announcement, 15: forum)
+    const validChannels = rawChannels.filter(c => c.type !== 4);
+
+    // 3. Sort hierarchically: by category position first, then channel position
+    validChannels.sort((a, b) => {
+      const posA = catMap[a.parent_id]?.position ?? 999;
+      const posB = catMap[b.parent_id]?.position ?? 999;
+      if (posA !== posB) return posA - posB;
+      return a.position - b.position;
+    });
+
+    const channels = validChannels.map(c => {
+      let icon = '#';
+      let typeLabel = 'text';
+      if (c.type === 2) {
+        icon = '🔊';
+        typeLabel = 'voice';
+      } else if (c.type === 5) {
+        icon = '📢';
+        typeLabel = 'announcement';
+      } else if (c.type === 15) {
+        icon = '💬';
+        typeLabel = 'forum';
+      }
+
+      return {
+        id: c.id,
+        name: c.name,
+        type: c.type,
+        typeLabel,
+        icon,
+        category: catMap[c.parent_id]?.name || 'General Channels',
+        parentId: c.parent_id,
+        position: c.position
+      };
+    });
+
+    res.status(200).json(channels);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
