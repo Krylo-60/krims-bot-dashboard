@@ -170,6 +170,27 @@ function initSidebarSearch() {
 }
 
 // Server Switch Modal
+function openServerSelectionPrompt(isFirstTime = false) {
+  const modal = document.getElementById('server-modal');
+  const title = document.getElementById('server-modal-title');
+  const desc = document.getElementById('server-modal-desc');
+  const closeBtn = document.getElementById('close-server-modal-btn');
+
+  if (title && desc) {
+    if (isFirstTime) {
+      title.textContent = '🚀 Select a Server to Start With';
+      desc.textContent = 'Which Discord server would you like to set up or manage with Krims Bot? Choose below:';
+      if (closeBtn) closeBtn.style.display = selectedGuildId ? 'block' : 'none';
+    } else {
+      title.textContent = 'Switch Discord Server';
+      desc.textContent = 'Select the server you want to manage with Krims Bot:';
+      if (closeBtn) closeBtn.style.display = 'block';
+    }
+  }
+
+  if (modal) modal.style.display = 'flex';
+}
+
 function initServerModal() {
   const modal = document.getElementById('server-modal');
   const openHeaderBtn = document.getElementById('open-server-modal-btn');
@@ -177,8 +198,15 @@ function initServerModal() {
   const openCtaBtn = document.getElementById('select-server-cta-btn');
   const closeBtn = document.getElementById('close-server-modal-btn');
 
-  const openModal = () => { if (modal) modal.style.display = 'flex'; };
-  const closeModal = () => { if (modal) modal.style.display = 'none'; };
+  const openModal = () => openServerSelectionPrompt(false);
+  const closeModal = () => {
+    // If closing without having chosen any guild yet, default to first guild
+    if (!selectedGuildId && guilds.length > 0) {
+      const fallback = guilds.find(g => g.botActive) || guilds[0];
+      selectGuild(fallback.id);
+    }
+    if (modal) modal.style.display = 'none';
+  };
 
   openHeaderBtn?.addEventListener('click', openModal);
   openSidebarBtn?.addEventListener('click', openModal);
@@ -223,9 +251,15 @@ function startDemoMode() {
   guilds = [...mockGuilds];
   renderGuilds();
 
-  // Select first active guild automatically for smooth demo
-  if (guilds.length > 0) {
-    selectGuild(guilds[0].id);
+  // Check if user previously opened a server
+  const savedLastGuildId = localStorage.getItem('krims_last_guild_id');
+  const lastGuild = savedLastGuildId ? guilds.find(g => g.id === savedLastGuildId) : null;
+
+  if (lastGuild) {
+    selectGuild(lastGuild.id);
+  } else {
+    // First time: Prompt which server to setup / start with!
+    openServerSelectionPrompt(true);
   }
 }
 
@@ -281,10 +315,16 @@ async function loadDiscordData(token) {
 
     renderGuilds();
 
-    // Auto-select first active guild or first guild
-    const activeGuild = guilds.find(g => g.botActive) || guilds[0];
-    if (activeGuild) {
-      selectGuild(activeGuild.id);
+    // Check if user previously opened a server
+    const savedLastGuildId = localStorage.getItem('krims_last_guild_id');
+    const lastGuild = savedLastGuildId ? guilds.find(g => g.id === savedLastGuildId) : null;
+
+    if (lastGuild) {
+      // Automatically open the last opened server first!
+      selectGuild(lastGuild.id);
+    } else {
+      // First time: Prompt which server to setup / start with!
+      openServerSelectionPrompt(true);
     }
   } catch (err) {
     console.error("Failed to load Discord credentials:", err);
@@ -299,11 +339,14 @@ function renderGuilds() {
 
   guilds.forEach(guild => {
     const item = document.createElement('div');
-    item.className = `guild-item ${selectedGuildId === guild.id ? 'active' : ''}`;
+    const isSelected = selectedGuildId === guild.id;
+    item.className = `guild-item ${isSelected ? 'active' : ''}`;
     item.onclick = () => {
       selectGuild(guild.id);
       const modal = document.getElementById('server-modal');
       if (modal) modal.style.display = 'none';
+      const closeBtn = document.getElementById('close-server-modal-btn');
+      if (closeBtn) closeBtn.style.display = 'block';
     };
 
     const iconHtml = guild.icon 
@@ -311,12 +354,15 @@ function renderGuilds() {
       : `<div class="guild-icon">${guild.name.charAt(0)}</div>`;
 
     const badgeClass = guild.botActive ? 'active' : 'invite';
-    const badgeText = guild.botActive ? 'Active' : 'Setup Bot';
+    const badgeText = isSelected ? '✓ Active' : (guild.botActive ? '⚡ Open Server' : '➕ Setup Bot');
 
     item.innerHTML = `
       <div class="guild-info">
         ${iconHtml}
-        <span class="guild-name">${guild.name}</span>
+        <div>
+          <span class="guild-name">${guild.name}</span>
+          <span class="guild-sub-status">${guild.botActive ? '🟢 Krims Bot Connected' : '⚪ Bot Not Added Yet'}</span>
+        </div>
       </div>
       <span class="setup-badge ${badgeClass}">${badgeText}</span>
     `;
@@ -327,6 +373,7 @@ function renderGuilds() {
 
 function selectGuild(guildId) {
   selectedGuildId = guildId;
+  localStorage.setItem('krims_last_guild_id', guildId);
   renderGuilds(); // update active class
 
   const guild = guilds.find(g => g.id === guildId);

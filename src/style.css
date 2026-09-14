@@ -1766,6 +1766,13 @@ input:checked + .slider:before {
   gap: 12px;
 }
 
+.guild-sub-status {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
 .guild-icon {
   width: 36px;
   height: 36px;
