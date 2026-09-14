@@ -1021,22 +1021,28 @@
                 <div class="auto-resource-banner">
                   <div class="resource-banner-header">
                     <span class="resource-title">CURRENT ALLOCATION: <strong>DYNAMIC AUTO-ROUTING</strong></span>
-                    <span class="resource-sub">Automatically optimizes across available quotas</span>
+                    <span class="resource-sub">Powered by Krylo Studios Neural Compute Network</span>
                   </div>
                   <div class="resource-pools-grid">
                     <div class="pool-chip active">
-                      <span class="pool-dot green">●</span>
-                      <span class="pool-name">Google Gemini 2.5</span>
+                      <div class="pool-header-row">
+                        <span class="pool-dot green">●</span>
+                        <span class="pool-name">Krylo Core AI (Primary)</span>
+                      </div>
                       <span class="pool-status">Online (Healthy)</span>
                     </div>
                     <div class="pool-chip active">
-                      <span class="pool-dot green">●</span>
-                      <span class="pool-name">Groq Llama 3.3</span>
+                      <div class="pool-header-row">
+                        <span class="pool-dot green">●</span>
+                        <span class="pool-name">Krylo Ultra-Fast Reasoning</span>
+                      </div>
                       <span class="pool-status">Online (Low Latency)</span>
                     </div>
                     <div class="pool-chip standby">
-                      <span class="pool-dot cyan">●</span>
-                      <span class="pool-name">Local JS Trigrams</span>
+                      <div class="pool-header-row">
+                        <span class="pool-dot cyan">●</span>
+                        <span class="pool-name">Krylo Local Edge Engine</span>
+                      </div>
                       <span class="pool-status">Standby Fallback</span>
                     </div>
                   </div>
@@ -1045,17 +1051,17 @@
                 <div class="setting-row">
                   <div class="setting-meta">
                     <label for="ai-model" class="setting-title">Compute & Model Engine</label>
-                    <p class="setting-desc">Auto-allocation uses available resources dynamically. Custom allocation is available in Premium.</p>
+                    <p class="setting-desc">Auto-allocation uses available Krylo Studios resources dynamically. Custom allocation is available in Premium.</p>
                   </div>
                   <div class="setting-input-wrap">
                     <select id="ai-model" class="form-select">
-                      <option value="auto" selected>⚡ Smart Auto-Allocation (Recommended - Dynamically uses available resources)</option>
-                      <option value="gemini">Google Gemini 2.5 Flash (Balanced Standard Pool)</option>
-                      <option value="groq">Groq Llama 3.3 70B (High-Speed Reasoning)</option>
-                      <option value="krims-local">Krims Local JS Engine (Low-Resource Fallback)</option>
-                      <option value="premium-gpu" disabled>👑 Dedicated GPU Cluster (Premium - Coming Soon)</option>
-                      <option value="premium-custom" disabled>👑 Custom Model Weights Allocation (Premium - Coming Soon)</option>
-                      <option value="premium-claude" disabled>👑 Claude 3.5 Sonnet / GPT-4o Dedicated (Premium - Coming Soon)</option>
+                      <option value="auto" selected>⚡ Smart Auto-Allocation (Recommended - Dynamically routes to Krylo Studios nodes)</option>
+                      <option value="gemini">Krylo Core Intelligence (Balanced Standard Pool)</option>
+                      <option value="groq">Krylo Ultra-Fast Engine (High-Speed Neural Reasoning)</option>
+                      <option value="krims-local">Krylo Local Fallback Engine (Edge Worker)</option>
+                      <option value="premium-gpu" disabled>👑 Krylo Enterprise Dedicated Cluster (Premium - Coming Soon)</option>
+                      <option value="premium-custom" disabled>👑 Krylo Custom Trained Weights (Premium - Coming Soon)</option>
+                      <option value="premium-claude" disabled>👑 Krylo Extreme Context 128k (Premium - Coming Soon)</option>
                     </select>
                   </div>
                 </div>
@@ -1082,7 +1088,7 @@
                     <p class="setting-desc">Define instructions, tone of voice, knowledge base, and behavior constraints for the bot.</p>
                   </div>
                   <div class="setting-input-wrap full-width">
-                    <textarea id="system-instruction" class="form-textarea" rows="4" placeholder="You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone.">You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone.</textarea>
+                    <textarea id="system-instruction" class="form-textarea" rows="4" placeholder="You are the Krims Code AI, built and custom-trained by Krylo Studios. Answer coding queries with clear instructions and a friendly, confident tone.">You are the Krims Code AI, built and custom-trained by Krylo Studios. Answer coding queries with clear instructions and a friendly, confident tone.</textarea>
                   </div>
                 </div>
               </div>
@@ -1235,7 +1241,7 @@
     </div>
 
     <footer class="bottom-footer">
-      <span>KRIMS BOT DASHBOARD</span> • <span>POWERED BY KRYLO ENTERPRISE</span> • <span>ALL SYSTEMS OPERATIONAL</span>
+      <span>KRIMS BOT DASHBOARD</span> • <span>POWERED BY KRYLO STUDIOS</span> • <span>ALL SYSTEMS OPERATIONAL</span>
     </footer>
   </div>
   <script type="module" src="/src/main.js"></script>
