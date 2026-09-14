@@ -1050,63 +1050,31 @@
 
                 <div class="setting-row">
                   <div class="setting-meta">
-                    <label for="ai-model" class="setting-title">Compute & Model Engine</label>
-                    <p class="setting-desc">Auto-allocation uses available Krylo Studios resources dynamically. Custom allocation is available in Premium.</p>
+                    <label class="setting-title">AI Engine Status</label>
+                    <p class="setting-desc">Free tier automatically uses Krylo Studios dynamic auto-allocation across standard available resources.</p>
                   </div>
                   <div class="setting-input-wrap">
-                    <select id="ai-model" class="form-select">
-                      <option value="auto" selected>⚡ Smart Auto-Allocation (Recommended - Dynamically routes to Krylo Studios nodes)</option>
-                      <option value="gemini">Krylo Core Intelligence (Balanced Standard Pool)</option>
-                      <option value="groq">Krylo Ultra-Fast Engine (High-Speed Neural Reasoning)</option>
-                      <option value="krims-local">Krylo Local Fallback Engine (Edge Worker)</option>
-                      <option value="premium-gpu" disabled>👑 Krylo Enterprise Dedicated Cluster (Premium - Coming Soon)</option>
-                      <option value="premium-custom" disabled>👑 Krylo Custom Trained Weights (Premium - Coming Soon)</option>
-                      <option value="premium-claude" disabled>👑 Krylo Extreme Context 128k (Premium - Coming Soon)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="setting-row">
-                  <div class="setting-meta">
-                    <label for="ai-personality" class="setting-title">Personality Presets</label>
-                    <p class="setting-desc">Pick an instant personality style or create your own custom system prompt.</p>
-                  </div>
-                  <div class="setting-input-wrap">
-                    <select id="ai-personality" class="form-select">
-                      <option value="custom">-- Custom Prompt (Edit Below) --</option>
-                      <option value="developer">💻 Confident Developer (Default)</option>
-                      <option value="cyberpunk">🌌 Cyberpunk Netrunner</option>
-                      <option value="sarcastic">🙄 Sarcastic Assistant</option>
-                      <option value="scientist">🔬 Technical Researcher</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="setting-row">
-                  <div class="setting-meta">
-                    <label for="system-instruction" class="setting-title">Custom Identity / System Prompt</label>
-                    <p class="setting-desc">Define instructions, tone of voice, knowledge base, and behavior constraints for the bot.</p>
-                  </div>
-                  <div class="setting-input-wrap full-width">
-                    <textarea id="system-instruction" class="form-textarea" rows="4" placeholder="You are the Krims Code AI, built and custom-trained by Krylo Studios. Answer coding queries with clear instructions and a friendly, confident tone.">You are the Krims Code AI, built and custom-trained by Krylo Studios. Answer coding queries with clear instructions and a friendly, confident tone.</textarea>
+                    <span class="badge-status-online" style="display: inline-flex; align-items: center; gap: 6px;">
+                      <span>⚡</span> Auto-Routing Active
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <!-- Premium Tier: Custom Allocation (Coming Soon) Card -->
+              <!-- Premium Tier: Custom Allocation & Personality Studio Card -->
               <div class="card module-box premium-allocation-card">
                 <div class="card-header">
                   <div class="card-title-group">
                     <span class="card-icon">👑</span>
                     <div>
-                      <h3>Custom Resource Allocation (Premium Tier)</h3>
-                      <p>Dedicated compute, custom fine-tuned weights, and zero-throttling isolated instances.</p>
+                      <h3>Custom Model Allocation & Personality Studio (Premium Tier)</h3>
+                      <p>Dedicated compute, custom model weights, custom identity prompt, and zero-throttling isolated instances.</p>
                     </div>
                   </div>
-                  <span class="coming-soon-badge">COMING SOON</span>
+                  <span class="coming-soon-badge">PREMIUM • COMING SOON</span>
                 </div>
                 <p class="premium-desc">
-                  Upgrade your server to reserve dedicated compute nodes. Choose exact model checkpoints, upload fine-tuned LoRA weights, customize context window sizes up to 128k, and guarantee 0ms queuing even during peak Discord traffic.
+                  Upgrade your server to unlock dedicated Krylo Studios compute nodes. Choose exact model checkpoints, upload fine-tuned LoRA weights, craft custom identity prompts, customize context window sizes up to 128k, and guarantee 0ms queuing even during peak Discord traffic.
                 </p>
                 <div class="premium-perks-grid">
                   <div class="perk-card">
@@ -1125,14 +1093,71 @@
                     <span class="perk-sub">No rate-limits or throttling</span>
                   </div>
                   <div class="perk-card">
-                    <span class="perk-icon">🔒</span>
-                    <span class="perk-title">Private Vault</span>
-                    <span class="perk-sub">Dedicated server sandbox</span>
+                    <span class="perk-icon">🎭</span>
+                    <span class="perk-title">Custom Identity</span>
+                    <span class="perk-sub">Unlimited system prompts</span>
                   </div>
                 </div>
-                <div class="premium-action-bar">
+
+                <!-- Premium Controls Locked Container -->
+                <div class="premium-locked-controls">
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <label for="ai-model" class="setting-title">Compute & Model Engine</label>
+                        <span class="coming-soon-badge" style="font-size: 0.62rem; padding: 2px 6px;">PREMIUM</span>
+                      </div>
+                      <p class="setting-desc">Auto-allocation uses available Krylo Studios resources dynamically. Custom allocation is available in Premium.</p>
+                    </div>
+                    <div class="setting-input-wrap">
+                      <select id="ai-model" class="form-select">
+                        <option value="auto" selected>⚡ Smart Auto-Allocation (Recommended - Dynamically routes to Krylo Studios nodes)</option>
+                        <option value="gemini">Krylo Core Intelligence (Balanced Standard Pool)</option>
+                        <option value="groq">Krylo Ultra-Fast Engine (High-Speed Neural Reasoning)</option>
+                        <option value="krims-local">Krylo Local Fallback Engine (Edge Worker)</option>
+                        <option value="premium-gpu" disabled>👑 Krylo Enterprise Dedicated Cluster (Premium - Coming Soon)</option>
+                        <option value="premium-custom" disabled>👑 Krylo Custom Trained Weights (Premium - Coming Soon)</option>
+                        <option value="premium-claude" disabled>👑 Krylo Extreme Context 128k (Premium - Coming Soon)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <label for="ai-personality" class="setting-title">Personality Presets</label>
+                        <span class="coming-soon-badge" style="font-size: 0.62rem; padding: 2px 6px;">PREMIUM</span>
+                      </div>
+                      <p class="setting-desc">Pick an instant personality style or create your own custom system prompt.</p>
+                    </div>
+                    <div class="setting-input-wrap">
+                      <select id="ai-personality" class="form-select">
+                        <option value="custom">-- Custom Prompt (Edit Below) --</option>
+                        <option value="developer">💻 Confident Developer (Default)</option>
+                        <option value="cyberpunk">🌌 Cyberpunk Netrunner</option>
+                        <option value="sarcastic">🙄 Sarcastic Assistant</option>
+                        <option value="scientist">🔬 Technical Researcher</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <label for="system-instruction" class="setting-title">Custom Identity / System Prompt</label>
+                        <span class="coming-soon-badge" style="font-size: 0.62rem; padding: 2px 6px;">PREMIUM</span>
+                      </div>
+                      <p class="setting-desc">Define instructions, tone of voice, knowledge base, and behavior constraints for the bot.</p>
+                    </div>
+                    <div class="setting-input-wrap full-width">
+                      <textarea id="system-instruction" class="form-textarea" rows="4" placeholder="You are the Krims Code AI, built and custom-trained by Krylo Studios. Answer coding queries with clear instructions and a friendly, confident tone.">You are the Krims Code AI, built and custom-trained by Krylo Studios. Answer coding queries with clear instructions and a friendly, confident tone.</textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="premium-action-bar" style="margin-top: 1.5rem;">
                   <button type="button" class="btn-premium-waitlist" id="premium-waitlist-btn">
-                    ✨ Notify Me When Custom Allocation Launches
+                    ✨ Notify Me When Premium Launches
                   </button>
                 </div>
               </div>
