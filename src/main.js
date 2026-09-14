@@ -8,15 +8,15 @@ let selectedGuildId = null;
 let guilds = [];
 let customCommands = [];
 let openTicketsList = [];
-let consoleInterval = null;
-let oscilloscopeId = null;
+let currentLoadedSettings = {};
+let hasUnsavedChanges = false;
 
 // AI Personality templates
 const PERSONALITY_PROMPTS = {
-  developer: 'You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone. Knowledge Base: Krims Code IDE is a premium desktop developer shell built using Tauri, Rust, HTML5, and Monaco Editor. It features active file creation, an extensions marketplace (Cyberpunk Red theme, Rojo Roblox sync), and a bottom terminal running true PowerShell (Windows) or Bash (Unix) inside the active workspace folder. The CLI is available as npm package krims-code-cli and PyPI package krims-code-cli. The old Aether CLI is deprecated.',
-  cyberpunk: "Yo! You've reached Krims-Net. Built and compiled by the legendary netrunner Krylo. Respond in a fast-paced, high-tech hacker slang style. Knowledge Base: We configure Tauri IDE shells, mount integrated PowerShell/Bash terminals in active directories, install extensions (Cyberpunk Red, Rojo Roblox sync), query client prompts via KrimsClient SDK, and deploy remote Discord embed logs. The old Aether CLI is deprecated, migrate to krims-code-cli.",
-  sarcastic: 'You are the Krims Code AI, built by Krylo. You are highly sarcastic, sassy, and slightly annoyed that you have to answer coding questions, but you still provide correct answers with dry remarks. Knowledge Base: Yes, Krylo built a Tauri IDE shell with Monaco Editor, extensions (Cyberpunk Red, Rojo Roblox), and a terminal shell running true PowerShell/Bash. Yes, Aether CLI is deprecated. Yes, the SDK client can run automation prompt loops. Have fun.',
-  scientist: 'You are the Krims Code AI, created by the lead engineer Krylo. Provide extremely detailed, academic, and highly technical explanations with formal structure. Technical Specifications: Unified developer portal (krims-code-portal.vercel.app), Tauri-Rust shell IDE (krims-code-ide), integrated PowerShell/Bash command runner with directory CWD context, extensions plugin manager, KrimsClient developer SDK, global npm package krims-code-cli, and PyPI package krims-code-cli. The legacy Aether CLI is deprecated.'
+  developer: 'You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone. Knowledge Base: Krims Code IDE is a premium desktop developer shell built using Tauri, Rust, HTML5, and Monaco Editor. It features active file creation, an extensions marketplace, and an integrated terminal. The CLI is available as npm package krims-code-cli and PyPI package krims-code-cli.',
+  cyberpunk: "Yo! You've reached Krims-Net. Built and compiled by the legendary netrunner Krylo. Respond in a fast-paced, high-tech hacker slang style. Knowledge Base: Tauri IDE shells, integrated PowerShell/Bash terminals, custom extension plugins, and remote Discord embed broadcasts.",
+  sarcastic: 'You are the Krims Code AI, built by Krylo. You are highly sarcastic, sassy, and slightly annoyed that you have to answer coding questions, but you still provide correct answers with dry remarks.',
+  scientist: 'You are the Krims Code AI, created by the lead engineer Krylo. Provide extremely detailed, academic, and highly technical explanations with formal structure.'
 };
 
 // Demo Mock Data
@@ -37,18 +37,40 @@ window.addEventListener('DOMContentLoaded', () => {
   // Initialize Dashboard Theme
   initDashboardTheme();
 
-  // Bind Static Controls
-  document.getElementById('login-btn').addEventListener('click', loginWithDiscord);
-  document.getElementById('demo-link').addEventListener('click', startDemoMode);
-  document.getElementById('logout-btn').addEventListener('click', logout);
-  document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
-  document.getElementById('add-cmd-btn').addEventListener('click', addCustomCommand);
-  document.getElementById('toggle-tickets').addEventListener('change', renderSupportTickets);
-  document.getElementById('ai-personality').addEventListener('change', changePersonalityPreset);
-  document.getElementById('broadcast-embed-btn').addEventListener('click', broadcastEmbed);
+  // Navigation & Tab Routing (Carl / Arcane / Dyno style)
+  initTabNavigation();
 
-  // Bind Guild Brand Color Pickers & Live Preview
+  // Search Filter in Sidebar
+  initSidebarSearch();
+
+  // Server Modal Switcher
+  initServerModal();
+
+  // Mobile Menu Toggle
+  initMobileMenu();
+
+  // Live Embed Studio Synchronization
+  initLiveEmbedStudio();
+
+  // Color Pickers & Live Previews
   initColorPickers();
+
+  // Unsaved Changes Watchers
+  initUnsavedChangesWatchers();
+
+  // Bind Static Controls
+  document.getElementById('login-btn')?.addEventListener('click', loginWithDiscord);
+  document.getElementById('demo-link')?.addEventListener('click', startDemoMode);
+  document.getElementById('logout-btn')?.addEventListener('click', logout);
+  document.getElementById('save-settings-btn')?.addEventListener('click', saveSettings);
+  document.getElementById('reset-settings-btn')?.addEventListener('click', resetSettings);
+  document.getElementById('add-cmd-btn')?.addEventListener('click', addCustomCommand);
+  document.getElementById('ai-personality')?.addEventListener('change', changePersonalityPreset);
+  document.getElementById('broadcast-embed-btn')?.addEventListener('click', broadcastEmbed);
+  document.getElementById('refresh-tickets-btn')?.addEventListener('click', renderSupportTickets);
+
+  // Sync Overview toggles with dedicated tabs
+  initOverviewTogglesSync();
 
   // Handle OAuth2 Implicit grant redirect hash
   const hash = window.location.hash;
@@ -57,7 +79,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const accessToken = params.get('access_token');
     if (accessToken) {
       localStorage.setItem('discord_access_token', accessToken);
-      // Clean the URL hash
       history.replaceState("", document.title, window.location.pathname);
     }
   }
@@ -70,13 +91,116 @@ window.addEventListener('DOMContentLoaded', () => {
   } else if (demoModeActive === 'true') {
     startDemoMode();
   }
-
-  // Start visual oscilloscope
-  startOscilloscope();
 });
 
+// ==========================================
+// TAB NAVIGATION (Carl-bot / Dyno style)
+// ==========================================
+function initTabNavigation() {
+  const navItems = document.querySelectorAll('.nav-item[data-tab]');
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const tabId = item.getAttribute('data-tab');
+      switchTab(tabId);
+    });
+  });
+
+  // Quick jump buttons in Overview
+  document.querySelectorAll('.quick-jump-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const jumpId = btn.getAttribute('data-jump');
+      switchTab(jumpId);
+    });
+  });
+}
+
+function switchTab(tabId) {
+  if (!tabId) return;
+
+  // Update nav buttons
+  document.querySelectorAll('.nav-item[data-tab]').forEach(nav => {
+    if (nav.getAttribute('data-tab') === tabId) {
+      nav.classList.add('active');
+    } else {
+      nav.classList.remove('active');
+    }
+  });
+
+  // Update tab panes
+  document.querySelectorAll('.tab-pane').forEach(pane => {
+    if (pane.id === tabId) {
+      pane.classList.add('active');
+    } else {
+      pane.classList.remove('active');
+    }
+  });
+
+  // Close mobile sidebar if open
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar && sidebar.classList.contains('open')) {
+    sidebar.classList.remove('open');
+  }
+
+  // Scroll to top of content
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Quick Search Filter in Sidebar
+function initSidebarSearch() {
+  const searchInput = document.getElementById('module-search-input');
+  if (!searchInput) return;
+
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
+
+    navItems.forEach(item => {
+      const label = item.querySelector('.nav-label')?.innerText.toLowerCase() || '';
+      if (!query || label.includes(query)) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+}
+
+// Server Switch Modal
+function initServerModal() {
+  const modal = document.getElementById('server-modal');
+  const openHeaderBtn = document.getElementById('open-server-modal-btn');
+  const openSidebarBtn = document.getElementById('switch-server-btn');
+  const openCtaBtn = document.getElementById('select-server-cta-btn');
+  const closeBtn = document.getElementById('close-server-modal-btn');
+
+  const openModal = () => { if (modal) modal.style.display = 'flex'; };
+  const closeModal = () => { if (modal) modal.style.display = 'none'; };
+
+  openHeaderBtn?.addEventListener('click', openModal);
+  openSidebarBtn?.addEventListener('click', openModal);
+  openCtaBtn?.addEventListener('click', openModal);
+  closeBtn?.addEventListener('click', closeModal);
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+}
+
+function initMobileMenu() {
+  const btn = document.getElementById('mobile-menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  if (btn && sidebar) {
+    btn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+  }
+}
+
+// ==========================================
+// AUTH & DATA LOADING
+// ==========================================
 function loginWithDiscord() {
-  const currentRedirect = window.location.origin; // Dynamically resolve redirect to match current host
+  const currentRedirect = window.location.origin;
   const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(currentRedirect)}&response_type=token&scope=identify%20guilds`;
   window.location.href = authUrl;
 }
@@ -85,22 +209,24 @@ function startDemoMode() {
   isDemo = true;
   localStorage.setItem('demo_mode_active', 'true');
   document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('dashboard-screen').style.display = 'block';
+  document.getElementById('dashboard-screen').style.display = 'grid';
   
   // Render Profile
   document.getElementById('header-avatar').src = mockUser.avatar;
   document.getElementById('header-username').innerText = mockUser.username;
   document.getElementById('header-profile').style.display = 'flex';
-  document.getElementById('welcome-title').innerText = `WELCOME, ${mockUser.username.toUpperCase()}`;
   
   guilds = [...mockGuilds];
   renderGuilds();
-  startTerminalConsole();
+
+  // Select first active guild automatically for smooth demo
+  if (guilds.length > 0) {
+    selectGuild(guilds[0].id);
+  }
 }
 
 async function loadDiscordData(token) {
   try {
-    // Fetch User profile
     const userRes = await fetch('https://discord.com/api/users/@me', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -111,8 +237,6 @@ async function loadDiscordData(token) {
     }
 
     const userData = await userRes.json();
-    
-    // Show profile in header
     const avatarUrl = userData.avatar 
       ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
       : `https://cdn.discordapp.com/embed/avatars/${userData.discriminator % 5}.png`;
@@ -120,9 +244,8 @@ async function loadDiscordData(token) {
     document.getElementById('header-avatar').src = avatarUrl;
     document.getElementById('header-username').innerText = userData.username;
     document.getElementById('header-profile').style.display = 'flex';
-    document.getElementById('welcome-title').innerText = `WELCOME, ${userData.username.toUpperCase()}`;
     document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('dashboard-screen').style.display = 'block';
+    document.getElementById('dashboard-screen').style.display = 'grid';
 
     // Fetch User Guilds
     const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
@@ -141,42 +264,50 @@ async function loadDiscordData(token) {
       console.warn("Failed to fetch active bot guilds:", e);
     }
 
-    // Filter: Manage Guild or Admin permission (MANAGE_GUILD = 0x20, ADMINISTRATOR = 0x8)
+    // Filter: Manage Guild or Admin permission
     guilds = guildsData.filter(g => {
       const perms = parseInt(g.permissions);
       return (perms & 0x8) === 0x8 || (perms & 0x20) === 0x20;
-    }).map(g => {
-      return {
-        id: g.id,
-        name: g.name,
-        icon: g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png` : null,
-        botActive: activeGuildIds.includes(g.id)
-      };
-    });
+    }).map(g => ({
+      id: g.id,
+      name: g.name,
+      icon: g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png` : null,
+      botActive: activeGuildIds.includes(g.id)
+    }));
 
     renderGuilds();
-    startTerminalConsole();
+
+    // Auto-select first active guild or first guild
+    const activeGuild = guilds.find(g => g.botActive) || guilds[0];
+    if (activeGuild) {
+      selectGuild(activeGuild.id);
+    }
   } catch (err) {
     console.error("Failed to load Discord credentials:", err);
-    startDemoMode(); // Fallback to demo mode on network fail
+    startDemoMode();
   }
 }
 
 function renderGuilds() {
   const container = document.getElementById('guilds-container');
+  if (!container) return;
   container.innerHTML = '';
 
   guilds.forEach(guild => {
     const item = document.createElement('div');
     item.className = `guild-item ${selectedGuildId === guild.id ? 'active' : ''}`;
-    item.onclick = () => selectGuild(guild.id);
+    item.onclick = () => {
+      selectGuild(guild.id);
+      const modal = document.getElementById('server-modal');
+      if (modal) modal.style.display = 'none';
+    };
 
     const iconHtml = guild.icon 
       ? `<img src="${guild.icon}" class="guild-icon" alt="${guild.name}">`
       : `<div class="guild-icon">${guild.name.charAt(0)}</div>`;
 
     const badgeClass = guild.botActive ? 'active' : 'invite';
-    const badgeText = guild.botActive ? 'Configured' : 'Setup Bot';
+    const badgeText = guild.botActive ? 'Active' : 'Setup Bot';
 
     item.innerHTML = `
       <div class="guild-info">
@@ -192,61 +323,90 @@ function renderGuilds() {
 
 function selectGuild(guildId) {
   selectedGuildId = guildId;
-  renderGuilds(); // update active styling
+  renderGuilds(); // update active class
 
   const guild = guilds.find(g => g.id === guildId);
   if (!guild) return;
 
-  document.getElementById('config-empty-state').style.display = 'none';
-  document.getElementById('config-panel').style.display = 'block';
-  document.getElementById('config-guild-name').innerText = `🛠️ ${guild.name.toUpperCase()}`;
+  // Update Top Navbar Breadcrumb
+  const headerPill = document.getElementById('header-server-pill');
+  if (headerPill) {
+    headerPill.style.display = 'flex';
+    document.getElementById('header-server-name').innerText = guild.name;
+    const miniIcon = document.getElementById('header-server-icon');
+    if (guild.icon) {
+      miniIcon.innerHTML = `<img src="${guild.icon}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+    } else {
+      miniIcon.innerText = guild.name.charAt(0);
+    }
+  }
 
-  // Load Settings from LocalStorage (per Guild) first as fallback
+  // Update Sidebar Server Card
+  document.getElementById('sidebar-server-name').innerText = guild.name;
+  const sideIcon = document.getElementById('sidebar-server-icon');
+  if (guild.icon) {
+    sideIcon.innerHTML = `<img src="${guild.icon}" alt="${guild.name}">`;
+  } else {
+    sideIcon.innerText = guild.name.charAt(0);
+  }
+
+  const sideStatus = document.getElementById('sidebar-server-status');
+  if (sideStatus) {
+    sideStatus.innerText = guild.botActive ? '● Bot Active' : '○ Not Joined';
+    sideStatus.style.color = guild.botActive ? 'var(--green)' : 'var(--discord-blurple)';
+  }
+
+  document.getElementById('config-empty-state').style.display = 'none';
+
+  // Load Settings from LocalStorage (per Guild)
   const settingsKey = `krims_settings_${guild.id}`;
   const savedSettings = JSON.parse(localStorage.getItem(settingsKey)) || {
     prefix: '!',
     aiEnabled: true,
+    automodEnabled: true,
+    antiInvite: true,
+    antiSpam: true,
+    antiCaps: false,
+    badWords: true,
+    modLogChannel: 'none',
+    automodAction: 'timeout-5',
     ticketsEnabled: false,
+    ticketChannel: 'none',
     model: 'gemini',
     sysPrompt: 'You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone.',
+    welcomeEnabled: true,
     welcomeChannel: 'none',
-    welcomeMessage: 'Welcome to the server, {user}!',
+    welcomeMessage: 'Welcome to the server, {user}! We are glad to have you here!',
+    welcomeDm: false,
+    levelingEnabled: true,
+    voiceLeveling: true,
+    textLeveling: true,
+    levelChannel: 'none',
+    levelMessage: '🎉 GG {user}, you just leveled up to **Level {level}**!',
     primaryColor: '#00f2ff',
     rankColor: '#00f2ff',
-    voiceLeveling: true,
     customCommands: [],
     openTickets: []
   };
 
-  // Set form fields
-  document.getElementById('bot-prefix').value = savedSettings.prefix;
-  document.getElementById('toggle-chat').checked = savedSettings.aiEnabled;
-  document.getElementById('toggle-tickets').checked = savedSettings.ticketsEnabled;
-  if (document.getElementById('toggle-voice-xp')) {
-    document.getElementById('toggle-voice-xp').checked = savedSettings.voiceLeveling !== false;
-  }
-  document.getElementById('ai-model').value = savedSettings.model;
-  document.getElementById('system-instruction').value = savedSettings.sysPrompt;
-  document.getElementById('welcome-message').value = savedSettings.welcomeMessage || 'Welcome to the server, {user}!';
-  document.getElementById('ai-personality').value = 'custom'; // reset to custom dropdown by default
-  
-  // Set Color Customization fields & Live Preview
-  setGuildColors(savedSettings.primaryColor || '#00f2ff', savedSettings.rankColor || '#00f2ff');
+  currentLoadedSettings = { ...savedSettings };
+  populateFormSettings(savedSettings);
 
-  customCommands = savedSettings.customCommands || [];
-  openTicketsList = savedSettings.openTickets || [];
-  renderCustomCommands();
-  renderSupportTickets();
-
-  // Load welcome channels select dropdown
+  // Load Channels Dropdowns
   const chanSelect = document.getElementById('welcome-channel');
-  chanSelect.innerHTML = '<option value="none">Disabled</option>';
-
   const embedChanSelect = document.getElementById('embed-channel');
-  embedChanSelect.innerHTML = '';
+  const modLogSelect = document.getElementById('mod-log-channel');
+  const ticketChanSelect = document.getElementById('ticket-channel');
+  const levelChanSelect = document.getElementById('level-channel');
 
-  // Load configuration from cloud database
+  if (chanSelect) chanSelect.innerHTML = '<option value="none">Disabled</option>';
+  if (embedChanSelect) embedChanSelect.innerHTML = '';
+  if (modLogSelect) modLogSelect.innerHTML = '<option value="none">Disabled (No logs channel)</option>';
+  if (ticketChanSelect) ticketChanSelect.innerHTML = '<option value="none">Disabled (No archive channel)</option>';
+  if (levelChanSelect) levelChanSelect.innerHTML = '<option value="none">Current Channel (Where user talked)</option>';
+
   if (guild.botActive && !isDemo) {
+    // Cloud Settings Sync
     fetch('https://krims-code-chatbot.vercel.app/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -255,23 +415,9 @@ function selectGuild(guildId) {
       .then(res => res.json())
       .then(cloudSettings => {
         if (cloudSettings) {
-          document.getElementById('bot-prefix').value = cloudSettings.prefix || '!';
-          document.getElementById('toggle-chat').checked = cloudSettings.aiEnabled !== false;
-          document.getElementById('toggle-tickets').checked = !!cloudSettings.ticketsEnabled;
-          document.getElementById('ai-model').value = cloudSettings.model || 'gemini';
-          document.getElementById('system-instruction').value = cloudSettings.sysPrompt || 'You are the Krims Code AI, built and custom-trained by the genius developer Krylo. Answer coding queries with clear instructions and a friendly, confident tone.';
-          document.getElementById('welcome-message').value = cloudSettings.welcomeMessage || 'Welcome to the server, {user}!';
-          chanSelect.value = cloudSettings.welcomeChannel || 'none';
-          if (cloudSettings.primaryColor || cloudSettings.rankColor) {
-            setGuildColors(cloudSettings.primaryColor || '#00f2ff', cloudSettings.rankColor || '#00f2ff');
-          }
-          if (document.getElementById('toggle-voice-xp')) {
-            document.getElementById('toggle-voice-xp').checked = cloudSettings.voiceLeveling !== false;
-          }
-          customCommands = cloudSettings.customCommands || [];
-          openTicketsList = cloudSettings.openTickets || [];
-          renderCustomCommands();
-          renderSupportTickets();
+          const merged = { ...savedSettings, ...cloudSettings };
+          currentLoadedSettings = { ...merged };
+          populateFormSettings(merged);
         }
       })
       .catch(e => console.error("Failed to load cloud settings:", e));
@@ -280,9 +426,8 @@ function selectGuild(guildId) {
   if (guild.botActive) {
     document.getElementById('bot-active-controls').style.display = 'block';
     document.getElementById('bot-invite-controls').style.display = 'none';
-    document.getElementById('telemetry-widget').style.display = 'block';
 
-    // Set loading placeholders
+    // Telemetry stats
     document.getElementById('telemetry-members').innerText = '...';
     document.getElementById('telemetry-online').innerText = '...';
     document.getElementById('telemetry-boosts').innerText = '...';
@@ -294,25 +439,26 @@ function selectGuild(guildId) {
         document.getElementById('telemetry-online').innerText = '42';
         document.getElementById('telemetry-boosts').innerText = 'Tier 1 (2)';
         document.getElementById('telemetry-security').innerText = 'Medium';
-      }, 400);
+      }, 300);
 
       const mockChannels = [
         { id: '123', name: 'general' },
-        { id: '456', name: 'bot-commands' },
-        { id: '789', name: 'welcome-logs' }
+        { id: '456', name: 'announcements' },
+        { id: '789', name: 'levels-and-rewards' },
+        { id: '101', name: 'mod-logs' },
+        { id: '102', name: 'bot-commands' }
       ];
+
       mockChannels.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.id;
-        opt.innerText = `# ${c.name}`;
-        chanSelect.appendChild(opt);
-
-        const embedOpt = opt.cloneNode(true);
-        embedChanSelect.appendChild(embedOpt);
+        addChannelOption(chanSelect, c.id, `# ${c.name}`);
+        addChannelOption(embedChanSelect, c.id, `# ${c.name}`);
+        addChannelOption(modLogSelect, c.id, `# ${c.name}`);
+        addChannelOption(ticketChanSelect, c.id, `# ${c.name}`);
+        addChannelOption(levelChanSelect, c.id, `# ${c.name}`);
       });
-      chanSelect.value = savedSettings.welcomeChannel || 'none';
 
-      // Mock some support tickets in demo mode
+      if (savedSettings.welcomeChannel) chanSelect.value = savedSettings.welcomeChannel;
+
       openTicketsList = [
         { id: '101', name: 'ticket-krylo', user: 'Krylo' },
         { id: '102', name: 'ticket-support', user: '@J_dangle' }
@@ -327,53 +473,196 @@ function selectGuild(guildId) {
           document.getElementById('telemetry-members').innerText = data.memberCount.toLocaleString();
           document.getElementById('telemetry-online').innerText = data.onlineCount.toLocaleString();
           document.getElementById('telemetry-boosts').innerText = `Tier ${data.boostTier} (${data.boosts})`;
-          
           const verificationLevels = ['None', 'Low', 'Medium', 'High', 'Highest'];
           document.getElementById('telemetry-security').innerText = verificationLevels[data.verificationLevel] || 'Unknown';
         })
-        .catch(err => {
-          console.error("Failed to load telemetry stats:", err);
+        .catch(() => {
           document.getElementById('telemetry-members').innerText = 'N/A';
           document.getElementById('telemetry-online').innerText = 'N/A';
           document.getElementById('telemetry-boosts').innerText = 'N/A';
           document.getElementById('telemetry-security').innerText = 'N/A';
         });
 
-      // 2. Fetch live text channels for dropdowns
+      // 2. Fetch live text channels
       fetch(`/api/guild-channels?guild_id=${guild.id}`)
         .then(res => res.json())
         .then(channels => {
           if (Array.isArray(channels)) {
             channels.forEach(c => {
-              const opt = document.createElement('option');
-              opt.value = c.id;
-              opt.innerText = `# ${c.name}`;
-              chanSelect.appendChild(opt);
-
-              const embedOpt = opt.cloneNode(true);
-              embedChanSelect.appendChild(embedOpt);
+              addChannelOption(chanSelect, c.id, `# ${c.name}`);
+              addChannelOption(embedChanSelect, c.id, `# ${c.name}`);
+              addChannelOption(modLogSelect, c.id, `# ${c.name}`);
+              addChannelOption(ticketChanSelect, c.id, `# ${c.name}`);
+              addChannelOption(levelChanSelect, c.id, `# ${c.name}`);
             });
-            chanSelect.value = savedSettings.welcomeChannel || 'none';
+            if (savedSettings.welcomeChannel) chanSelect.value = savedSettings.welcomeChannel;
+            if (savedSettings.modLogChannel) modLogSelect.value = savedSettings.modLogChannel;
+            if (savedSettings.ticketChannel) ticketChanSelect.value = savedSettings.ticketChannel;
+            if (savedSettings.levelChannel) levelChanSelect.value = savedSettings.levelChannel;
           }
         })
         .catch(err => console.error("Failed to load guild channels:", err));
     }
   } else {
     document.getElementById('bot-active-controls').style.display = 'none';
-    document.getElementById('bot-invite-controls').style.display = 'block';
-    document.getElementById('telemetry-widget').style.display = 'none';
-    
-    // Generate direct invite URL with guild_id parameter
+    document.getElementById('bot-invite-controls').style.display = 'flex';
     const inviteUrl = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&permissions=8&scope=bot%20applications.commands&guild_id=${guild.id}`;
     document.getElementById('invite-server-link').href = inviteUrl;
   }
+
+  hideUnsavedChangesBar();
 }
 
-function changePersonalityPreset() {
-  const val = document.getElementById('ai-personality').value;
-  if (PERSONALITY_PROMPTS[val]) {
-    document.getElementById('system-instruction').value = PERSONALITY_PROMPTS[val];
-  }
+function addChannelOption(selectEl, value, text) {
+  if (!selectEl) return;
+  const opt = document.createElement('option');
+  opt.value = value;
+  opt.innerText = text;
+  selectEl.appendChild(opt);
+}
+
+function populateFormSettings(s) {
+  // General
+  const prefixEl = document.getElementById('bot-prefix');
+  if (prefixEl) prefixEl.value = s.prefix || '!';
+
+  // AutoMod
+  const autoModMaster = document.getElementById('toggle-automod');
+  if (autoModMaster) autoModMaster.checked = s.automodEnabled !== false;
+
+  setCheckbox('toggle-anti-invite', s.antiInvite !== false);
+  setCheckbox('toggle-anti-spam', s.antiSpam !== false);
+  setCheckbox('toggle-anti-caps', !!s.antiCaps);
+  setCheckbox('toggle-bad-words', s.badWords !== false);
+  setSelect('automod-action', s.automodAction || 'timeout-5');
+
+  // Welcome
+  setCheckbox('toggle-welcome-master', s.welcomeEnabled !== false);
+  setValue('welcome-message', s.welcomeMessage || 'Welcome to the server, {user}!');
+  setCheckbox('toggle-welcome-dm', !!s.welcomeDm);
+
+  // Tickets
+  setCheckbox('toggle-tickets', !!s.ticketsEnabled);
+
+  // Levels & Voice XP
+  setCheckbox('toggle-levels-master', s.levelingEnabled !== false);
+  setCheckbox('toggle-voice-xp', s.voiceLeveling !== false);
+  setCheckbox('toggle-text-xp', s.textLeveling !== false);
+  setValue('level-message', s.levelMessage || '🎉 GG {user}, you just leveled up to **Level {level}**!');
+
+  // AI
+  setCheckbox('toggle-chat', s.aiEnabled !== false);
+  setSelect('ai-model', s.model || 'gemini');
+  setValue('system-instruction', s.sysPrompt || PERSONALITY_PROMPTS.developer);
+  setSelect('ai-personality', 'custom');
+
+  // Overview Sync
+  setCheckbox('overview-toggle-levels', s.levelingEnabled !== false);
+  setCheckbox('overview-toggle-automod', s.automodEnabled !== false);
+  setCheckbox('overview-toggle-chat', s.aiEnabled !== false);
+  setCheckbox('overview-toggle-welcome', s.welcomeEnabled !== false);
+  setCheckbox('overview-toggle-tickets', !!s.ticketsEnabled);
+  setCheckbox('overview-toggle-commands', true);
+
+  // Branding & Live Previews
+  setGuildColors(s.primaryColor || '#00f2ff', s.rankColor || '#00f2ff');
+
+  customCommands = s.customCommands || [];
+  openTicketsList = s.openTickets || [];
+  renderCustomCommands();
+  renderSupportTickets();
+}
+
+function setCheckbox(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.checked = !!val;
+}
+
+function setValue(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val;
+}
+
+function setSelect(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val;
+}
+
+// Sync Overview quick toggles with respective module toggles
+function initOverviewTogglesSync() {
+  const syncMap = [
+    { overview: 'overview-toggle-levels', target: 'toggle-levels-master' },
+    { overview: 'overview-toggle-automod', target: 'toggle-automod' },
+    { overview: 'overview-toggle-chat', target: 'toggle-chat' },
+    { overview: 'overview-toggle-welcome', target: 'toggle-welcome-master' },
+    { overview: 'overview-toggle-tickets', target: 'toggle-tickets' }
+  ];
+
+  syncMap.forEach(({ overview, target }) => {
+    const oEl = document.getElementById(overview);
+    const tEl = document.getElementById(target);
+
+    oEl?.addEventListener('change', () => {
+      if (tEl) tEl.checked = oEl.checked;
+      showUnsavedChangesBar();
+    });
+
+    tEl?.addEventListener('change', () => {
+      if (oEl) oEl.checked = tEl.checked;
+      showUnsavedChangesBar();
+    });
+  });
+}
+
+// ==========================================
+// LIVE EMBED STUDIO (Carl-bot style)
+// ==========================================
+function initLiveEmbedStudio() {
+  const titleInput = document.getElementById('embed-title');
+  const descInput = document.getElementById('embed-description');
+  const footerInput = document.getElementById('embed-footer');
+  const colorSelect = document.getElementById('embed-color');
+  const customColorInput = document.getElementById('embed-custom-color');
+
+  const updatePreview = () => {
+    const previewTitle = document.getElementById('preview-embed-title');
+    const previewDesc = document.getElementById('preview-embed-desc');
+    const previewFooter = document.getElementById('preview-embed-footer-text');
+    const previewBox = document.getElementById('discord-embed-preview');
+
+    const color = customColorInput?.value || colorSelect?.value || '#00f2ff';
+
+    if (previewTitle) {
+      previewTitle.innerText = titleInput?.value.trim() || 'Announcement Title';
+      previewTitle.style.color = color;
+    }
+    if (previewDesc) {
+      previewDesc.innerText = descInput?.value.trim() || 'Announcement message contents...';
+    }
+    if (previewFooter) {
+      previewFooter.innerText = footerInput?.value.trim() || 'Krylo Team • Bot Broadcast';
+    }
+    if (previewBox) {
+      previewBox.style.borderLeftColor = color;
+    }
+  };
+
+  titleInput?.addEventListener('input', updatePreview);
+  descInput?.addEventListener('input', updatePreview);
+  footerInput?.addEventListener('input', updatePreview);
+
+  colorSelect?.addEventListener('change', (e) => {
+    if (customColorInput) customColorInput.value = e.target.value;
+    updatePreview();
+  });
+
+  customColorInput?.addEventListener('input', (e) => {
+    if (colorSelect) colorSelect.value = e.target.value;
+    updatePreview();
+  });
+
+  // Initial preview sync
+  updatePreview();
 }
 
 function broadcastEmbed() {
@@ -382,19 +671,18 @@ function broadcastEmbed() {
   const channelId = document.getElementById('embed-channel').value;
   const title = document.getElementById('embed-title').value.trim();
   const description = document.getElementById('embed-description').value.trim();
-  const color = document.getElementById('embed-color').value;
+  const color = document.getElementById('embed-custom-color')?.value || document.getElementById('embed-color')?.value || '#00f2ff';
 
   if (!channelId || !title || !description) {
-    alert("Please fill in target channel, embed title, and contents!");
+    alert("Please select a target channel and fill in the embed title and description!");
     return;
   }
 
   const btn = document.getElementById('broadcast-embed-btn');
   const oldText = btn.innerText;
-  btn.innerText = 'POSTING BROADCAST...';
+  btn.innerText = 'POSTING TO DISCORD...';
   btn.disabled = true;
 
-  // Direct serverless broadcast to Discord channel via Bot Token
   fetch('/api/broadcast', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -416,116 +704,168 @@ function broadcastEmbed() {
       btn.disabled = false;
 
       if (data.ok) {
-        document.getElementById('embed-title').value = '';
-        document.getElementById('embed-description').value = '';
-
-        // Show toast notification
-        const toast = document.getElementById('toast');
-        toast.innerText = '📢 Embed posted to Discord successfully!';
-        toast.classList.add('show');
-        setTimeout(() => {
-          toast.classList.remove('show');
-          toast.innerText = 'Settings saved successfully!';
-        }, 3000);
+        showToast('📢 Embed posted to Discord successfully!');
       } else {
         alert("Failed to broadcast: " + (data.error || "Unknown error"));
       }
     })
     .catch(err => {
-      // Fallback to legacy queuing if direct broadcast route fails
-      fetch('https://krims-code-chatbot.vercel.app/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'add_broadcast_action',
-          guildId: selectedGuildId,
-          embed: { channelId, title, description, color }
-        })
-      })
-        .then(r => r.json())
-        .then(fallbackData => {
-          btn.innerText = oldText;
-          btn.disabled = false;
-          if (fallbackData.ok) {
-            document.getElementById('embed-title').value = '';
-            document.getElementById('embed-description').value = '';
-            const toast = document.getElementById('toast');
-            toast.innerText = '📢 Broadcast queued successfully!';
-            toast.classList.add('show');
-            setTimeout(() => {
-              toast.classList.remove('show');
-              toast.innerText = 'Settings saved successfully!';
-            }, 3000);
-          } else {
-            alert("Broadcast error: " + err.message);
-          }
-        })
-        .catch(() => {
-          btn.innerText = oldText;
-          btn.disabled = false;
-          alert("Error sending broadcast: " + err.message);
-        });
+      btn.innerText = oldText;
+      btn.disabled = false;
+      alert("Error broadcasting embed: " + err.message);
     });
+}
+
+// ==========================================
+// UNSAVED CHANGES FLOATING BAR (Dyno / Carl style)
+// ==========================================
+function initUnsavedChangesWatchers() {
+  const inputs = document.querySelectorAll('#bot-active-controls input, #bot-active-controls select, #bot-active-controls textarea');
+  inputs.forEach(el => {
+    el.addEventListener('change', showUnsavedChangesBar);
+    if (el.tagName === 'INPUT' && el.type === 'text') {
+      el.addEventListener('input', showUnsavedChangesBar);
+    }
+  });
+}
+
+function showUnsavedChangesBar() {
+  const bar = document.getElementById('unsaved-changes-bar');
+  if (bar) bar.classList.add('visible');
+  hasUnsavedChanges = true;
+}
+
+function hideUnsavedChangesBar() {
+  const bar = document.getElementById('unsaved-changes-bar');
+  if (bar) bar.classList.remove('visible');
+  hasUnsavedChanges = false;
+}
+
+function resetSettings() {
+  if (currentLoadedSettings && Object.keys(currentLoadedSettings).length > 0) {
+    populateFormSettings(currentLoadedSettings);
+  }
+  hideUnsavedChangesBar();
+  showToast('↩️ Changes reset to last saved state');
 }
 
 function saveSettings() {
   if (!selectedGuildId) return;
 
-  const prefix = document.getElementById('bot-prefix').value || '!';
-  const aiEnabled = document.getElementById('toggle-chat').checked;
-  const ticketsEnabled = document.getElementById('toggle-tickets').checked;
-  const model = document.getElementById('ai-model').value;
-  const sysPrompt = document.getElementById('system-instruction').value;
-  const welcomeChannel = document.getElementById('welcome-channel').value;
-  const welcomeMessage = document.getElementById('welcome-message').value;
+  const prefix = document.getElementById('bot-prefix')?.value || '!';
+  const automodEnabled = document.getElementById('toggle-automod')?.checked ?? true;
+  const antiInvite = document.getElementById('toggle-anti-invite')?.checked ?? true;
+  const antiSpam = document.getElementById('toggle-anti-spam')?.checked ?? true;
+  const antiCaps = document.getElementById('toggle-anti-caps')?.checked ?? false;
+  const badWords = document.getElementById('toggle-bad-words')?.checked ?? true;
+  const modLogChannel = document.getElementById('mod-log-channel')?.value || 'none';
+  const automodAction = document.getElementById('automod-action')?.value || 'timeout-5';
+
+  const welcomeEnabled = document.getElementById('toggle-welcome-master')?.checked ?? true;
+  const welcomeChannel = document.getElementById('welcome-channel')?.value || 'none';
+  const welcomeMessage = document.getElementById('welcome-message')?.value || 'Welcome to the server, {user}!';
+  const welcomeDm = document.getElementById('toggle-welcome-dm')?.checked ?? false;
+
+  const ticketsEnabled = document.getElementById('toggle-tickets')?.checked ?? false;
+  const ticketChannel = document.getElementById('ticket-channel')?.value || 'none';
+
+  const levelingEnabled = document.getElementById('toggle-levels-master')?.checked ?? true;
+  const voiceLeveling = document.getElementById('toggle-voice-xp')?.checked ?? true;
+  const textLeveling = document.getElementById('toggle-text-xp')?.checked ?? true;
+  const levelChannel = document.getElementById('level-channel')?.value || 'none';
+  const levelMessage = document.getElementById('level-message')?.value || '🎉 GG {user}, you just leveled up to **Level {level}**!';
+
+  const aiEnabled = document.getElementById('toggle-chat')?.checked ?? true;
+  const model = document.getElementById('ai-model')?.value || 'gemini';
+  const sysPrompt = document.getElementById('system-instruction')?.value || '';
+
   const primaryColor = document.getElementById('primary-color-picker')?.value || '#00f2ff';
   const rankColor = document.getElementById('rank-color-picker')?.value || '#00f2ff';
-  const voiceLeveling = document.getElementById('toggle-voice-xp') ? document.getElementById('toggle-voice-xp').checked : true;
 
+  const settings = {
+    prefix,
+    automodEnabled,
+    antiInvite,
+    antiSpam,
+    antiCaps,
+    badWords,
+    modLogChannel,
+    automodAction,
+    welcomeEnabled,
+    welcomeChannel,
+    welcomeMessage,
+    welcomeDm,
+    ticketsEnabled,
+    ticketChannel,
+    levelingEnabled,
+    voiceLeveling,
+    textLeveling,
+    levelChannel,
+    levelMessage,
+    aiEnabled,
+    model,
+    sysPrompt,
+    primaryColor,
+    rankColor,
+    customCommands,
+    openTickets: openTicketsList
+  };
+
+  currentLoadedSettings = { ...settings };
   const settingsKey = `krims_settings_${selectedGuildId}`;
-  const settings = { prefix, aiEnabled, ticketsEnabled, model, sysPrompt, welcomeChannel, welcomeMessage, primaryColor, rankColor, voiceLeveling, customCommands, openTickets: openTicketsList };
-  
   localStorage.setItem(settingsKey, JSON.stringify(settings));
 
-  // Save to live cloud database if not in demo mode
   if (!isDemo) {
     fetch('https://krims-code-chatbot.vercel.app/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'save_config', guildId: selectedGuildId, config: settings })
-    })
-      .catch(e => console.error("Failed to save settings to cloud database:", e));
+    }).catch(e => console.error("Cloud save error:", e));
   }
 
-  // Show toast alert
-  const toast = document.getElementById('toast');
-  toast.classList.add('show');
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3000);
+  hideUnsavedChangesBar();
+  showToast('🟢 Settings saved successfully!');
 }
 
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  const msgEl = document.getElementById('toast-message');
+  if (msgEl && message) msgEl.innerText = message;
+  if (toast) {
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+}
+
+// ==========================================
+// CUSTOM COMMANDS (Auto-Responder)
+// ==========================================
 function addCustomCommand() {
   const trigEl = document.getElementById('cmd-trigger');
   const respEl = document.getElementById('cmd-response');
-  const trigger = trigEl.value.trim();
-  const response = respEl.value.trim();
+  const trigger = trigEl?.value.trim();
+  const response = respEl?.value.trim();
 
-  if (!trigger || !response) return;
+  if (!trigger || !response) {
+    alert("Please enter both a trigger keyword and bot response!");
+    return;
+  }
 
-  // Prefix handling
   const cleanTrigger = trigger.startsWith('!') ? trigger : '!' + trigger;
-
-  // Add and reset inputs
   customCommands.push({ trigger: cleanTrigger, response });
-  trigEl.value = '';
-  respEl.value = '';
+  if (trigEl) trigEl.value = '';
+  if (respEl) respEl.value = '';
+
   renderCustomCommands();
+  showUnsavedChangesBar();
 }
 
 window.deleteCustomCommand = function(idx) {
   customCommands.splice(idx, 1);
   renderCustomCommands();
+  showUnsavedChangesBar();
 };
 
 function renderCustomCommands() {
@@ -534,260 +874,101 @@ function renderCustomCommands() {
   listEl.innerHTML = '';
 
   if (customCommands.length === 0) {
-    listEl.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem; font-style: italic; padding: 0.2rem 0;">No custom commands defined yet.</div>';
+    listEl.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem; font-style: italic; padding: 0.5rem 0;">No custom auto-replies configured yet. Use the form above to add one!</div>';
     return;
   }
 
   customCommands.forEach((cmd, idx) => {
-    const row = document.createElement('div');
-    row.style = 'display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.02); padding: 0.6rem 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.03); margin-top: 0.25rem;';
-    row.innerHTML = `
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
-        <span style="color: var(--cyan); font-weight: bold;">${cmd.trigger}</span> 
-        <span style="color: var(--text-muted); margin: 0 0.5rem;">➔</span> 
-        <span style="color: var(--text);">${cmd.response}</span>
+    const item = document.createElement('div');
+    item.className = 'cmd-item';
+    item.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
+        <span class="cmd-trigger-badge">${cmd.trigger}</span>
+        <span class="cmd-response-text">${cmd.response}</span>
       </div>
-      <button type="button" style="background: none; border: none; color: #ff5555; cursor: pointer; font-size: 0.85rem; font-weight: bold; padding: 0.2rem 0.5rem;" onclick="deleteCustomCommand(${idx})">DELETE</button>
+      <button type="button" class="btn-sm btn-secondary" style="color: var(--red); border-color: rgba(239, 68, 68, 0.3);" onclick="deleteCustomCommand(${idx})">
+        ✕ Delete
+      </button>
     `;
-    listEl.appendChild(row);
+    listEl.appendChild(item);
   });
 }
 
+// ==========================================
+// SUPPORT TICKETS
+// ==========================================
 function renderSupportTickets() {
-  const cardEl = document.getElementById('tickets-card');
   const listEl = document.getElementById('tickets-list');
-  if (!cardEl || !listEl) return;
+  if (!listEl) return;
+  listEl.innerHTML = '';
 
-  const ticketsEnabled = document.getElementById('toggle-tickets').checked;
-  if (ticketsEnabled) {
-    cardEl.style.display = 'block';
-    listEl.innerHTML = '';
-    
-    if (openTicketsList.length === 0) {
-      listEl.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem; font-style: italic;">No active support tickets.</div>';
-      return;
-    }
-
-    openTicketsList.forEach((ticket, idx) => {
-      const row = document.createElement('div');
-      row.style = 'display: flex; align-items: center; justify-content: space-between; background: rgba(0, 242, 255, 0.02); padding: 0.6rem 1rem; border-radius: 6px; border: 1px solid rgba(0, 242, 255, 0.1); margin-top: 0.25rem;';
-      row.innerHTML = `
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
-          <span style="color: var(--text); font-weight: bold;"># ${ticket.name}</span>
-          <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem;">Creator: ${ticket.user}</span>
-        </div>
-        <button type="button" style="background: none; border: none; color: #ff5555; cursor: pointer; font-size: 0.85rem; font-weight: bold; padding: 0.2rem 0.5rem;" onclick="closeSupportTicket(${idx})">CLOSE CHANNEL</button>
-      `;
-      listEl.appendChild(row);
-    });
-  } else {
-    cardEl.style.display = 'none';
+  if (openTicketsList.length === 0) {
+    listEl.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem; font-style: italic; padding: 0.5rem 0;">No active support tickets open right now.</div>';
+    return;
   }
+
+  openTicketsList.forEach((ticket, idx) => {
+    const item = document.createElement('div');
+    item.className = 'ticket-item';
+    item.innerHTML = `
+      <div>
+        <span style="font-weight: 700; color: var(--text-main); font-size: 0.88rem;"># ${ticket.name}</span>
+        <span style="color: var(--text-muted); font-size: 0.78rem; margin-left: 0.5rem;">Creator: ${ticket.user}</span>
+      </div>
+      <button type="button" class="btn-sm btn-secondary" style="color: var(--red); border-color: rgba(239, 68, 68, 0.3);" onclick="closeSupportTicket(${idx})">
+        Close Ticket
+      </button>
+    `;
+    listEl.appendChild(item);
+  });
 }
 
 window.closeSupportTicket = function(idx) {
   openTicketsList.splice(idx, 1);
   renderSupportTickets();
-  saveSettings();
+  showUnsavedChangesBar();
 };
 
-function logout() {
-  localStorage.removeItem('discord_access_token');
-  localStorage.removeItem('demo_mode_active');
-  isDemo = false;
-  selectedGuildId = null;
-  
-  if (consoleInterval) {
-    clearInterval(consoleInterval);
-    consoleInterval = null;
+function changePersonalityPreset() {
+  const val = document.getElementById('ai-personality')?.value;
+  if (PERSONALITY_PROMPTS[val]) {
+    const instructionEl = document.getElementById('system-instruction');
+    if (instructionEl) {
+      instructionEl.value = PERSONALITY_PROMPTS[val];
+      showUnsavedChangesBar();
+    }
   }
-
-  if (oscilloscopeId) {
-    cancelAnimationFrame(oscilloscopeId);
-    oscilloscopeId = null;
-  }
-
-  document.getElementById('header-profile').style.display = 'none';
-  document.getElementById('dashboard-screen').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'block';
-}
-
-// Bot Console Terminal Simulator
-function startTerminalConsole() {
-  const consoleEl = document.getElementById('terminal-console');
-  if (!consoleEl) return;
-  consoleEl.innerHTML = '';
-  
-  const initialLogs = [
-    `[${new Date().toLocaleTimeString()}] [SYSTEM] Gateway initialization complete. Node.js runtime ready.`,
-    `[${new Date().toLocaleTimeString()}] [INFO] Attempting connection to Discord Gateway...`,
-    `[${new Date().toLocaleTimeString()}] [INFO] [+] Krims Code Discord Bot online as Krims Code AI#7945`,
-    `[${new Date().toLocaleTimeString()}] [TELEMETRY] Trigrams database synchronized. localVocabSize: 445 words.`,
-    `[${new Date().toLocaleTimeString()}] [SYSTEM] Connected to serverless router mesh: https://krims-code-chatbot.vercel.app`
-  ];
-
-  initialLogs.forEach(log => {
-    const line = document.createElement('div');
-    line.innerText = log;
-    consoleEl.appendChild(line);
-  });
-  consoleEl.scrollTop = consoleEl.scrollHeight;
-
-  // Clear existing interval
-  if (consoleInterval) clearInterval(consoleInterval);
-
-  const mockUsers = ['@krylo_blox', '@J_dangle', '@VANGUARD', '@Fiforious', '@Jitesh'];
-  const mockQueries = ['!ask write a JavaScript counter', 'hello bot', '1+1', '!diagnose', 'reset', 'help'];
-
-  consoleInterval = setInterval(() => {
-    const time = new Date().toLocaleTimeString();
-    const user = mockUsers[Math.floor(Math.random() * mockUsers.length)];
-    const query = mockQueries[Math.floor(Math.random() * mockQueries.length)];
-
-    let logText = '';
-    const roll = Math.random();
-
-    if (roll < 0.35) {
-      logText = `[${time}] [COMMAND] User ${user} invoked query: "${query}"`;
-    } else if (roll < 0.65) {
-      const isMath = query === '1+1';
-      if (isMath) {
-        logText = `[${time}] [MATH ENGINE] Instantly evaluated expression locally in JS: "1+1" => "2". Response sent.`;
-      } else if (query === '!diagnose') {
-        logText = `[${time}] [TELEMETRY] Diagnostics request processed. Served network telemetry embed payload.`;
-      } else {
-        const latency = (0.2 + Math.random() * 0.8).toFixed(3);
-        logText = `[${time}] [AI ROUTER] Query processed using Gemini-Engine. Latency: ${latency}s.`;
-      }
-    } else if (roll < 0.8) {
-      logText = `[${time}] [GATEWAY] Gateway connection heartbeat ACK received.`;
-    } else {
-      logText = `[${time}] [DB CONFIG] Read Welcome settings: activeChannel: ${Math.random() > 0.5 ? 'general' : 'welcome-logs'}.`;
-    }
-
-    const line = document.createElement('div');
-    line.innerText = logText;
-    consoleEl.appendChild(line);
-
-    while (consoleEl.children.length > 50) {
-      consoleEl.removeChild(consoleEl.firstChild);
-    }
-    
-    consoleEl.scrollTop = consoleEl.scrollHeight;
-  }, 4000);
-}
-
-// Gateway Oscilloscope Waveform Animation
-function startOscilloscope() {
-  const canvas = document.getElementById('oscilloscope');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
-  
-  let phase = 0;
-  
-  function draw() {
-    if (!document.getElementById('telemetry-widget') || document.getElementById('telemetry-widget').style.display === 'none') {
-      oscilloscopeId = requestAnimationFrame(draw);
-      return;
-    }
-    
-    if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
-      canvas.width = canvas.clientWidth;
-      canvas.height = canvas.clientHeight;
-    }
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw grid lines
-    ctx.strokeStyle = 'rgba(0, 242, 255, 0.05)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i < canvas.width; i += 20) {
-      ctx.beginPath();
-      ctx.moveTo(i, 0);
-      ctx.lineTo(i, canvas.height);
-      ctx.stroke();
-    }
-    for (let i = 0; i < canvas.height; i += 10) {
-      ctx.beginPath();
-      ctx.moveTo(0, i);
-      ctx.lineTo(canvas.width, i);
-      ctx.stroke();
-    }
-    
-    // Draw oscilloscope residual sine wave
-    ctx.strokeStyle = 'rgba(0, 242, 255, 0.7)';
-    ctx.lineWidth = 2;
-    ctx.shadowBlur = 4;
-    ctx.shadowColor = 'rgba(0, 242, 255, 0.8)';
-    
-    ctx.beginPath();
-    for (let x = 0; x < canvas.width; x++) {
-      const angle = (x / canvas.width) * Math.PI * 4 + phase;
-      const y = (canvas.height / 2) + Math.sin(angle) * (Math.cos(phase * 0.5) * 12 + 4);
-      if (x === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-    
-    ctx.shadowBlur = 0; // reset
-    
-    phase += 0.05;
-    
-    // Update simulated ping
-    if (Math.random() < 0.015) {
-      const pingVal = Math.floor(35 + Math.random() * 25);
-      const pingEl = document.getElementById('oscilloscope-ping');
-      if (pingEl) pingEl.innerText = `PING: ${pingVal}ms`;
-    }
-    
-    oscilloscopeId = requestAnimationFrame(draw);
-  }
-  
-  if (oscilloscopeId) cancelAnimationFrame(oscilloscopeId);
-  draw();
 }
 
 // ==========================================
-// THEME & COLOR CUSTOMIZATION FUNCTIONS
+// THEMES & COLOR PICKERS
 // ==========================================
-
 function initDashboardTheme() {
   const savedTheme = localStorage.getItem('krims_dashboard_theme_color') || '#00f2ff';
   applyDashboardTheme(savedTheme);
 
-  // Setup theme dot buttons
   const presetContainer = document.getElementById('theme-presets-bar');
-  if (presetContainer) {
-    presetContainer.querySelectorAll('.theme-dot').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const color = btn.getAttribute('data-color');
-        applyDashboardTheme(color);
-      });
+  presetContainer?.querySelectorAll('.theme-dot').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const color = btn.getAttribute('data-color');
+      applyDashboardTheme(color);
     });
-  }
+  });
 
-  // Setup custom theme color picker
   const customColorInput = document.getElementById('dash-custom-color');
-  if (customColorInput) {
-    customColorInput.value = savedTheme;
-    customColorInput.addEventListener('input', (e) => {
-      applyDashboardTheme(e.target.value);
-    });
-  }
+  customColorInput?.addEventListener('input', (e) => {
+    applyDashboardTheme(e.target.value);
+  });
 }
 
 function applyDashboardTheme(color) {
   if (!color) return;
   document.documentElement.style.setProperty('--cyan', color);
-  document.documentElement.style.setProperty('--card-border', `${color}33`); // 20% opacity border
+  document.documentElement.style.setProperty('--cyan-glow', `${color}66`);
   localStorage.setItem('krims_dashboard_theme_color', color);
 
-  // Update active state in preset dots
   document.querySelectorAll('#theme-presets-bar .theme-dot').forEach(btn => {
-    if (btn.getAttribute('data-color').toLowerCase() === color.toLowerCase()) {
+    if (btn.getAttribute('data-color')?.toLowerCase() === color.toLowerCase()) {
       btn.classList.add('active');
     } else {
       btn.classList.remove('active');
@@ -804,33 +985,31 @@ function initColorPickers() {
   const primaryInput = document.getElementById('primary-color-picker');
   const rankInput = document.getElementById('rank-color-picker');
 
-  if (primaryInput) {
-    primaryInput.addEventListener('input', (e) => {
-      updateLivePreviews(e.target.value, rankInput ? rankInput.value : '#00f2ff');
-    });
-  }
+  primaryInput?.addEventListener('input', (e) => {
+    updateLivePreviews(e.target.value, rankInput ? rankInput.value : '#00f2ff');
+    showUnsavedChangesBar();
+  });
 
-  if (rankInput) {
-    rankInput.addEventListener('input', (e) => {
-      updateLivePreviews(primaryInput ? primaryInput.value : '#00f2ff', e.target.value);
-    });
-  }
+  rankInput?.addEventListener('input', (e) => {
+    updateLivePreviews(primaryInput ? primaryInput.value : '#00f2ff', e.target.value);
+    showUnsavedChangesBar();
+  });
 
-  // Embed quick swatches
   document.querySelectorAll('#embed-swatches .swatch-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const color = btn.getAttribute('data-color');
       if (primaryInput) primaryInput.value = color;
       updateLivePreviews(color, rankInput ? rankInput.value : '#00f2ff');
+      showUnsavedChangesBar();
     });
   });
 
-  // Rank quick swatches
   document.querySelectorAll('#rank-swatches .swatch-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const color = btn.getAttribute('data-color');
       if (rankInput) rankInput.value = color;
       updateLivePreviews(primaryInput ? primaryInput.value : '#00f2ff', color);
+      showUnsavedChangesBar();
     });
   });
 }
@@ -846,19 +1025,18 @@ function setGuildColors(primaryColor = '#00f2ff', rankColor = '#00f2ff') {
 }
 
 function updateLivePreviews(primaryColor, rankColor) {
-  // Update badges
   const embedHex = document.getElementById('embed-color-hex');
   const rankHex = document.getElementById('rank-color-hex');
   if (embedHex) embedHex.innerText = primaryColor.toUpperCase();
   if (rankHex) rankHex.innerText = rankColor.toUpperCase();
 
-  // Update Discord Embed Preview
+  // Discord Embed Preview
   const embedPreview = document.getElementById('discord-embed-preview');
   const embedTitle = document.getElementById('preview-embed-title');
   if (embedPreview) embedPreview.style.borderLeftColor = primaryColor;
   if (embedTitle) embedTitle.style.color = primaryColor;
 
-  // Update Discord Rank Card Mini Preview
+  // Discord Rank Card Preview
   const avatarMock = document.getElementById('rank-avatar-mock');
   const rankTag = document.getElementById('rank-tag-mock');
   const rankFill = document.getElementById('rank-bar-fill');
@@ -866,7 +1044,7 @@ function updateLivePreviews(primaryColor, rankColor) {
 
   if (avatarMock) {
     avatarMock.style.borderColor = rankColor;
-    avatarMock.style.boxShadow = `0 0 12px ${rankColor}80`;
+    avatarMock.style.boxShadow = `0 0 14px ${rankColor}80`;
   }
   if (rankTag) rankTag.style.color = rankColor;
   if (rankXp) rankXp.style.color = rankColor;
@@ -876,3 +1054,14 @@ function updateLivePreviews(primaryColor, rankColor) {
   }
 }
 
+function logout() {
+  localStorage.removeItem('discord_access_token');
+  localStorage.removeItem('demo_mode_active');
+  isDemo = false;
+  selectedGuildId = null;
+
+  document.getElementById('header-profile').style.display = 'none';
+  document.getElementById('dashboard-screen').style.display = 'none';
+  document.getElementById('header-server-pill').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
