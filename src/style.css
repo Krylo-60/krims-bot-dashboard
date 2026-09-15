@@ -3262,13 +3262,13 @@ input:checked + .slider:before {
 }
 
 .rank-sim-user {
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 800;
   color: #fff;
 }
 
 .rank-sim-discrim {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
   font-family: 'JetBrains Mono', monospace;
 }
@@ -3276,7 +3276,7 @@ input:checked + .slider:before {
 .rank-badges-box {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   flex-shrink: 0;
 }
 
