@@ -252,6 +252,8 @@ function switchTab(tabId) {
   }
 
   // Scroll to top of content
+  const contentArea = document.getElementById('dashboard-content-area');
+  if (contentArea) contentArea.scrollTo({ top: 0, behavior: 'smooth' });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
