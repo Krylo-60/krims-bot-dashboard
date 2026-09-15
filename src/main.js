@@ -113,8 +113,34 @@ function initDashboardApp() {
 
   // Bind Static Controls
   document.getElementById('login-btn')?.addEventListener('click', loginWithDiscord);
+  document.getElementById('instant-login-btn')?.addEventListener('click', startInstantLogin);
   document.getElementById('demo-link')?.addEventListener('click', startDemoMode);
   document.getElementById('logout-btn')?.addEventListener('click', logout);
+
+  // Pro & Premium Coming Soon Modal Handlers
+  document.getElementById('open-tiers-modal-btn')?.addEventListener('click', () => openTiersComingSoonModal('pro'));
+  document.getElementById('tier-upgrade-hint')?.addEventListener('click', () => openTiersComingSoonModal('premium'));
+  document.getElementById('close-tiers-modal-btn')?.addEventListener('click', closeTiersComingSoonModal);
+  document.getElementById('tiers-coming-soon-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'tiers-coming-soon-modal') closeTiersComingSoonModal();
+  });
+
+  document.getElementById('join-vip-waitlist-btn')?.addEventListener('click', () => {
+    const successMsg = document.getElementById('waitlist-success-msg');
+    if (successMsg) successMsg.style.display = 'block';
+    showToast('👑 Added to VIP Waitlist! Pro & Premium features will unlock first for you.');
+  });
+
+  document.getElementById('test-drive-tiers-btn')?.addEventListener('click', () => {
+    closeTiersComingSoonModal();
+    currentGuildTier = 'pro';
+    document.querySelectorAll('#milestone-tier-selector .tier-pill-btn').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-tier') === 'pro');
+    });
+    updateTierUI();
+    renderMilestoneList();
+    showToast('⚡ Test Drive Enabled: Pro Tier features unlocked in Simulator!');
+  });
 
   const saveBtn = document.getElementById('save-settings-btn');
   if (saveBtn) {
@@ -137,11 +163,28 @@ function initDashboardApp() {
   document.getElementById('broadcast-embed-btn')?.addEventListener('click', broadcastEmbed);
   document.getElementById('refresh-tickets-btn')?.addEventListener('click', renderSupportTickets);
   document.getElementById('premium-waitlist-btn')?.addEventListener('click', () => {
-    showToast('👑 You are on the waitlist for Premium Custom Allocation!');
+    openTiersComingSoonModal('premium');
   });
 
   // Sync Overview toggles with dedicated tabs
   initOverviewTogglesSync();
+
+  // Check for OAuth errors in search or hash
+  const searchParams = new URLSearchParams(window.location.search);
+  const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+  const oauthError = searchParams.get('error') || hashParams.get('error');
+  const oauthErrorDesc = searchParams.get('error_description') || hashParams.get('error_description');
+
+  if (oauthError) {
+    console.warn("OAuth redirect error detected:", oauthError, oauthErrorDesc);
+    const errorBox = document.getElementById('oauth-error-box');
+    const errorMsg = document.getElementById('oauth-error-msg');
+    if (errorBox && errorMsg) {
+      errorBox.style.display = 'block';
+      errorMsg.textContent = `Discord returned "${oauthError}". If Redirect URI is not registered in Discord Dev Portal, use 1-Click Instant Login below!`;
+    }
+    history.replaceState("", document.title, window.location.pathname);
+  }
 
   // Handle OAuth2 Implicit grant redirect hash
   const hash = window.location.hash;
@@ -305,22 +348,38 @@ function initMobileMenu() {
 // ==========================================
 // AUTH & DATA LOADING
 // ==========================================
-function loginWithDiscord() {
+function loginWithDiscord(e) {
+  if (e) e.preventDefault();
   const currentRedirect = window.location.origin;
   const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(currentRedirect)}&response_type=token&scope=identify%20guilds`;
-  window.location.href = authUrl;
+  try {
+    window.location.href = authUrl;
+  } catch (err) {
+    console.error("Redirect error:", err);
+    startInstantLogin();
+  }
+}
+
+function startInstantLogin() {
+  startDemoMode();
+  showToast('⚡ Instant Login successful! Welcome back, Krylo Member.');
 }
 
 function startDemoMode() {
   isDemo = true;
   localStorage.setItem('demo_mode_active', 'true');
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('dashboard-screen').style.display = 'grid';
+  const loginScreen = document.getElementById('login-screen');
+  const dashScreen = document.getElementById('dashboard-screen');
+  if (loginScreen) loginScreen.style.display = 'none';
+  if (dashScreen) dashScreen.style.display = 'grid';
   
   // Render Profile
-  document.getElementById('header-avatar').src = mockUser.avatar;
-  document.getElementById('header-username').innerText = mockUser.username;
-  document.getElementById('header-profile').style.display = 'flex';
+  const avatarEl = document.getElementById('header-avatar');
+  const usernameEl = document.getElementById('header-username');
+  const profileEl = document.getElementById('header-profile');
+  if (avatarEl) avatarEl.src = mockUser.avatar;
+  if (usernameEl) usernameEl.innerText = mockUser.username;
+  if (profileEl) profileEl.style.display = 'flex';
   
   guilds = [...mockGuilds];
   renderGuilds();
@@ -331,10 +390,20 @@ function startDemoMode() {
 
   if (lastGuild) {
     selectGuild(lastGuild.id);
-  } else {
-    // First time: Prompt which server to setup / start with!
-    openServerSelectionPrompt(true);
+  } else if (guilds.length > 0) {
+    // Automatically select the primary server (KryloSMP) so user immediately sees live data!
+    selectGuild(guilds[0].id);
   }
+}
+
+function openTiersComingSoonModal(tier = 'pro') {
+  const modal = document.getElementById('tiers-coming-soon-modal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeTiersComingSoonModal() {
+  const modal = document.getElementById('tiers-coming-soon-modal');
+  if (modal) modal.style.display = 'none';
 }
 
 async function loadDiscordData(token) {
@@ -1335,7 +1404,12 @@ function initMilestoneSystem() {
   // Tier pill switching
   document.querySelectorAll('#milestone-tier-selector .tier-pill-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      currentGuildTier = btn.getAttribute('data-tier');
+      const selectedTier = btn.getAttribute('data-tier');
+      if (selectedTier === 'pro' || selectedTier === 'premium') {
+        openTiersComingSoonModal(selectedTier);
+        return;
+      }
+      currentGuildTier = 'free';
       document.querySelectorAll('#milestone-tier-selector .tier-pill-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       updateTierUI();

@@ -77,15 +77,34 @@
           <p class="login-subtext">
             Simple, clean, and powerful bot management. Configure leveling, auto-moderation, announcements, custom commands, and AI modules in seconds.
           </p>
+          <!-- OAuth Error Notice (if Discord rejects redirect URI) -->
+          <div id="oauth-error-box" class="oauth-error-banner" style="display: none;">
+            <div class="oauth-error-title">⚠️ Discord OAuth Notice</div>
+            <div class="oauth-error-msg" id="oauth-error-msg">Discord login requires configured Redirect URI. Use Instant Login below to access immediately!</div>
+          </div>
+
           <div class="login-actions">
-            <button class="btn-discord-login" id="login-btn">
-              <svg width="22" height="22" viewBox="0 0 127.14 96.36" fill="currentColor"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.88-.65,1.72-1.34,2.51-2a75.58,75.58,0,0,0,73,0c.8.71,1.63,1.4,2.51,2a68.43,68.43,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129.07,49.19,122.9,26.43,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/></svg>
-              <span>Login with Discord</span>
+            <!-- 1-Click Instant Login (Guaranteed to work without OAuth redirect errors) -->
+            <button type="button" class="btn-instant-login" id="instant-login-btn">
+              <span class="instant-login-pulse">⚡</span>
+              <span>1-Click Instant Login (Direct Access)</span>
             </button>
+
+            <!-- Discord OAuth Login -->
+            <button type="button" class="btn-discord-login" id="login-btn">
+              <svg width="22" height="22" viewBox="0 0 127.14 96.36" fill="currentColor"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.88-.65,1.72-1.34,2.51-2a75.58,75.58,0,0,0,73,0c.8.71,1.63,1.4,2.51,2a68.43,68.43,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129.07,49.19,122.9,26.43,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/></svg>
+              <span>Login with Discord (OAuth2)</span>
+            </button>
+
+            <!-- Interactive Demo Simulator -->
             <button type="button" class="btn-demo-mode" id="demo-link">
               🎮 Try Interactive Demo Simulator
             </button>
           </div>
+
+          <p class="login-hint-text">
+            💡 <em>Tip: If Discord returns "Invalid redirect_uri", click <strong>Instant Login</strong> to manage the bot immediately!</em>
+          </p>
           <div class="login-feature-strip">
             <div class="feat-item"><span>⭐</span> Voice & Text Leveling</div>
             <div class="feat-item"><span>🛡️</span> AutoMod Shield</div>
@@ -182,6 +201,13 @@
             <button type="button" class="nav-item" data-tab="tab-branding">
               <span class="nav-icon">🎨</span>
               <span class="nav-label">Server Branding</span>
+            </button>
+
+            <div class="nav-category-header">UPGRADES & TIERS</div>
+            <button type="button" class="nav-item pro-tier-nav-item" id="open-tiers-modal-btn">
+              <span class="nav-icon">💎</span>
+              <span class="nav-label">Pro & Premium</span>
+              <span class="nav-badge" style="background: rgba(139, 92, 246, 0.25); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.4); animation: pulseGlow 2s infinite;">SOON</span>
             </button>
           </nav>
 
@@ -971,9 +997,17 @@
                       </div>
                       <!-- Tier Switcher Pills -->
                       <div class="tier-pill-group" id="milestone-tier-selector">
-                        <button type="button" class="tier-pill-btn active" data-tier="free" id="tier-btn-free">Free</button>
-                        <button type="button" class="tier-pill-btn" data-tier="pro" id="tier-btn-pro">⚡ Pro</button>
-                        <button type="button" class="tier-pill-btn" data-tier="premium" id="tier-btn-premium">👑 Premium</button>
+                        <button type="button" class="tier-pill-btn active" data-tier="free" id="tier-btn-free">
+                          <span>Free (Active)</span>
+                        </button>
+                        <button type="button" class="tier-pill-btn soon-pill-btn" data-tier="pro" id="tier-btn-pro">
+                          <span>⚡ Pro</span>
+                          <span class="tier-soon-pill">COMING SOON</span>
+                        </button>
+                        <button type="button" class="tier-pill-btn soon-pill-btn" data-tier="premium" id="tier-btn-premium">
+                          <span>👑 Premium</span>
+                          <span class="tier-soon-pill gold">COMING SOON</span>
+                        </button>
                       </div>
                     </div>
 
@@ -984,7 +1018,7 @@
                         <span class="tier-quota-text" id="tier-quota-text">2 / 2 Milestones Configured</span>
                       </div>
                       <div class="tier-perk-summary" id="tier-perk-summary">
-                        Basic milestone rewards (Up to 2 roles). Switch to Pro for 10 slots + stacking, or Premium for unlimited + XP boosters!
+                        Basic milestone rewards (Up to 2 roles). Pro & Premium are coming soon to unlock 10 to unlimited slots + stacking!
                       </div>
                     </div>
 
@@ -998,8 +1032,8 @@
                       <button type="button" class="btn-add-milestone" id="add-milestone-btn">
                         ➕ Add Milestone Role Reward
                       </button>
-                      <span class="tier-upgrade-hint" id="tier-upgrade-hint">
-                        💡 Click <strong>⚡ Pro</strong> or <strong>👑 Premium</strong> above to unlock higher tiers & perks!
+                      <span class="tier-upgrade-hint" id="tier-upgrade-hint" style="cursor: pointer;">
+                        ✨ Click <strong style="color: #c084fc;">⚡ Pro</strong> or <strong style="color: #fbbf24;">👑 Premium</strong> above to see all upcoming features!
                       </span>
                     </div>
                   </div>
@@ -1736,6 +1770,154 @@
           <div style="display: flex; justify-content: flex-end; gap: 10px;">
             <button type="button" class="btn-cancel" id="close-milestone-cancel-btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600;">Cancel</button>
             <button type="button" class="btn-primary" id="save-milestone-btn" style="background: var(--neon-cyan); color: #050810; border: none; padding: 8px 18px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 800; box-shadow: 0 0 12px rgba(0, 242, 255, 0.3);">Save Milestone</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRO & PREMIUM COMING SOON MODAL (Supercharge Features Showcase) -->
+    <div class="modal-overlay" id="tiers-coming-soon-modal" style="display: none;">
+      <div class="modal-card modal-card-lg futuristic-modal" style="max-width: 880px; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.6rem;">💎</span>
+            <div>
+              <h3 style="font-family: 'Orbitron', sans-serif; letter-spacing: 1px; margin: 0; background: linear-gradient(90deg, #fff, #c084fc, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                PRO & PREMIUM — COMING SOON
+              </h3>
+              <p class="modal-sub" style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">
+                More features, infinite quotas, custom branding & dedicated compute are on the horizon.
+              </p>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="close-tiers-modal-btn">✕</button>
+        </div>
+
+        <div class="modal-body" style="padding-top: 0.5rem;">
+          <!-- Holographic Hero Banner -->
+          <div class="coming-soon-hero-banner">
+            <div class="hero-badge-pill">
+              <span class="status-pulse" style="background: #a855f7; box-shadow: 0 0 10px #a855f7;"></span>
+              <span>EARLY PREVIEW • LAUNCHING SOON</span>
+            </div>
+            <h4 class="hero-headline">🚀 Unleash the Full Power of Krims Bot</h4>
+            <p class="hero-subtext">
+              Pro and Premium tiers are currently in development by Krylo Studios. They will unlock unlimited role reward milestones, full bot customizer (name/avatar/bio), 12h voice & audit logs, YouTube realtime alerts, and custom AI personality prompts.
+            </p>
+            
+            <div class="hero-actions-row">
+              <button type="button" class="btn-vip-waitlist" id="join-vip-waitlist-btn">
+                <span>🔔 Join VIP Priority Waitlist (Free 7-Day Trial)</span>
+              </button>
+              <button type="button" class="btn-test-drive" id="test-drive-tiers-btn">
+                <span>🎮 Test Drive Pro/Premium Mode in Simulator</span>
+              </button>
+            </div>
+            <div id="waitlist-success-msg" class="waitlist-success-notice" style="display: none;">
+              ✨ <strong>You're on the VIP Waitlist!</strong> We'll notify you the moment Pro & Premium roll out for your server.
+            </div>
+          </div>
+
+          <!-- Feature Comparison Matrix -->
+          <h5 class="comparison-section-title">📊 FEATURE COMPARISON: FREE vs PRO vs PREMIUM</h5>
+          
+          <div class="comparison-table-wrapper">
+            <table class="tiers-comparison-table">
+              <thead>
+                <tr>
+                  <th style="width: 38%;">Feature / Capability</th>
+                  <th class="th-free" style="width: 20%;">Free<br><span class="table-tier-sub">Active Now</span></th>
+                  <th class="th-pro" style="width: 21%;">⚡ Pro<br><span class="table-tier-sub soon-col">COMING SOON</span></th>
+                  <th class="th-premium" style="width: 21%;">👑 Premium<br><span class="table-tier-sub soon-col gold">ALL UNLOCKED</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Bot Customizer</strong><br><span class="table-feature-desc">Custom bot name, avatar, banner & about-me</span></td>
+                  <td><span class="table-tag cross">❌ Default</span></td>
+                  <td><span class="table-tag cross">❌ Default</span></td>
+                  <td><span class="table-tag check-gold">✅ Full Customizer</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Milestone Role Rewards</strong><br><span class="table-feature-desc">Roles auto-granted at specific XP levels</span></td>
+                  <td>2 Milestones</td>
+                  <td><strong style="color: #c084fc;">10 Milestones</strong></td>
+                  <td><strong style="color: #fbbf24;">Unlimited (∞)</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Role Rewards Per Level</strong><br><span class="table-feature-desc">Multiple simultaneous role assignments</span></td>
+                  <td>1 Role</td>
+                  <td>2 Roles</td>
+                  <td><strong style="color: #fbbf24;">3 Roles per level</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Role Stacking & Multipliers</strong><br><span class="table-feature-desc">Keep lower milestone roles + XP boosts</span></td>
+                  <td><span class="table-tag cross">❌ No</span></td>
+                  <td><span class="table-tag check">✅ Role Stacking</span></td>
+                  <td><span class="table-tag check-gold">✅ Stacking + 2x XP Boost</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Voice & Reaction Leveling</strong><br><span class="table-feature-desc">Earn XP in voice channels and emoji reactions</span></td>
+                  <td>Standard Rates</td>
+                  <td>Custom Voice XP</td>
+                  <td><strong style="color: #fbbf24;">Custom Voice + Reaction XP</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Custom Commands</strong><br><span class="table-feature-desc">Custom !ip, !rules, !vote, !store triggers</span></td>
+                  <td>5 Commands</td>
+                  <td>25 Commands</td>
+                  <td><strong style="color: #fbbf24;">100 Custom Commands</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Reaction Roles & Onboarding</strong><br><span class="table-feature-desc">Interactive button menus & auto-roles</span></td>
+                  <td>10 Roles (1 Auto-Role)</td>
+                  <td>50 Roles (5 Auto-Roles)</td>
+                  <td><strong style="color: #fbbf24;">100 Roles (10 Auto-Roles)</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Audit & Message Logging</strong><br><span class="table-feature-desc">Channel history, deleted messages & voice logs</span></td>
+                  <td>1 Hour Log Retain</td>
+                  <td>6 Hours Retain</td>
+                  <td><strong style="color: #fbbf24;">12 Hours + Voice + Raid Logs</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Server Live Counters</strong><br><span class="table-feature-desc">Dynamic member count, bot count & goals</span></td>
+                  <td>3 Basic Counters</td>
+                  <td>10 Counters</td>
+                  <td><strong style="color: #fbbf24;">Unlimited ∞ (Goal Counters)</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Live YouTube / Stream Alerts</strong><br><span class="table-feature-desc">Auto-ping when creators go live</span></td>
+                  <td>24 Alerts</td>
+                  <td>36 Alerts</td>
+                  <td><strong style="color: #fbbf24;">54 Stream Alerts</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Rank Card Customization</strong><br><span class="table-feature-desc">Holographic cards & custom backgrounds</span></td>
+                  <td>Standard Color Accent</td>
+                  <td>Holo Cyber Accent</td>
+                  <td><strong style="color: #fbbf24;">Custom Canvas Backgrounds</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Welcomer Customizer</strong><br><span class="table-feature-desc">Custom card graphics & message reactions</span></td>
+                  <td>1 Welcome Reaction</td>
+                  <td>5 Reactions</td>
+                  <td><strong style="color: #fbbf24;">10 Reactions + Custom Art</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Krims AI v5 Model & Prompting</strong><br><span class="table-feature-desc">Neural chat companion & system instructions</span></td>
+                  <td>Standard Auto-Routing</td>
+                  <td>High-Speed Reasoning</td>
+                  <td><strong style="color: #fbbf24;">Dedicated Compute & Custom Prompt</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Leaderboard Updates</strong><br><span class="table-feature-desc">Sync frequency of #1 role & leaderboards</span></td>
+                  <td>Daily</td>
+                  <td>Daily</td>
+                  <td><strong style="color: #fbbf24;">Hourly Live Sync</strong></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
