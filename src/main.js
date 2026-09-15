@@ -90,7 +90,6 @@ const mockGuilds = [
 function initDashboardApp() {
   // Bind Static Controls FIRST (Guaranteed to work immediately)
   document.getElementById('login-btn')?.addEventListener('click', loginWithDiscord);
-  document.getElementById('instant-login-btn')?.addEventListener('click', startInstantLogin);
   document.getElementById('demo-link')?.addEventListener('click', startDemoMode);
   document.getElementById('logout-btn')?.addEventListener('click', logout);
 
