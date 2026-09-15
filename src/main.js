@@ -26,6 +26,16 @@ const DEFAULT_ROLE_REWARDS = [
 ];
 let currentRoleRewards = [...DEFAULT_ROLE_REWARDS];
 
+const DEFAULT_REACTION_ROLES = [
+  { id: 'rr1', emoji: '☕', label: 'Java Edition', color: '#f59e0b', style: 'PRIMARY' },
+  { id: 'rr2', emoji: '🪨', label: 'Bedrock Edition', color: '#10b981', style: 'PRIMARY' },
+  { id: 'rr3', emoji: '⚔️', label: 'PvP Player', color: '#ef4444', style: 'SECONDARY' },
+  { id: 'rr4', emoji: '🏗️', label: 'Builder', color: '#8b5cf6', style: 'SECONDARY' },
+  { id: 'rr5', emoji: '🔔', label: 'Event Pings', color: '#00f2ff', style: 'SUCCESS' },
+  { id: 'rr6', emoji: '📢', label: 'Update Pings', color: '#3b82f6', style: 'SUCCESS' }
+];
+let currentReactionRoles = [...DEFAULT_REACTION_ROLES];
+
 const TIER_CONFIG = {
   free: {
     name: 'Free Tier',
@@ -78,40 +88,7 @@ const mockGuilds = [
 ];
 
 function initDashboardApp() {
-  // Initialize Dashboard Theme
-  initDashboardTheme();
-
-  // Navigation & Tab Routing
-  initTabNavigation();
-
-  // Search Filter in Sidebar
-  initSidebarSearch();
-
-  // Server Modal Switcher
-  initServerModal();
-
-  // Mobile Menu Toggle
-  initMobileMenu();
-
-  // Live Embed Studio Synchronization
-  initLiveEmbedStudio();
-
-  // Color Pickers & Live Previews
-  initColorPickers();
-
-  // Milestone Role Rewards System (Free, Pro, Premium)
-  initMilestoneSystem();
-
-  // Reaction Roles & Onboarding System
-  initReactionRolesSystem();
-
-  // Welcome Card Designer (Live Preview)
-  initWelcomeCardDesigner();
-
-  // Unsaved Changes Watchers
-  initUnsavedChangesWatchers();
-
-  // Bind Static Controls
+  // Bind Static Controls FIRST (Guaranteed to work immediately)
   document.getElementById('login-btn')?.addEventListener('click', loginWithDiscord);
   document.getElementById('instant-login-btn')?.addEventListener('click', startInstantLogin);
   document.getElementById('demo-link')?.addEventListener('click', startDemoMode);
@@ -141,6 +118,19 @@ function initDashboardApp() {
     renderMilestoneList();
     showToast('⚡ Test Drive Enabled: Pro Tier features unlocked in Simulator!');
   });
+
+  // Initialize Modules with Error Guards
+  try { initDashboardTheme(); } catch (e) { console.warn("Theme init:", e); }
+  try { initTabNavigation(); } catch (e) { console.warn("Tab init:", e); }
+  try { initSidebarSearch(); } catch (e) { console.warn("Search init:", e); }
+  try { initServerModal(); } catch (e) { console.warn("Server modal init:", e); }
+  try { initMobileMenu(); } catch (e) { console.warn("Mobile menu init:", e); }
+  try { initLiveEmbedStudio(); } catch (e) { console.warn("Embed studio init:", e); }
+  try { initColorPickers(); } catch (e) { console.warn("Color pickers init:", e); }
+  try { initMilestoneSystem(); } catch (e) { console.warn("Milestone init:", e); }
+  try { initReactionRolesSystem(); } catch (e) { console.warn("Reaction roles init:", e); }
+  try { initWelcomeCardDesigner(); } catch (e) { console.warn("Welcome card init:", e); }
+  try { initUnsavedChangesWatchers(); } catch (e) { console.warn("Watchers init:", e); }
 
   const saveBtn = document.getElementById('save-settings-btn');
   if (saveBtn) {
@@ -405,6 +395,13 @@ function closeTiersComingSoonModal() {
   const modal = document.getElementById('tiers-coming-soon-modal');
   if (modal) modal.style.display = 'none';
 }
+
+// Expose key handlers globally on window
+window.startInstantLogin = startInstantLogin;
+window.startDemoMode = startDemoMode;
+window.loginWithDiscord = loginWithDiscord;
+window.openTiersComingSoonModal = openTiersComingSoonModal;
+window.closeTiersComingSoonModal = closeTiersComingSoonModal;
 
 async function loadDiscordData(token) {
   try {
@@ -1628,15 +1625,6 @@ function saveMilestoneFromModal() {
 // ==========================================
 // REACTION ROLES & ONBOARDING SYSTEM
 // ==========================================
-let currentReactionRoles = [
-  { id: 'rr1', emoji: '☕', label: 'Java Edition', color: '#f59e0b', style: 'PRIMARY' },
-  { id: 'rr2', emoji: '🪨', label: 'Bedrock Edition', color: '#10b981', style: 'PRIMARY' },
-  { id: 'rr3', emoji: '⚔️', label: 'PvP Player', color: '#ef4444', style: 'SECONDARY' },
-  { id: 'rr4', emoji: '🏗️', label: 'Builder', color: '#8b5cf6', style: 'SECONDARY' },
-  { id: 'rr5', emoji: '🔔', label: 'Event Pings', color: '#00f2ff', style: 'SUCCESS' },
-  { id: 'rr6', emoji: '📢', label: 'Update Pings', color: '#3b82f6', style: 'SUCCESS' }
-];
-
 function initReactionRolesSystem() {
   renderReactionRolesGrid();
   syncReactionRolePreview();
