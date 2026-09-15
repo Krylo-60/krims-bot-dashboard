@@ -709,6 +709,8 @@ function renderCategorizedChannels(selectEl, channels, defaultOption = null) {
   if (!selectEl) return;
   selectEl.innerHTML = '';
 
+  const safeChannels = Array.isArray(channels) && channels.length > 0 ? channels : (KRYLO_CHANNELS || []);
+
   if (defaultOption) {
     const opt = document.createElement('option');
     opt.value = defaultOption.value;
@@ -718,7 +720,7 @@ function renderCategorizedChannels(selectEl, channels, defaultOption = null) {
 
   // Group channels by category name
   const categoryGroups = {};
-  channels.forEach(ch => {
+  safeChannels.forEach(ch => {
     const cat = ch.category || 'General Channels';
     if (!categoryGroups[cat]) categoryGroups[cat] = [];
     categoryGroups[cat].push(ch);
