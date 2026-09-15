@@ -441,16 +441,28 @@ async function loadDiscordData(token) {
       console.warn("Failed to fetch active bot guilds:", e);
     }
 
-    // Filter: Manage Guild or Admin permission
-    guilds = guildsData.filter(g => {
-      const perms = parseInt(g.permissions);
-      return (perms & 0x8) === 0x8 || (perms & 0x20) === 0x20;
+    // Filter: Manage Guild (0x20), Admin (0x8), or Server Owner
+    const rawGuildList = Array.isArray(guildsData) ? guildsData : [];
+    guilds = rawGuildList.filter(g => {
+      try {
+        if (g.owner) return true;
+        const perms = BigInt(g.permissions || 0);
+        return (perms & 8n) === 8n || (perms & 32n) === 32n;
+      } catch (e) {
+        return false;
+      }
     }).map(g => ({
       id: g.id,
       name: g.name,
       icon: g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png` : null,
       botActive: activeGuildIds.includes(g.id)
     }));
+
+    // If user has no eligible servers, include demo servers so dashboard remains fully functional
+    if (guilds.length === 0) {
+      guilds = [...mockGuilds];
+      showToast('ℹ️ No managed Discord servers found. Loaded KryloSMP demo workspace!');
+    }
 
     renderGuilds();
 
@@ -461,6 +473,9 @@ async function loadDiscordData(token) {
     if (lastGuild) {
       // Automatically open the last opened server first!
       selectGuild(lastGuild.id);
+    } else if (guilds.length > 0) {
+      // Automatically select the first server
+      selectGuild(guilds[0].id);
     } else {
       // First time: Prompt which server to setup / start with!
       openServerSelectionPrompt(true);
