@@ -72,14 +72,51 @@ html {
 body {
   background-color: var(--bg-dark);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(88, 101, 242, 0.08) 0px, transparent 40%),
-    radial-gradient(at 100% 100%, rgba(0, 242, 255, 0.05) 0px, transparent 40%);
+    radial-gradient(at 0% 0%, rgba(88, 101, 242, 0.10) 0px, transparent 40%),
+    radial-gradient(at 100% 100%, rgba(0, 242, 255, 0.07) 0px, transparent 40%),
+    radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.04) 0px, transparent 50%);
   color: var(--text-main);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  position: relative;
+}
+
+/* Animated futuristic grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridDrift 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes gridDrift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(60px, 60px); }
 }
 
 /* ==========================================================================
@@ -87,9 +124,11 @@ body {
    ========================================================================== */
 .top-nav {
   height: 64px;
-  background: rgba(15, 19, 29, 0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(15, 19, 29, 0.80);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(0, 242, 255, 0.12);
+  box-shadow: 0 1px 0 rgba(0, 242, 255, 0.08), 0 4px 30px rgba(0, 0, 0, 0.3);
   padding: 0 1.5rem;
   display: flex;
   align-items: center;
@@ -336,14 +375,44 @@ body {
 }
 
 .login-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: rgba(21, 26, 38, 0.90);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 242, 255, 0.15);
   border-radius: var(--radius-lg);
   padding: 3rem 2.5rem;
   max-width: 580px;
   width: 100%;
   text-align: center;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 
+    0 0 40px rgba(0, 242, 255, 0.08),
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(0, 242, 255, 0.03) 10%,
+    transparent 20%,
+    rgba(139, 92, 246, 0.03) 30%,
+    transparent 40%
+  );
+  animation: loginHolographicSpin 12s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes loginHolographicSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .login-hero-icon {
@@ -458,8 +527,11 @@ body {
 
 /* Sidebar Navigation */
 .dashboard-sidebar {
-  background: var(--bg-sidebar);
-  border-right: 1px solid var(--border-color);
+  background: rgba(15, 19, 29, 0.75);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border-right: 1px solid rgba(0, 242, 255, 0.10);
+  box-shadow: 1px 0 0 rgba(0, 242, 255, 0.05);
   padding: 1.25rem 1rem;
   display: flex;
   flex-direction: column;
@@ -468,6 +540,7 @@ body {
   top: 64px;
   height: calc(100vh - 64px);
   overflow-y: auto;
+  z-index: 10;
 }
 
 .sidebar-server-card {
@@ -615,9 +688,10 @@ body {
 }
 
 .nav-item.active {
-  background: rgba(0, 242, 255, 0.08);
+  background: rgba(0, 242, 255, 0.10);
   color: var(--cyan);
   font-weight: 700;
+  box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.04);
 }
 
 .nav-item.active::before {
@@ -629,7 +703,13 @@ body {
   width: 3px;
   border-radius: 2px;
   background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
+  box-shadow: 0 0 12px var(--cyan), 0 0 4px var(--cyan);
+  animation: navGlowPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes navGlowPulse {
+  0%, 100% { box-shadow: 0 0 8px var(--cyan), 0 0 3px var(--cyan); }
+  50% { box-shadow: 0 0 16px var(--cyan), 0 0 6px var(--cyan); }
 }
 
 .nav-icon {
@@ -762,12 +842,13 @@ body {
 
 .tab-pane.active {
   display: block;
-  animation: fadeIn 0.2s ease-in-out;
+  animation: tabSlideIn 0.35s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes tabSlideIn {
+  0% { opacity: 0; transform: translateY(8px) scale(0.998); filter: blur(2px); }
+  60% { opacity: 0.9; filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
 .tab-header {
@@ -776,12 +857,30 @@ body {
   justify-content: space-between;
   margin-bottom: 1.75rem;
   gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(0, 242, 255, 0.06);
+  position: relative;
+}
+
+.tab-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan), transparent);
+  box-shadow: 0 0 8px var(--cyan-glow);
 }
 
 .tab-header h2 {
   font-size: 1.6rem;
   font-weight: 800;
   margin-bottom: 0.35rem;
+  background: linear-gradient(135deg, #fff 0%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .tab-sub {
@@ -800,19 +899,53 @@ body {
 }
 
 /* ==========================================================================
-   CARDS & MODULE BOXES
+   CARDS & MODULE BOXES (Futuristic Neon Edition)
    ========================================================================== */
 .card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: rgba(21, 26, 38, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 242, 255, 0.08);
   border-radius: var(--radius-md);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  transition: border-color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 242, 255, 0.15),
+    transparent 40%,
+    transparent 60%,
+    rgba(139, 92, 246, 0.12)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .card:hover {
-  border-color: rgba(255, 255, 255, 0.14);
+  border-color: rgba(0, 242, 255, 0.18);
+  box-shadow: 
+    0 0 20px rgba(0, 242, 255, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transform: translateY(-1px);
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 .card-header {
@@ -852,11 +985,33 @@ body {
 }
 
 .stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: rgba(21, 26, 38, 0.9);
+  border: 1px solid rgba(0, 242, 255, 0.08);
+  border-top: 2px solid var(--cyan);
   border-radius: var(--radius-md);
   padding: 1.25rem;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  box-shadow: 0 0 8px var(--cyan-glow);
+}
+
+.stat-card:hover {
+  border-color: rgba(0, 242, 255, 0.15);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
 }
 
 .stat-label {
@@ -2379,6 +2534,124 @@ input:checked + .slider:before {
 }
 
 /* ==========================================================================
+   FUTURISTIC GLOBAL ENHANCEMENTS
+   ========================================================================== */
+
+/* Neon glow on active toggle switches */
+.switch input:checked + .slider {
+  box-shadow: 0 0 12px var(--cyan-glow), 0 0 4px var(--cyan);
+}
+
+/* Sci-fi form inputs - neon underline glow on focus */
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 1px 0 var(--cyan), 0 4px 12px rgba(0, 242, 255, 0.08);
+  outline: none;
+}
+
+/* Holographic primary button effect */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.12) 45%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 55%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.btn-primary:hover::after {
+  transform: translateX(100%);
+}
+
+/* Neon data readout effect on stat values */
+.stat-val {
+  font-family: 'Orbitron', 'JetBrains Mono', monospace;
+  text-shadow: 0 0 8px currentColor;
+}
+
+/* Glowing sidebar server card */
+.sidebar-server-card {
+  background: rgba(21, 26, 38, 0.85);
+  border: 1px solid rgba(0, 242, 255, 0.10);
+  transition: all 0.3s ease;
+}
+
+.sidebar-server-card:hover {
+  border-color: rgba(0, 242, 255, 0.2);
+  box-shadow: 0 0 16px rgba(0, 242, 255, 0.06);
+}
+
+/* Enhanced Discord embed preview - neon glow */
+#discord-embed-preview {
+  box-shadow: 0 0 16px rgba(0, 242, 255, 0.06), 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Futuristic badge glow */
+.nav-badge.live {
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.3);
+  animation: badgePulse 3s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(16, 185, 129, 0.2); }
+  50% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+}
+
+/* Rank card simulator - holographic border */
+.rank-card-bg {
+  position: relative;
+}
+
+.rank-card-bg::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--cyan), var(--purple), var(--cyan));
+  background-size: 300% 300%;
+  animation: holoShift 6s ease-in-out infinite;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+@keyframes holoShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Welcome canvas mock - enhanced glow */
+#welcome-canvas-mock {
+  box-shadow: 0 0 24px rgba(0, 242, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+/* Content area needs z-index to sit above body pseudos */
+.dashboard-content {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
    RESPONSIVE DESIGN (Tablets & Mobile)
    ========================================================================== */
 @media (max-width: 1024px) {
@@ -2428,5 +2701,9 @@ input:checked + .slider:before {
     flex-direction: column;
     gap: 0.75rem;
     text-align: center;
+  }
+  /* Disable grid animation on mobile for performance */
+  body::before {
+    animation: none;
   }
 }
