@@ -827,17 +827,17 @@ function populateFormSettings(s) {
 
   // Embed Studio
   setSelect('embed-channel', s.embedChannel || '');
-  setValue('embed-title', s.embedTitle || '🚀 KryloSMP Community Announcement');
-  setValue('embed-description', s.embedDesc || 'Welcome to the official KryloSMP discord server! Check out the rules in #rules and get started.');
-  setValue('embed-footer', s.embedFooter || s.botEmbedFooter || 'Krylo Team • Bot Broadcast');
+  setValue('embed-title', s.embedTitle || '📢 Important Community Announcement');
+  setValue('embed-description', s.embedDesc || 'Welcome to our official community server! Check out the rules and guidelines, grab your roles, and say hello in general chat.');
+  setValue('embed-footer', s.embedFooter || s.botEmbedFooter || 'Community Team • Official Announcement');
 
   // Sync Live Embed Studio Preview Box
   const previewTitle = document.getElementById('preview-embed-title');
   const previewDesc = document.getElementById('preview-embed-desc');
   const previewFooter = document.getElementById('preview-embed-footer-text');
-  if (previewTitle) previewTitle.innerText = s.embedTitle || '🚀 KryloSMP Community Announcement';
-  if (previewDesc) previewDesc.innerText = s.embedDesc || 'Welcome to the official KryloSMP discord server! Check out the rules in #rules and get started.';
-  if (previewFooter) previewFooter.innerText = s.embedFooter || s.botEmbedFooter || 'Krylo Team • Bot Broadcast';
+  if (previewTitle) previewTitle.innerText = s.embedTitle || '📢 Important Community Announcement';
+  if (previewDesc) previewDesc.innerText = s.embedDesc || 'Welcome to our official community server! Check out the rules and guidelines, grab your roles, and say hello in general chat.';
+  if (previewFooter) previewFooter.innerText = s.embedFooter || s.botEmbedFooter || 'Community Team • Official Announcement';
 
   // Overview Sync
   setCheckbox('overview-toggle-levels', s.levelingEnabled !== false);
@@ -1162,8 +1162,8 @@ function saveSettings() {
   const rankColor = document.getElementById('rank-color-picker')?.value || '#00f2ff';
 
   const embedChannel = document.getElementById('embed-channel')?.value || '';
-  const embedTitle = document.getElementById('embed-title')?.value || '🚀 KryloSMP Community Announcement';
-  const embedDesc = document.getElementById('embed-description')?.value || 'Welcome to the official KryloSMP discord server!';
+  const embedTitle = document.getElementById('embed-title')?.value || '📢 Important Community Announcement';
+  const embedDesc = document.getElementById('embed-description')?.value || 'Welcome to our official community server!';
   const embedFooter = document.getElementById('embed-footer')?.value || botEmbedFooter;
 
   // Economy fields
