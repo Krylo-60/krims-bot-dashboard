@@ -1756,6 +1756,10 @@ function updateEcoLabels() {
   const modalName = document.getElementById('store-modal-currency-label');
   if (modalSym) modalSym.textContent = sym;
   if (modalName) modalName.textContent = name;
+
+  // Update sidebar badge
+  const sidebarBadge = document.getElementById('sidebar-eco-badge');
+  if (sidebarBadge) sidebarBadge.textContent = sym;
 }
 
 function renderStoreItems() {
