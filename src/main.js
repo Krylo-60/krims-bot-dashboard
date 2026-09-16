@@ -1010,6 +1010,7 @@ function broadcastEmbed() {
   const title = document.getElementById('embed-title').value.trim();
   const description = document.getElementById('embed-description').value.trim();
   const color = document.getElementById('embed-custom-color')?.value || document.getElementById('embed-color')?.value || '#00f2ff';
+  const footer = document.getElementById('embed-footer')?.value.trim() || '';
 
   if (!channelId || !title || !description) {
     alert("Please select a target channel and fill in the embed title and description!");
@@ -1029,7 +1030,8 @@ function broadcastEmbed() {
       channelId,
       title,
       description,
-      color
+      color,
+      footer
     })
   })
     .then(async res => {

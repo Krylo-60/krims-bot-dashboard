@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { channelId, title, description, color } = req.body || {};
+  const { channelId, title, description, color, footer } = req.body || {};
   if (!channelId || !title || !description) {
     res.status(400).json({ error: 'channelId, title, and description are required' });
     return;
@@ -33,6 +33,10 @@ export default async function handler(req, res) {
     if (!isNaN(parsed)) decimalColor = parsed;
   }
 
+  const footerText = (typeof footer === 'string' && footer.trim().length > 0)
+    ? footer.trim()
+    : 'Krylo Team • Bot Broadcast';
+
   const embedPayload = {
     embeds: [
       {
@@ -40,7 +44,7 @@ export default async function handler(req, res) {
         description: description,
         color: decimalColor,
         footer: {
-          text: 'Krylo Team • Bot Broadcast'
+          text: footerText
         },
         timestamp: new Date().toISOString()
       }
