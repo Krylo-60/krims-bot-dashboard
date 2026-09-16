@@ -36,6 +36,22 @@ const DEFAULT_REACTION_ROLES = [
 ];
 let currentReactionRoles = [...DEFAULT_REACTION_ROLES];
 
+// Server Economy & Custom Store Catalog State
+const DEFAULT_KSMP_STORE_ITEMS = [
+  { id: 'ksmp_1', name: '⚡ 7-Day Flight Pass', price: 5000, description: 'Grants /fly in non-PvP zones on KSMP for 7 days.', delivery: 'owner_approval' },
+  { id: 'ksmp_2', name: '🎨 Custom Chat Color Tag', price: 2500, description: 'Unlock custom glowing hex chat colors in Discord and KSMP.', delivery: 'owner_approval' },
+  { id: 'ksmp_3', name: '💎 KSMP Diamond Crate Key', price: 7500, description: 'Opens the legendary spawn diamond loot crate on KSMP.', delivery: 'owner_approval' },
+  { id: 'ksmp_4', name: '👑 VIP Rank for 30 Days', price: 15000, description: 'Unlocks @VIP Discord role and priority queue in KSMP.', delivery: 'owner_approval' }
+];
+
+const DEFAULT_GENERIC_STORE_ITEMS = [
+  { id: 'item_1', name: '👑 VIP Member Role', price: 5000, description: 'Exclusive @VIP role and secret chat lounge access.', delivery: 'owner_approval' },
+  { id: 'item_2', name: '🎨 Custom Name Color', price: 2500, description: 'Pick your own custom hex name color in the server.', delivery: 'owner_approval' },
+  { id: 'item_3', name: '📢 Server Announcement Shoutout', price: 10000, description: 'Post an approved broadcast ping in #announcements.', delivery: 'owner_approval' }
+];
+
+let currentStoreItems = [...DEFAULT_GENERIC_STORE_ITEMS];
+
 const TIER_CONFIG = {
   free: {
     name: 'Free Tier',
@@ -129,6 +145,7 @@ function initDashboardApp() {
   try { initMilestoneSystem(); } catch (e) { console.warn("Milestone init:", e); }
   try { initReactionRolesSystem(); } catch (e) { console.warn("Reaction roles init:", e); }
   try { initWelcomeCardDesigner(); } catch (e) { console.warn("Welcome card init:", e); }
+  try { initEconomySystem(); } catch (e) { console.warn("Economy init:", e); }
   try { initUnsavedChangesWatchers(); } catch (e) { console.warn("Watchers init:", e); }
 
   const saveBtn = document.getElementById('save-settings-btn');
@@ -833,12 +850,28 @@ function populateFormSettings(s) {
   // Branding & Live Previews
   setGuildColors(s.primaryColor || '#00f2ff', s.rankColor || '#00f2ff');
 
-  // Economy fields
+  // Server Economy & Custom Store fields
   setCheckbox('toggle-economy-master', s.economyEnabled !== false);
+  const defaultCurrencyName = selectedGuildId === '1538225337048236082' ? 'KryloCoins' : 'Coins';
+  const defaultCurrencySymbol = selectedGuildId === '1538225337048236082' ? 'KC' : '🪙';
+  setValue('eco-currency-name', s.currencyName || defaultCurrencyName);
+  setValue('eco-currency-symbol', s.currencySymbol || defaultCurrencySymbol);
+  setCheckbox('eco-require-approval', s.requireOwnerApproval !== false);
   setValue('eco-msg-reward', s.ecoMsgReward || 10);
   setValue('eco-voice-reward', s.ecoVoiceReward || 25);
   setValue('eco-daily-streak', s.ecoDailyStreak || 100);
   setValue('eco-casino-max', s.ecoCasinoMax || 1000);
+
+  if (s.storeItems && Array.isArray(s.storeItems) && s.storeItems.length > 0) {
+    currentStoreItems = [...s.storeItems];
+  } else {
+    currentStoreItems = selectedGuildId === '1538225337048236082' 
+      ? [...DEFAULT_KSMP_STORE_ITEMS] 
+      : [...DEFAULT_GENERIC_STORE_ITEMS];
+  }
+  renderStoreItems();
+  updateEcoLabels();
+  updateEcoMasterUI();
 
   // Welcome Card Designer fields
   setSelect('welcome-card-theme', s.welcomeCardTheme || 'cyber-cyan');
@@ -1133,6 +1166,9 @@ function saveSettings() {
 
   // Economy fields
   const economyEnabled = document.getElementById('toggle-economy-master')?.checked ?? true;
+  const currencyName = document.getElementById('eco-currency-name')?.value.trim() || 'Coins';
+  const currencySymbol = document.getElementById('eco-currency-symbol')?.value.trim() || '🪙';
+  const requireOwnerApproval = document.getElementById('eco-require-approval')?.checked ?? true;
   const ecoMsgReward = parseInt(document.getElementById('eco-msg-reward')?.value) || 10;
   const ecoVoiceReward = parseInt(document.getElementById('eco-voice-reward')?.value) || 25;
   const ecoDailyStreak = parseInt(document.getElementById('eco-daily-streak')?.value) || 100;
@@ -1188,10 +1224,14 @@ function saveSettings() {
     embedDesc,
     embedFooter,
     economyEnabled,
+    currencyName,
+    currencySymbol,
+    requireOwnerApproval,
     ecoMsgReward,
     ecoVoiceReward,
     ecoDailyStreak,
     ecoCasinoMax,
+    storeItems: currentStoreItems,
     reactionRolesEnabled,
     reactionRoleTitle,
     reactionRoleDesc,
@@ -1636,6 +1676,209 @@ function saveMilestoneFromModal() {
   updateTierUI();
   showUnsavedChangesBar();
   showToast('🏆 Milestone saved!');
+}
+
+// ==========================================
+// SERVER ECONOMY & CUSTOM STORE SYSTEM
+// ==========================================
+function initEconomySystem() {
+  renderStoreItems();
+  updateEcoLabels();
+  updateEcoMasterUI();
+
+  // Master switch
+  document.getElementById('toggle-economy-master')?.addEventListener('change', () => {
+    updateEcoMasterUI();
+    showUnsavedChangesBar();
+  });
+
+  // Currency symbol & name dynamic syncing
+  document.getElementById('eco-currency-symbol')?.addEventListener('input', () => {
+    updateEcoLabels();
+    renderStoreItems();
+    showUnsavedChangesBar();
+  });
+
+  document.getElementById('eco-currency-name')?.addEventListener('input', () => {
+    updateEcoLabels();
+    showUnsavedChangesBar();
+  });
+
+  document.getElementById('eco-require-approval')?.addEventListener('change', () => {
+    showUnsavedChangesBar();
+  });
+
+  // Add shop item button
+  document.getElementById('add-store-item-btn')?.addEventListener('click', () => {
+    openStoreItemModal(null);
+  });
+
+  // Modal close buttons
+  document.getElementById('close-store-modal-btn')?.addEventListener('click', closeStoreItemModal);
+  document.getElementById('close-store-cancel-btn')?.addEventListener('click', closeStoreItemModal);
+
+  // Overlay click to close
+  document.getElementById('modal-store-item')?.addEventListener('click', (e) => {
+    if (e.target.id === 'modal-store-item') closeStoreItemModal();
+  });
+
+  // Save item from modal
+  document.getElementById('save-store-item-btn')?.addEventListener('click', saveStoreItemFromModal);
+}
+
+function updateEcoMasterUI() {
+  const isEnabled = document.getElementById('toggle-economy-master')?.checked ?? true;
+  const banner = document.getElementById('eco-disabled-banner');
+  const container = document.getElementById('eco-controls-container');
+
+  if (banner) banner.style.display = isEnabled ? 'none' : 'flex';
+  if (container) {
+    container.style.opacity = isEnabled ? '1' : '0.4';
+    container.style.pointerEvents = isEnabled ? 'auto' : 'none';
+  }
+}
+
+function updateEcoLabels() {
+  const sym = document.getElementById('eco-currency-symbol')?.value.trim() || '🪙';
+  const name = document.getElementById('eco-currency-name')?.value.trim() || 'Coins';
+
+  // Update all unit labels
+  const unitLabels = document.querySelectorAll('#tab-economy .eco-unit-label');
+  if (unitLabels.length >= 4) {
+    unitLabels[0].textContent = `${sym} / msg`;
+    unitLabels[1].textContent = `${sym} / 5 min`;
+    unitLabels[2].textContent = `${sym} / day`;
+    unitLabels[3].textContent = `${sym} max bet`;
+  }
+
+  // Update modal label & symbol
+  const modalSym = document.getElementById('store-modal-currency-symbol');
+  const modalName = document.getElementById('store-modal-currency-label');
+  if (modalSym) modalSym.textContent = sym;
+  if (modalName) modalName.textContent = name;
+}
+
+function renderStoreItems() {
+  const grid = document.getElementById('store-items-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const sym = document.getElementById('eco-currency-symbol')?.value.trim() || '🪙';
+
+  if (!currentStoreItems || currentStoreItems.length === 0) {
+    grid.innerHTML = '<div style="grid-column: 1 / -1; color: var(--text-muted); font-size: 0.85rem; font-style: italic; padding: 1rem 0;">No store items configured yet. Click "➕ Add Shop Item" to create your first server perk!</div>';
+    return;
+  }
+
+  currentStoreItems.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'role-reward-item';
+    card.style.cssText = 'flex-direction: column; align-items: stretch; gap: 8px; position: relative; border-radius: 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); padding: 12px;';
+
+    const isApproval = item.delivery === 'owner_approval';
+    const badgeHtml = isApproval
+      ? '<span style="font-size: 0.7rem; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); padding: 2px 8px; border-radius: 999px; align-self: flex-start; display: inline-flex; align-items: center; gap: 4px;">👑 Owner Approval</span>'
+      : '<span class="reward-auto-badge" style="align-self: flex-start;">⚡ Instant Delivery</span>';
+
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+        <span style="font-weight: 800; font-size: 0.92rem; color: #fff; word-break: break-word;">${item.name}</span>
+        <span style="font-weight: 800; color: #f59e0b; font-size: 0.9rem; white-space: nowrap;">${Number(item.price).toLocaleString()} ${sym}</span>
+      </div>
+      <span style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.35;">${item.description || 'No description provided.'}</span>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+        ${badgeHtml}
+        <div style="display: flex; gap: 6px;">
+          <button type="button" class="btn-sm btn-secondary store-item-edit-btn" data-id="${item.id}" style="font-size: 0.72rem; padding: 2px 8px;">✏️ Edit</button>
+          <button type="button" class="btn-sm btn-secondary store-item-del-btn" data-id="${item.id}" style="color: var(--red); border-color: rgba(239,68,68,0.3); font-size: 0.72rem; padding: 2px 8px;">✕</button>
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  // Bind edit & delete buttons
+  grid.querySelectorAll('.store-item-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = currentStoreItems.find(i => i.id === btn.dataset.id);
+      if (item) openStoreItemModal(item);
+    });
+  });
+
+  grid.querySelectorAll('.store-item-del-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentStoreItems = currentStoreItems.filter(i => i.id !== btn.dataset.id);
+      renderStoreItems();
+      showUnsavedChangesBar();
+      showToast('🗑️ Item removed from shop catalog');
+    });
+  });
+}
+
+function openStoreItemModal(item = null) {
+  const modal = document.getElementById('modal-store-item');
+  if (!modal) return;
+
+  const titleEl = document.getElementById('store-modal-title');
+  const editIdEl = document.getElementById('store-item-edit-id');
+  const nameEl = document.getElementById('store-item-name');
+  const priceEl = document.getElementById('store-item-price');
+  const descEl = document.getElementById('store-item-desc');
+  const deliveryEl = document.getElementById('store-item-delivery');
+
+  updateEcoLabels();
+
+  if (item) {
+    if (titleEl) titleEl.textContent = '✏️ Edit Shop Item';
+    if (editIdEl) editIdEl.value = item.id;
+    if (nameEl) nameEl.value = item.name;
+    if (priceEl) priceEl.value = item.price;
+    if (descEl) descEl.value = item.description || '';
+    if (deliveryEl) deliveryEl.value = item.delivery || 'owner_approval';
+  } else {
+    if (titleEl) titleEl.textContent = '🛍️ Configure Custom Shop Item';
+    if (editIdEl) editIdEl.value = '';
+    if (nameEl) nameEl.value = '';
+    if (priceEl) priceEl.value = 5000;
+    if (descEl) descEl.value = '';
+    if (deliveryEl) deliveryEl.value = 'owner_approval';
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeStoreItemModal() {
+  const modal = document.getElementById('modal-store-item');
+  if (modal) modal.style.display = 'none';
+}
+
+function saveStoreItemFromModal() {
+  const editId = document.getElementById('store-item-edit-id')?.value;
+  const name = document.getElementById('store-item-name')?.value.trim();
+  const price = parseInt(document.getElementById('store-item-price')?.value) || 1000;
+  const description = document.getElementById('store-item-desc')?.value.trim();
+  const delivery = document.getElementById('store-item-delivery')?.value || 'owner_approval';
+
+  if (!name) {
+    showToast('⚠️ Please enter an item name!');
+    return;
+  }
+
+  if (editId) {
+    const idx = currentStoreItems.findIndex(i => i.id === editId);
+    if (idx !== -1) {
+      currentStoreItems[idx] = { ...currentStoreItems[idx], name, price, description, delivery };
+    }
+  } else {
+    const newId = 'item_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    currentStoreItems.push({ id: newId, name, price, description, delivery });
+  }
+
+  closeStoreItemModal();
+  renderStoreItems();
+  showUnsavedChangesBar();
+  showToast('🛍️ Shop item saved successfully!');
 }
 
 // ==========================================

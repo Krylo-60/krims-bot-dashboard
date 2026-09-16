@@ -1090,8 +1090,8 @@
             <section class="tab-pane" id="tab-economy">
               <div class="tab-header">
                 <div>
-                  <h2>💰 KSMP Economy & Store Manager</h2>
-                  <p class="tab-sub">Configure KryloCoins (KC) currency rewards, daily streaks, casino betting caps, and community store catalog.</p>
+                  <h2>💰 Server Economy & Custom Store</h2>
+                  <p class="tab-sub">Configure server currency identity, chat & voice earning engines, gambling ceilings, and custom shop perks with server owner approval control.</p>
                 </div>
                 <div class="header-actions">
                   <label class="switch-with-label">
@@ -1104,121 +1104,142 @@
                 </div>
               </div>
 
-              <!-- Economy Earning Rates Card -->
-              <div class="card module-box">
-                <div class="card-header">
-                  <div class="card-title-group">
-                    <span class="card-icon">🪙</span>
-                    <div>
-                      <h3>KryloCoins (KC) Reward Engines</h3>
-                      <p>Control how members earn currency through active chat, voice, and daily activity.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="setting-row">
-                  <div class="setting-meta">
-                    <label for="eco-msg-reward" class="setting-title">Text Message Earnings</label>
-                    <p class="setting-desc">KryloCoins granted per active chat message (60-second cooldown).</p>
-                  </div>
-                  <div class="setting-input-wrap">
-                    <div class="input-unit-group">
-                      <input type="number" id="eco-msg-reward" class="form-input" min="1" max="100" value="10">
-                      <span class="input-unit">KC / msg</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="setting-row">
-                  <div class="setting-meta">
-                    <label for="eco-voice-reward" class="setting-title">Voice Lounge Earnings</label>
-                    <p class="setting-desc">KryloCoins granted to active unmuted members in voice lounges.</p>
-                  </div>
-                  <div class="setting-input-wrap">
-                    <div class="input-unit-group">
-                      <input type="number" id="eco-voice-reward" class="form-input" min="1" max="250" value="25">
-                      <span class="input-unit">KC / 5 min</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="setting-row">
-                  <div class="setting-meta">
-                    <label for="eco-daily-streak" class="setting-title">Daily Streak Base Bonus</label>
-                    <p class="setting-desc">Base reward granted when running <code>!daily</code> (increases by +20 KC per consecutive day).</p>
-                  </div>
-                  <div class="setting-input-wrap">
-                    <div class="input-unit-group">
-                      <input type="number" id="eco-daily-streak" class="form-input" min="50" max="1000" value="100">
-                      <span class="input-unit">KC / day</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="setting-row">
-                  <div class="setting-meta">
-                    <label for="eco-casino-max" class="setting-title">Casino & Coinflip Max Bet</label>
-                    <p class="setting-desc">Safety ceiling preventing coin inflation and massive gambling losses.</p>
-                  </div>
-                  <div class="setting-input-wrap">
-                    <div class="input-unit-group">
-                      <input type="number" id="eco-casino-max" class="form-input" min="100" max="50000" value="1000">
-                      <span class="input-unit">KC max bet</span>
-                    </div>
-                  </div>
+              <!-- Economy Disabled Banner (Shown when master switch is off) -->
+              <div id="eco-disabled-banner" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: var(--radius-md); padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; align-items: center; gap: 14px;">
+                <span style="font-size: 1.6rem;">🔒</span>
+                <div>
+                  <div style="font-weight: 800; color: #fca5a5; font-size: 0.95rem; margin-bottom: 3px;">Economy & Custom Store Disabled</div>
+                  <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">The server owner has deactivated economy on this server. Members cannot earn currency, bet in casino/coinflip, or purchase perks via <code>!shop</code> and <code>!buy</code> in Discord. Toggle the switch above back on anytime to re-enable.</div>
                 </div>
               </div>
 
-              <!-- KSMP Server Store Items Catalog -->
-              <div class="card module-box">
-                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                  <div class="card-title-group">
-                    <span class="card-icon">🛍️</span>
-                    <div>
-                      <h3>KSMP Store Catalog Items</h3>
-                      <p>Perks and items players can purchase with their earned KryloCoins via <code>!shop</code>.</p>
+              <div id="eco-controls-container">
+                <!-- Currency Identity & Owner Approval Controls -->
+                <div class="card module-box">
+                  <div class="card-header">
+                    <div class="card-title-group">
+                      <span class="card-icon">🪙</span>
+                      <div>
+                        <h3>Server Currency Identity & Approval Mode</h3>
+                        <p>Customize your server's unique currency name and symbol, and decide if store purchases require server owner confirmation.</p>
+                      </div>
                     </div>
                   </div>
-                  <button type="button" class="btn-primary" id="add-store-item-btn" style="padding: 6px 14px; font-size: 0.8rem;">
-                    ➕ Add Shop Item
-                  </button>
+
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <label for="eco-currency-name" class="setting-title">Currency Full Name</label>
+                      <p class="setting-desc">The official name of your currency (e.g., Coins, KryloCoins, Credits, Gems, Stars).</p>
+                    </div>
+                    <div class="setting-input-wrap">
+                      <input type="text" id="eco-currency-name" class="form-input" value="Coins" placeholder="e.g., Coins, Credits, Gems">
+                    </div>
+                  </div>
+
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <label for="eco-currency-symbol" class="setting-title">Currency Symbol / Icon</label>
+                      <p class="setting-desc">Short icon or ticker displayed beside balances and store prices (e.g., 🪙, KC, $, 💎, ⭐).</p>
+                    </div>
+                    <div class="setting-input-wrap">
+                      <input type="text" id="eco-currency-symbol" class="form-input" value="🪙" placeholder="e.g., 🪙, KC, $, 💎" style="max-width: 140px;">
+                    </div>
+                  </div>
+
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <label for="eco-require-approval" class="setting-title">Require Server Owner Approval</label>
+                      <p class="setting-desc">When enabled, store purchases notify the server owner with interactive Discord buttons (<code>[Approve ✅]</code> and <code>[Deny ❌]</code>) before delivery.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" id="eco-require-approval" checked>
+                      <span class="slider"></span>
+                    </label>
+                  </div>
                 </div>
 
-                <div class="store-items-grid" id="store-items-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                  <div class="role-reward-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span style="font-weight: 800; font-size: 0.9rem; color: #fff;">⚡ 7-Day Flight Pass</span>
-                      <span style="font-weight: 700; color: #f59e0b; font-size: 0.85rem;">5,000 KC</span>
+                <!-- Economy Earning Rates Card -->
+                <div class="card module-box">
+                  <div class="card-header">
+                    <div class="card-title-group">
+                      <span class="card-icon">⚡</span>
+                      <div>
+                        <h3>Currency Reward Engines</h3>
+                        <p>Control how members earn currency through active chat, voice lounges, and daily streaks.</p>
+                      </div>
                     </div>
-                    <span style="font-size: 0.76rem; color: var(--text-dim);">Grants /fly in non-PvP zones on KSMP for 7 days.</span>
-                    <span class="reward-auto-badge" style="align-self: flex-start;">Auto-Delivered</span>
                   </div>
 
-                  <div class="role-reward-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span style="font-weight: 800; font-size: 0.9rem; color: #fff;">🎨 Custom Chat Color Tag</span>
-                      <span style="font-weight: 700; color: #f59e0b; font-size: 0.85rem;">2,500 KC</span>
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <label for="eco-msg-reward" class="setting-title">Text Message Earnings</label>
+                      <p class="setting-desc">Currency granted per active chat message (60-second cooldown).</p>
                     </div>
-                    <span style="font-size: 0.76rem; color: var(--text-dim);">Unlock custom glowing hex chat colors in Discord and KSMP.</span>
-                    <span class="reward-auto-badge" style="align-self: flex-start;">Auto-Delivered</span>
+                    <div class="setting-input-wrap">
+                      <div class="input-unit-group">
+                        <input type="number" id="eco-msg-reward" class="form-input" min="1" max="1000" value="10">
+                        <span class="input-unit eco-unit-label">🪙 / msg</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div class="role-reward-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span style="font-weight: 800; font-size: 0.9rem; color: #fff;">💎 KSMP Diamond Crate Key</span>
-                      <span style="font-weight: 700; color: #f59e0b; font-size: 0.85rem;">7,500 KC</span>
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <label for="eco-voice-reward" class="setting-title">Voice Lounge Earnings</label>
+                      <p class="setting-desc">Currency granted to active unmuted members in voice lounges.</p>
                     </div>
-                    <span style="font-size: 0.76rem; color: var(--text-dim);">Opens the legendary spawn diamond loot crate on KSMP.</span>
-                    <span class="reward-auto-badge" style="align-self: flex-start;">Auto-Delivered</span>
+                    <div class="setting-input-wrap">
+                      <div class="input-unit-group">
+                        <input type="number" id="eco-voice-reward" class="form-input" min="1" max="2500" value="25">
+                        <span class="input-unit eco-unit-label">🪙 / 5 min</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div class="role-reward-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span style="font-weight: 800; font-size: 0.9rem; color: #fff;">👑 VIP Rank for 30 Days</span>
-                      <span style="font-weight: 700; color: #f59e0b; font-size: 0.85rem;">15,000 KC</span>
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <label for="eco-daily-streak" class="setting-title">Daily Streak Base Bonus</label>
+                      <p class="setting-desc">Base reward granted when running <code>!daily</code> (increases by +20 per consecutive day).</p>
                     </div>
-                    <span style="font-size: 0.76rem; color: var(--text-dim);">Unlocks @VIP Discord role and priority queue in KSMP.</span>
-                    <span class="reward-auto-badge" style="align-self: flex-start;">Auto-Delivered</span>
+                    <div class="setting-input-wrap">
+                      <div class="input-unit-group">
+                        <input type="number" id="eco-daily-streak" class="form-input" min="10" max="10000" value="100">
+                        <span class="input-unit eco-unit-label">🪙 / day</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="setting-row">
+                    <div class="setting-meta">
+                      <label for="eco-casino-max" class="setting-title">Casino & Coinflip Max Bet</label>
+                      <p class="setting-desc">Safety ceiling preventing coin inflation and massive gambling losses.</p>
+                    </div>
+                    <div class="setting-input-wrap">
+                      <div class="input-unit-group">
+                        <input type="number" id="eco-casino-max" class="form-input" min="100" max="100000" value="1000">
+                        <span class="input-unit eco-unit-label">🪙 max bet</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Server Store Catalog Items -->
+                <div class="card module-box">
+                  <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div class="card-title-group">
+                      <span class="card-icon">🛍️</span>
+                      <div>
+                        <h3>Server Store Catalog Items</h3>
+                        <p>Custom perks and items players can purchase with their earned currency via <code>!shop</code>.</p>
+                      </div>
+                    </div>
+                    <button type="button" class="btn-primary" id="add-store-item-btn" style="padding: 7px 16px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;">
+                      ➕ Add Shop Item
+                    </button>
+                  </div>
+
+                  <div class="store-items-grid" id="store-items-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <!-- Populated dynamically by main.js -->
                   </div>
                 </div>
               </div>
@@ -1760,6 +1781,59 @@
           <div style="display: flex; justify-content: flex-end; gap: 10px;">
             <button type="button" class="btn-cancel" id="close-milestone-cancel-btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600;">Cancel</button>
             <button type="button" class="btn-primary" id="save-milestone-btn" style="background: var(--neon-cyan); color: #050810; border: none; padding: 8px 18px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 800; box-shadow: 0 0 12px rgba(0, 242, 255, 0.3);">Save Milestone</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Store Item Modal (Add / Edit) -->
+    <div class="modal-overlay" id="modal-store-item" style="display: none;">
+      <div class="modal-card" style="max-width: 540px;">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.3rem;">🛍️</span>
+            <h3 id="store-modal-title" style="margin: 0;">Configure Custom Shop Item</h3>
+          </div>
+          <button type="button" class="modal-close-btn" id="close-store-modal-btn">✕</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="store-item-edit-id" value="">
+          
+          <div class="form-group" style="margin-bottom: 1.1rem;">
+            <label for="store-item-name" class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px; display: block;">Perk / Item Name</label>
+            <input type="text" id="store-item-name" class="form-input" placeholder="e.g. VIP Member (30 Days), Custom Role Color, Special Shoutout" style="font-weight: 600;">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.1rem;">
+            <label for="store-item-price" class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px; display: block;">Price (<span id="store-modal-currency-label">Coins</span>)</label>
+            <div class="input-unit-group">
+              <input type="number" id="store-item-price" class="form-input" min="1" max="1000000" value="5000" style="font-weight: bold; font-size: 1rem; color: #f59e0b;">
+              <span class="input-unit eco-unit-label" id="store-modal-currency-symbol">🪙</span>
+            </div>
+            <small style="color: var(--text-dim); font-size: 0.75rem; margin-top: 4px; display: block;">Amount deducted from the member's wallet upon purchasing via <code>!buy</code>.</small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.1rem;">
+            <label for="store-item-desc" class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px; display: block;">Perk Description & Benefits</label>
+            <textarea id="store-item-desc" class="form-textarea" rows="2" placeholder="Describe what the member receives when they purchase this item." style="resize: vertical;"></textarea>
+          </div>
+
+          <!-- Fulfillment Mode -->
+          <div class="form-group" style="margin-bottom: 1.3rem;">
+            <label for="store-item-delivery" class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 6px; display: block;">Fulfillment & Delivery Mode</label>
+            <select id="store-item-delivery" class="form-select" style="font-weight: 600;">
+              <option value="owner_approval" selected>👑 Requires Server Owner Approval (Recommended — Owner Controls Delivery)</option>
+              <option value="instant">⚡ Instant Auto-Delivery (Immediate Confirmation)</option>
+            </select>
+            <small style="color: var(--text-dim); font-size: 0.75rem; margin-top: 5px; display: block; line-height: 1.4;">
+              With <strong>Owner Approval</strong>, when a member runs <code>!buy</code> in Discord, the bot sends an interactive approval embed with <code>[Approve ✅]</code> and <code>[Deny ❌]</code> buttons directly to the server owner!
+            </small>
+          </div>
+
+          <!-- Modal Actions -->
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn-cancel" id="close-store-cancel-btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600;">Cancel</button>
+            <button type="button" class="btn-primary" id="save-store-item-btn" style="background: var(--neon-cyan); color: #050810; border: none; padding: 8px 18px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 800; box-shadow: 0 0 12px rgba(0, 242, 255, 0.3);">Save Shop Item</button>
           </div>
         </div>
       </div>
