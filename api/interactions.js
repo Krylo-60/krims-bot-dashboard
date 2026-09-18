@@ -120,17 +120,39 @@ export default async function handler(req, res) {
       const SUB_ROLE_ID = '1549918001380331632'; // 🔴 Skybase • Subbed to Krylo
       const FAN_ROLE_ID = '1549916920629825686'; // ⭐ Skybase • Krylo Fan
 
+      const verifyUrl = `https://krims-code-chatbot.vercel.app/api/youtube-verify?discord_id=${userId}`;
+      const verifyComponents = [
+        {
+          type: 1,
+          components: [
+            {
+              type: 2,
+              style: 5,
+              label: 'Sign In With Google & Verify',
+              url: verifyUrl,
+              emoji: { name: '🌐' }
+            },
+            {
+              type: 2,
+              style: 5,
+              label: 'Subscribe to Krylo MC',
+              url: 'https://www.youtube.com/@krylomcyt?sub_confirmation=1',
+              emoji: { name: '▶️' }
+            }
+          ]
+        }
+      ];
+
       if (memberRoles.includes(SUB_ROLE_ID) && memberRoles.includes(FAN_ROLE_ID)) {
         return res.status(200).json({
           type: 4,
           data: {
             flags: 64,
-            content: '✨ You already have the **🔴 Skybase • Subbed to Krylo** and **⭐ Skybase • Krylo Fan** roles! Thank you for supporting **Krylo MC**! 🚀'
+            content: '✨ You already have the **🔴 Skybase • Subbed to Krylo** and **⭐ Skybase • Krylo Fan** roles! Thank you for supporting **Krylo MC**! 🚀\n\n*(Want to test the portal or link a new account? Click below to verify)*',
+            components: verifyComponents
           }
         });
       }
-
-      const verifyUrl = `https://krims-code-chatbot.vercel.app/api/youtube-verify?discord_id=${userId}`;
       return res.status(200).json({
         type: 4,
         data: {
