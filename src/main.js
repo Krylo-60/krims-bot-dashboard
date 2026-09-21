@@ -239,6 +239,9 @@ function initTabNavigation() {
       switchTab(jumpId);
     });
   });
+
+  // Custom Bot Personalizer
+  initCustomBotPersonalizer();
 }
 
 function switchTab(tabId) {
@@ -2106,3 +2109,95 @@ function logout() {
   document.getElementById('header-server-pill').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
 }
+
+// ==========================================
+// CUSTOM BOT PERSONALIZER (BYOT & MADE BY US)
+// ==========================================
+function initCustomBotPersonalizer() {
+  const tokenInput = document.getElementById('custom-bot-token');
+  const toggleBtn = document.getElementById('toggle-token-visibility');
+  const deployBtn = document.getElementById('btn-deploy-custom-bot');
+  const resultBox = document.getElementById('custom-bot-result');
+  const botAvatarImg = document.getElementById('deployed-bot-avatar');
+  const botNameEl = document.getElementById('deployed-bot-name');
+  const inviteBtn = document.getElementById('deployed-bot-invite-btn');
+
+  if (toggleBtn && tokenInput) {
+    toggleBtn.addEventListener('click', () => {
+      if (tokenInput.type === 'password') {
+        tokenInput.type = 'text';
+        toggleBtn.textContent = '🔒';
+      } else {
+        tokenInput.type = 'password';
+        toggleBtn.textContent = '👁️';
+      }
+    });
+  }
+
+  if (deployBtn) {
+    deployBtn.addEventListener('click', async () => {
+      const token = (tokenInput ? tokenInput.value : '').trim();
+      const botName = (document.getElementById('custom-bot-name')?.value || '').trim();
+      const aiPersona = (document.getElementById('custom-bot-persona')?.value || '').trim();
+      const activityName = (document.getElementById('custom-bot-activity')?.value || '').trim();
+
+      if (!token) {
+        showToast('⚠️ Please enter your Discord Bot Token!', 'warning');
+        if (tokenInput) tokenInput.focus();
+        return;
+      }
+
+      deployBtn.disabled = true;
+      deployBtn.innerHTML = '<span>⏳ Validating & Connecting to Discord...</span>';
+
+      try {
+        const res = await fetch('/api/custom-bots', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token,
+            guildId: selectedGuildId || 'global',
+            botName,
+            aiPersona,
+            activityName
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to connect bot.');
+        }
+
+        showToast(`🎉 Bot "${data.botUser?.username || 'Custom Bot'}" connected successfully!`, 'success');
+
+        if (resultBox) {
+          resultBox.style.display = 'block';
+          if (botAvatarImg) {
+            botAvatarImg.src = data.botUser?.avatar || '/logo.png';
+          }
+          if (botNameEl) {
+            botNameEl.textContent = `Connected: ${data.botUser?.username || 'Custom Bot'} (Slot #${data.founderSlotAssigned || '8'})`;
+          }
+          if (inviteBtn) {
+            inviteBtn.href = data.inviteUrl || '#';
+          }
+        }
+
+        // Update progress counter
+        const claimedEl = document.getElementById('founder-claimed-slots');
+        const progressBar = document.getElementById('founder-progress-bar');
+        if (claimedEl) claimedEl.textContent = (data.founderSlotAssigned || 8).toString();
+        if (progressBar) progressBar.style.width = `${data.founderSlotAssigned || 8}%`;
+
+      } catch (err) {
+        console.error('Bot deploy error:', err);
+        showToast(`❌ ${err.message}`, 'error');
+      } finally {
+        deployBtn.disabled = false;
+        deployBtn.innerHTML = '<span>🚀 Deploy Bot with Krims AI Brain</span>';
+      }
+    });
+  }
+}
+
