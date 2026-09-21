@@ -383,88 +383,90 @@
             <section class="tab-pane" id="tab-custom-bot">
               <div class="tab-header">
                 <div>
-                  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
                     <h2>🤖 Custom Bot Personalizer</h2>
-                    <span style="background: linear-gradient(135deg, #10B981, #059669); color: white; font-weight: 800; font-size: 11px; padding: 3px 10px; border-radius: 9999px; letter-spacing: 0.5px;">FOUNDER 100 FREE</span>
+                    <span class="personalizer-header-badge">FOUNDER 100 FREE</span>
                   </div>
-                  <p class="tab-sub">Deploy a Discord bot under your own custom name, avatar, and server identity — completely powered by the <strong>Krims Code AI & Google Gemini Brain</strong>!</p>
+                  <p class="tab-sub">Deploy a Discord bot under your own custom name, avatar, and server identity — completely powered by the <strong>Krims Code AI &amp; Google Gemini Brain</strong>!</p>
                 </div>
               </div>
 
               <!-- FOUNDER SLOTS COUNTER BANNER -->
-              <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(0, 229, 255, 0.12)); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 20px; margin-bottom: 24px; position: relative; overflow: hidden;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+              <div class="founder-banner">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
                   <div>
-                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #10B981;">🚀 Limited Founder Launch Offer</div>
-                    <div style="font-size: 20px; font-weight: 800; color: #fff;">First 100 Server Owners Get 100% FREE Custom Bots Forever!</div>
+                    <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #10B981; margin-bottom: 4px;">🚀 LIMITED FOUNDER LAUNCH OFFER</div>
+                    <div style="font-size: 1.15rem; font-weight: 800; color: #F8FAFC;">First 100 Server Owners Get 100% FREE Custom Bots Forever!</div>
                   </div>
                   <div style="text-align: right;">
-                    <span style="font-size: 24px; font-weight: 900; color: #00E5FF;" id="founder-claimed-slots">7</span>
-                    <span style="font-size: 16px; color: #94A3B8; font-weight: 700;"> / 100 Claimed</span>
-                    <div style="font-size: 12px; color: #10B981; font-weight: 600;">93 Free Slots Remaining</div>
+                    <span style="font-size: 1.5rem; font-weight: 900; color: #00E5FF;" id="founder-claimed-slots">7</span>
+                    <span style="font-size: 0.95rem; color: #94A3B8; font-weight: 700;"> / 100 Claimed</span>
+                    <div style="font-size: 0.75rem; color: #34D399; font-weight: 600; margin-top: 2px;">93 Free Slots Remaining</div>
                   </div>
                 </div>
-                <div style="background: rgba(0, 0, 0, 0.4); height: 10px; border-radius: 9999px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);">
-                  <div id="founder-progress-bar" style="width: 7%; height: 100%; background: linear-gradient(90deg, #10B981, #00E5FF); box-shadow: 0 0 12px rgba(0, 229, 255, 0.6); transition: width 0.6s ease;"></div>
+                <div class="founder-progress-track">
+                  <div class="founder-progress-fill" id="founder-progress-bar" style="width: 7%;"></div>
                 </div>
               </div>
 
               <!-- MAIN WORKSPACE GRID -->
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-bottom: 30px;">
+              <div class="personalizer-grid">
                 
                 <!-- CARD 1: DEPLOY YOUR BOT (BYOT) -->
-                <div class="dash-card" style="border: 1px solid rgba(88, 101, 242, 0.35);">
-                  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-                    <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(88, 101, 242, 0.2); display: flex; align-items: center; justify-content: center; font-size: 18px;">⚡</div>
+                <div class="personalizer-card">
+                  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
+                    <div class="personalizer-card-icon" style="background: rgba(88, 101, 242, 0.2); color: #818CF8;">⚡</div>
                     <div>
-                      <h3 style="margin: 0; font-size: 16px; color: #fff;">Option 1: Deploy Custom Bot (BYOT)</h3>
-                      <p style="margin: 0; font-size: 12px; color: #94A3B8;">Paste your Discord Bot Token to give it the Krims AI brain.</p>
+                      <h3 style="margin: 0; font-size: 1.05rem; color: #F8FAFC; font-weight: 800;">Option 1: Deploy Custom Bot (BYOT)</h3>
+                      <p style="margin: 0; font-size: 0.75rem; color: #94A3B8;">Paste your Discord Bot Token to connect our Krims AI brain.</p>
                     </div>
                   </div>
 
                   <form id="custom-bot-form" onsubmit="return false;">
                     <div class="form-group" style="margin-bottom: 16px;">
-                      <label style="display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; margin-bottom: 6px;">
-                        <span>Discord Bot Token <span style="color: #EF4444;">*</span></span>
-                        <span style="font-size: 11px; color: #10B981;">🔒 Encrypted with AES-256-GCM</span>
-                      </label>
-                      <div style="position: relative;">
-                        <input type="password" id="custom-bot-token" class="input-text" placeholder="MTIzNDU2Nzg5MDEyMzQ1Njc4OQ.SAMPLE..." style="width: 100%; padding-right: 40px; font-family: monospace; font-size: 12px;" required />
-                        <button type="button" id="toggle-token-visibility" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94A3B8; cursor: pointer; font-size: 14px;">👁️</button>
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="form-label" style="margin: 0; font-size: 0.8rem;">Discord Bot Token <span style="color: #EF4444;">*</span></label>
+                        <span style="font-size: 0.68rem; color: #34D399; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                          <span>🔒</span> Encrypted with AES-256-GCM
+                        </span>
                       </div>
-                      <small style="color: #64748B; font-size: 11px;">From Discord Developer Portal &gt; Applications &gt; Bot &gt; Reset Token.</small>
+                      <div class="token-input-wrapper">
+                        <input type="password" id="custom-bot-token" class="personalizer-input" placeholder="MTIzNDU2Nzg5MDEyMzQ1Njc4OQ.SAMPLE_TOKEN..." required />
+                        <button type="button" id="toggle-token-visibility" class="token-toggle-btn" title="Toggle token visibility">👁️</button>
+                      </div>
+                      <span style="display: block; font-size: 0.7rem; color: #64748B; margin-top: 5px;">From Discord Developer Portal &gt; Applications &gt; Bot &gt; Reset Token.</span>
                     </div>
 
                     <div class="form-group" style="margin-bottom: 16px;">
-                      <label style="font-weight: 600; font-size: 13px; margin-bottom: 6px; display: block;">Bot Display Name (Optional)</label>
-                      <input type="text" id="custom-bot-name" class="input-text" placeholder="e.g. ShadowSMP AI" style="width: 100%;" />
+                      <label class="form-label" style="font-size: 0.8rem; margin-bottom: 6px;">Bot Display Name (Optional)</label>
+                      <input type="text" id="custom-bot-name" class="personalizer-input" placeholder="e.g. ShadowSMP AI" />
                     </div>
 
                     <div class="form-group" style="margin-bottom: 16px;">
-                      <label style="font-weight: 600; font-size: 13px; margin-bottom: 6px; display: block;">AI Personality / System Prompt</label>
-                      <textarea id="custom-bot-persona" class="input-textarea" rows="2" placeholder="e.g. You are an elite guild guardian for our Minecraft server. Be witty, epic, and helpful." style="width: 100%; resize: vertical;"></textarea>
+                      <label class="form-label" style="font-size: 0.8rem; margin-bottom: 6px;">AI Personality / System Prompt</label>
+                      <textarea id="custom-bot-persona" class="personalizer-textarea" rows="2" placeholder="e.g. You are an elite guild guardian for our Minecraft server. Be witty, epic, and helpful."></textarea>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
-                      <label style="font-weight: 600; font-size: 13px; margin-bottom: 6px; display: block;">Bot Activity Status</label>
-                      <input type="text" id="custom-bot-activity" class="input-text" placeholder="e.g. Playing: /help | shadowcraft.net" value="Powered by Krims Code AI • /about" style="width: 100%;" />
+                    <div class="form-group" style="margin-bottom: 22px;">
+                      <label class="form-label" style="font-size: 0.8rem; margin-bottom: 6px;">Bot Activity Status</label>
+                      <input type="text" id="custom-bot-activity" class="personalizer-input" placeholder="e.g. Playing: /help | shadowcraft.net" value="Powered by Krims Code AI • /about" />
                     </div>
 
-                    <button type="button" id="btn-deploy-custom-bot" class="btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; padding: 12px;">
+                    <button type="button" id="btn-deploy-custom-bot" class="btn-deploy-bot">
                       <span>🚀 Deploy Bot with Krims AI Brain</span>
                     </button>
                   </form>
 
                   <!-- DEPLOY RESULT BOX -->
-                  <div id="custom-bot-result" style="display: none; margin-top: 18px; padding: 16px; border-radius: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid #10B981;">
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                  <div id="custom-bot-result" style="display: none; margin-top: 18px; padding: 18px; border-radius: 10px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.4);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
                       <img id="deployed-bot-avatar" src="/logo.png" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #10B981;" />
                       <div>
-                        <div id="deployed-bot-name" style="font-weight: 800; color: #fff; font-size: 15px;">Bot Connected!</div>
-                        <div style="font-size: 12px; color: #10B981;">● Online &amp; Ready in Pool</div>
+                        <div id="deployed-bot-name" style="font-weight: 800; color: #F8FAFC; font-size: 0.95rem;">Bot Connected!</div>
+                        <div style="font-size: 0.75rem; color: #34D399; font-weight: 700;">● Online &amp; Loaded in Memory Pool</div>
                       </div>
                     </div>
-                    <a id="deployed-bot-invite-btn" href="#" target="_blank" class="btn-primary" style="display: block; text-align: center; text-decoration: none; font-weight: 800; padding: 10px; background: #5865F2;">
+                    <a id="deployed-bot-invite-btn" href="#" target="_blank" class="btn-primary" style="display: block; text-align: center; text-decoration: none; font-weight: 800; padding: 11px; background: #5865F2; border-radius: 8px;">
                       👑 Click Here to Invite Bot to Your Server
                     </a>
                   </div>
@@ -474,104 +476,119 @@
                 <div style="display: flex; flex-direction: column; gap: 20px;">
                   
                   <!-- CARD 2: MADE BY US (1-CLICK) -->
-                  <div class="dash-card" style="border: 1px solid rgba(0, 229, 255, 0.35); background: linear-gradient(135deg, rgba(0, 229, 255, 0.05), rgba(88, 101, 242, 0.05));">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                      <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(0, 229, 255, 0.2); display: flex; align-items: center; justify-content: center; font-size: 18px;">👑</div>
+                  <div class="personalizer-card" style="border-color: rgba(0, 229, 255, 0.35); background: linear-gradient(135deg, rgba(0, 229, 255, 0.04), rgba(88, 101, 242, 0.04));">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+                      <div class="personalizer-card-icon" style="background: rgba(0, 229, 255, 0.15); color: #00E5FF;">👑</div>
                       <div>
-                        <h3 style="margin: 0; font-size: 16px; color: #fff;">Option 2: Made By Us (1-Click)</h3>
-                        <p style="margin: 0; font-size: 12px; color: #94A3B8;">Don't want to deal with tokens or Developer Portal? Use our official pre-made bot!</p>
+                        <h3 style="margin: 0; font-size: 1.05rem; color: #F8FAFC; font-weight: 800;">Option 2: Made By Us (1-Click)</h3>
+                        <p style="margin: 0; font-size: 0.75rem; color: #94A3B8;">Don't want to deal with tokens? Use our official pre-made bot!</p>
                       </div>
                     </div>
-                    <p style="font-size: 13px; color: #CBD5E1; margin-bottom: 16px;">
-                      Instant setup in 5 seconds. Pre-configured with our official Krylo Cyber branding, Google Gemini AI chat, leveling, and moderation!
+                    <p style="font-size: 0.82rem; color: #CBD5E1; margin: 0 0 18px 0; line-height: 1.5;">
+                      Instant 5-second setup. Pre-configured with our official Krylo Cyber branding, Google Gemini AI chat, leveling XP, and AutoMod!
                     </p>
-                    <a href="https://discord.com/api/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot%20applications.commands" target="_blank" class="btn-secondary" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; text-decoration: none; font-weight: 700; padding: 10px; border-color: #00E5FF; color: #00E5FF;">
+                    <a href="https://discord.com/api/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot%20applications.commands" target="_blank" class="btn-secondary" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; text-decoration: none; font-weight: 800; padding: 11px; border-color: rgba(0, 229, 255, 0.5); color: #00E5FF; border-radius: 8px; box-sizing: border-box;">
                       <span>🚀 1-Click Invite Official Krylo Bot</span>
                     </a>
                   </div>
 
                   <!-- CARD 3: 60-SECOND GUIDE -->
-                  <div class="dash-card">
-                    <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 15px; color: #fff;">📖 How to Get Your Bot Token in 60 Seconds</h3>
-                    <ol style="margin: 0; padding-left: 20px; font-size: 12px; color: #94A3B8; display: flex; flex-direction: column; gap: 8px;">
-                      <li>Go to <a href="https://discord.com/developers/applications" target="_blank" style="color: #00E5FF; text-decoration: underline;">discord.com/developers/applications</a></li>
-                      <li>Click <strong>"New Application"</strong> and name it whatever you want.</li>
-                      <li>Click <strong>"Bot"</strong> in the left menu &gt; click <strong>"Reset Token"</strong> &gt; Copy it.</li>
-                      <li>Scroll down to <strong>"Privileged Gateway Intents"</strong> and toggle ON <strong>"Message Content Intent"</strong>.</li>
-                      <li>Paste the token in Option 1 on the left and click <strong>Deploy</strong>!</li>
-                    </ol>
+                  <div class="personalizer-card" style="border-color: rgba(255, 255, 255, 0.1);">
+                    <h3 style="margin: 0 0 14px 0; font-size: 0.95rem; color: #F8FAFC; font-weight: 800;">📖 How to Get Your Bot Token in 60 Seconds</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                      <div class="guide-step-item">
+                        <span class="guide-step-num">1</span>
+                        <span>Open <a href="https://discord.com/developers/applications" target="_blank" style="color: #00E5FF; text-decoration: underline; font-weight: 600;">discord.com/developers/applications</a></span>
+                      </div>
+                      <div class="guide-step-item">
+                        <span class="guide-step-num">2</span>
+                        <span>Click <strong>"New Application"</strong> and name your bot.</span>
+                      </div>
+                      <div class="guide-step-item">
+                        <span class="guide-step-num">3</span>
+                        <span>Go to <strong>"Bot"</strong> in the left menu &gt; click <strong>"Reset Token"</strong> &amp; copy it.</span>
+                      </div>
+                      <div class="guide-step-item">
+                        <span class="guide-step-num">4</span>
+                        <span>Scroll down to <strong>"Privileged Gateway Intents"</strong> and toggle ON <strong>"Message Content Intent"</strong>.</span>
+                      </div>
+                      <div class="guide-step-item">
+                        <span class="guide-step-num">5</span>
+                        <span>Paste the token in Option 1 on the left and click <strong>Deploy</strong>!</span>
+                      </div>
+                    </div>
                   </div>
 
                 </div>
               </div>
 
               <!-- PRICING & TIERS LADDER -->
-              <div class="dash-card" style="margin-top: 10px;">
-                <div style="text-align: center; margin-bottom: 24px;">
-                  <h3 style="font-size: 20px; margin-bottom: 6px; color: #fff;">Krims Code AI Tier Ladder</h3>
-                  <p style="font-size: 13px; color: #94A3B8;">Pick the plan that fits your community scale. Zero lock-in.</p>
+              <div class="personalizer-card" style="margin-top: 10px; border-color: rgba(255, 255, 255, 0.1);">
+                <div style="text-align: center; margin-bottom: 22px;">
+                  <h3 style="font-size: 1.25rem; margin: 0 0 6px 0; color: #F8FAFC; font-weight: 900;">Krims Code AI Tier Ladder</h3>
+                  <p style="font-size: 0.8rem; color: #94A3B8; margin: 0;">Pick the plan that fits your community scale. Zero lock-in.</p>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                <div class="pricing-ladder-grid">
                   
                   <!-- TIER 1: FOUNDER -->
-                  <div style="background: rgba(16, 185, 129, 0.08); border: 2px solid #10B981; border-radius: 10px; padding: 18px; display: flex; flex-direction: column;">
-                    <span style="font-size: 11px; font-weight: 800; color: #10B981; text-transform: uppercase;">EARLY ADOPTER</span>
-                    <h4 style="font-size: 18px; margin: 6px 0; color: #fff;">Founder 100</h4>
-                    <div style="font-size: 24px; font-weight: 900; color: #10B981; margin-bottom: 12px;">$0 <span style="font-size: 12px; color: #94A3B8; font-weight: 400;">/ forever</span></div>
-                    <ul style="list-style: none; padding: 0; margin: 0 0 16px 0; font-size: 12px; color: #CBD5E1; display: flex; flex-direction: column; gap: 8px; flex: 1;">
-                      <li>✅ <strong>1 Custom-Branded Bot</strong></li>
-                      <li>✅ Full Google Gemini AI Brain</li>
-                      <li>✅ MEE6 Leveling &amp; Rank Cards</li>
-                      <li>✅ Dyno AutoMod Suite</li>
-                      <li>✅ "Powered by Krims" Footer</li>
+                  <div class="tier-card tier-founder">
+                    <span style="font-size: 0.68rem; font-weight: 800; color: #10B981; text-transform: uppercase; letter-spacing: 0.5px;">EARLY ADOPTER</span>
+                    <h4 style="font-size: 1.15rem; margin: 6px 0; color: #F8FAFC; font-weight: 800;">Founder 100</h4>
+                    <div style="font-size: 1.5rem; font-weight: 900; color: #10B981; margin-bottom: 12px;">$0 <span style="font-size: 0.75rem; color: #94A3B8; font-weight: 500;">/ forever</span></div>
+                    <ul class="tier-feature-list">
+                      <li><span>✅</span> <span><strong>1 Custom-Branded Bot</strong></span></li>
+                      <li><span>✅</span> <span>Full Google Gemini AI Brain</span></li>
+                      <li><span>✅</span> <span>MEE6 Leveling &amp; Rank Cards</span></li>
+                      <li><span>✅</span> <span>Dyno AutoMod Suite</span></li>
+                      <li><span>✅</span> <span>"Powered by Krims" Footer</span></li>
                     </ul>
-                    <button type="button" class="btn-primary" style="background: #10B981; border: none; font-weight: 700; width: 100%;" onclick="document.getElementById('custom-bot-token').focus();">Claim Free Slot</button>
+                    <button type="button" class="btn-primary" style="background: #10B981; border: none; font-weight: 800; width: 100%; border-radius: 8px; padding: 10px;" onclick="document.getElementById('custom-bot-token').focus();">Claim Free Slot</button>
                   </div>
 
                   <!-- TIER 2: PRO -->
-                  <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 18px; display: flex; flex-direction: column;">
-                    <span style="font-size: 11px; font-weight: 800; color: #5865F2; text-transform: uppercase;">POPULAR</span>
-                    <h4 style="font-size: 18px; margin: 6px 0; color: #fff;">Pro Tier</h4>
-                    <div style="font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 12px;">$4.99 <span style="font-size: 12px; color: #94A3B8; font-weight: 400;">/ mo</span></div>
-                    <ul style="list-style: none; padding: 0; margin: 0 0 16px 0; font-size: 12px; color: #CBD5E1; display: flex; flex-direction: column; gap: 8px; flex: 1;">
-                      <li>✅ <strong>1 Custom Automated Bot</strong></li>
-                      <li>✅ Custom AI Persona Prompt</li>
-                      <li>✅ Unlimited Gemini AI Chats</li>
-                      <li>✅ Custom Embed &amp; Rank Colors</li>
-                      <li>✅ 99.9% Uptime Guarantee</li>
+                  <div class="tier-card tier-pro">
+                    <span style="font-size: 0.68rem; font-weight: 800; color: #818CF8; text-transform: uppercase; letter-spacing: 0.5px;">POPULAR</span>
+                    <h4 style="font-size: 1.15rem; margin: 6px 0; color: #F8FAFC; font-weight: 800;">Pro Tier</h4>
+                    <div style="font-size: 1.5rem; font-weight: 900; color: #F8FAFC; margin-bottom: 12px;">$4.99 <span style="font-size: 0.75rem; color: #94A3B8; font-weight: 500;">/ mo</span></div>
+                    <ul class="tier-feature-list">
+                      <li><span>✅</span> <span><strong>1 Custom Automated Bot</strong></span></li>
+                      <li><span>✅</span> <span>Custom AI Persona Prompt</span></li>
+                      <li><span>✅</span> <span>Unlimited Gemini AI Chats</span></li>
+                      <li><span>✅</span> <span>Custom Embed &amp; Rank Colors</span></li>
+                      <li><span>✅</span> <span>99.9% Uptime Guarantee</span></li>
                     </ul>
-                    <button type="button" class="btn-secondary" style="font-weight: 700; width: 100%;">Upgrade to Pro</button>
+                    <button type="button" class="btn-secondary" style="font-weight: 700; width: 100%; border-radius: 8px; padding: 10px;">Upgrade to Pro</button>
                   </div>
 
                   <!-- TIER 3: PREMIUM -->
-                  <div style="background: rgba(0, 229, 255, 0.05); border: 1px solid #00E5FF; border-radius: 10px; padding: 18px; display: flex; flex-direction: column;">
-                    <span style="font-size: 11px; font-weight: 800; color: #00E5FF; text-transform: uppercase;">NETWORKS</span>
-                    <h4 style="font-size: 18px; margin: 6px 0; color: #fff;">Premium</h4>
-                    <div style="font-size: 24px; font-weight: 900; color: #00E5FF; margin-bottom: 12px;">$14.99 <span style="font-size: 12px; color: #94A3B8; font-weight: 400;">/ mo</span></div>
-                    <ul style="list-style: none; padding: 0; margin: 0 0 16px 0; font-size: 12px; color: #CBD5E1; display: flex; flex-direction: column; gap: 8px; flex: 1;">
-                      <li>✅ <strong>Up to 5 Custom Bots</strong></li>
-                      <li>✅ Multi-Gamemode Server Sync</li>
-                      <li>✅ Minecraft MySQL Database Sync</li>
-                      <li>✅ VIP 24/7 Priority Uptime</li>
-                      <li>✅ Custom Ticket Categories</li>
+                  <div class="tier-card tier-premium">
+                    <span style="font-size: 0.68rem; font-weight: 800; color: #00E5FF; text-transform: uppercase; letter-spacing: 0.5px;">NETWORKS</span>
+                    <h4 style="font-size: 1.15rem; margin: 6px 0; color: #F8FAFC; font-weight: 800;">Premium</h4>
+                    <div style="font-size: 1.5rem; font-weight: 900; color: #00E5FF; margin-bottom: 12px;">$14.99 <span style="font-size: 0.75rem; color: #94A3B8; font-weight: 500;">/ mo</span></div>
+                    <ul class="tier-feature-list">
+                      <li><span>✅</span> <span><strong>Up to 5 Custom Bots</strong></span></li>
+                      <li><span>✅</span> <span>Multi-Gamemode Server Sync</span></li>
+                      <li><span>✅</span> <span>Minecraft MySQL Database Sync</span></li>
+                      <li><span>✅</span> <span>VIP 24/7 Priority Uptime</span></li>
+                      <li><span>✅</span> <span>Custom Ticket Categories</span></li>
                     </ul>
-                    <button type="button" class="btn-primary" style="background: #00E5FF; color: #000; border: none; font-weight: 800; width: 100%;">Get 5 Bots</button>
+                    <button type="button" class="btn-primary" style="background: #00E5FF; color: #000; border: none; font-weight: 800; width: 100%; border-radius: 8px; padding: 10px;">Get 5 Bots</button>
                   </div>
 
                   <!-- TIER 4: ENTERPRISE -->
-                  <div style="background: rgba(168, 85, 247, 0.05); border: 1px solid #A855F7; border-radius: 10px; padding: 18px; display: flex; flex-direction: column;">
-                    <span style="font-size: 11px; font-weight: 800; color: #A855F7; text-transform: uppercase;">SCALE &amp; AGENCIES</span>
-                    <h4 style="font-size: 18px; margin: 6px 0; color: #fff;">Enterprise</h4>
-                    <div style="font-size: 24px; font-weight: 900; color: #A855F7; margin-bottom: 12px;">Custom <span style="font-size: 12px; color: #94A3B8; font-weight: 400;">Quote</span></div>
-                    <ul style="list-style: none; padding: 0; margin: 0 0 16px 0; font-size: 12px; color: #CBD5E1; display: flex; flex-direction: column; gap: 8px; flex: 1;">
-                      <li>✅ <strong>10 to 1,000+ Custom Bots</strong></li>
-                      <li>✅ Dedicated Node.js Cloud Cluster</li>
-                      <li>✅ Optional White-Labeling (No Watermark)</li>
-                      <li>✅ Direct Developer SLA &amp; Support</li>
-                      <li>✅ Custom Discord/Minecraft Bridges</li>
+                  <div class="tier-card tier-enterprise">
+                    <span style="font-size: 0.68rem; font-weight: 800; color: #C084FC; text-transform: uppercase; letter-spacing: 0.5px;">SCALE &amp; AGENCIES</span>
+                    <h4 style="font-size: 1.15rem; margin: 6px 0; color: #F8FAFC; font-weight: 800;">Enterprise</h4>
+                    <div style="font-size: 1.5rem; font-weight: 900; color: #C084FC; margin-bottom: 12px;">Custom <span style="font-size: 0.75rem; color: #94A3B8; font-weight: 500;">Quote</span></div>
+                    <ul class="tier-feature-list">
+                      <li><span>✅</span> <span><strong>10 to 1,000+ Custom Bots</strong></span></li>
+                      <li><span>✅</span> <span>Dedicated Node.js Cloud Cluster</span></li>
+                      <li><span>✅</span> <span>Optional White-Labeling (No Watermark)</span></li>
+                      <li><span>✅</span> <span>Direct Developer SLA &amp; Support</span></li>
+                      <li><span>✅</span> <span>Custom Discord/Minecraft Bridges</span></li>
                     </ul>
-                    <a href="https://discord.gg/insanityz" target="_blank" class="btn-secondary" style="display: block; text-align: center; text-decoration: none; border-color: #A855F7; color: #A855F7; font-weight: 700; width: 100%;">💬 Open Enterprise Ticket</a>
+                    <a href="https://discord.gg/insanityz" target="_blank" class="btn-secondary" style="display: block; text-align: center; text-decoration: none; border-color: rgba(168, 85, 247, 0.5); color: #C084FC; font-weight: 800; width: 100%; border-radius: 8px; padding: 10px; box-sizing: border-box;">💬 Open Enterprise Ticket</a>
                   </div>
 
                 </div>
