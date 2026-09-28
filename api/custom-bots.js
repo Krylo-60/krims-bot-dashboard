@@ -103,19 +103,40 @@ export default async function handler(req, res) {
       // Generate 1-Click Bot Invite URL with Administrator or full permissions
       const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${botUser.id}&permissions=8&scope=bot%20applications.commands`;
 
-      // In production, also forwards to live Render backend if configured
-      const renderApiUrl = process.env.RENDER_BOT_WEBHOOK_URL;
-      if (renderApiUrl) {
-        fetch(renderApiUrl, {
+      // Forward to live Render backend to boot the bot online
+      const renderApiUrl = process.env.RENDER_BOT_WEBHOOK_URL || 'https://krims-discord-bot-d57m.onrender.com/api/custom-bots';
+      let renderResult = null;
+      let isBotRunning = false;
+      try {
+        const renderRes = await fetch(renderApiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token, guildId, ownerId, botName, aiPersona, activityName, botUser })
-        }).catch(() => {});
+          body: JSON.stringify({ 
+            token: token.trim(), 
+            guildId: guildId || 'global_' + botUser.id, 
+            ownerId: ownerId || 'dashboard', 
+            botName: botName ? botName.trim() : botUser.username, 
+            aiPersona, 
+            activityName 
+          })
+        });
+
+        if (renderRes.ok) {
+          renderResult = await renderRes.json();
+          isBotRunning = renderResult.ok !== false;
+          console.log('[Custom Bot] Successfully spawned on Render backend:', renderResult);
+        } else {
+          const errText = await renderRes.text();
+          console.warn('[Custom Bot] Render backend returned:', renderRes.status, errText);
+        }
+      } catch (e) {
+        console.error('[Custom Bot] Error forwarding to Render:', e.message);
       }
 
       return res.status(200).json({
         ok: true,
         message: `Successfully connected bot "${botUser.username}#${botUser.discriminator || '0'}"!`,
+        isOnline: isBotRunning,
         botUser: {
           id: botUser.id,
           username: botUser.username,
