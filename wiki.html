@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krims Wiki • Official Discord Bot Documentation</title>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: #00f2ff;
+      --cyan-glow: rgba(0, 242, 255, 0.25);
+      --bg: #090c10;
+      --panel: #0d121c;
+      --card-bg: #111724;
+      --border: rgba(0, 242, 255, 0.18);
+      --border-hover: rgba(0, 242, 255, 0.4);
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --purple: #a855f7;
+      --green: #10b981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(0, 242, 255, 0.07) 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(168, 85, 247, 0.05) 0%, transparent 45%);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Header */
+    .wiki-header {
+      background: rgba(13, 18, 28, 0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .brand-logo-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid var(--cyan);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+
+    .brand-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      color: #fff;
+    }
+
+    .wiki-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      background: rgba(0, 242, 255, 0.15);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      border-radius: 6px;
+      color: var(--cyan);
+      margin-left: 6px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .btn-primary {
+      background: var(--cyan);
+      color: #042429;
+      font-weight: 700;
+      box-shadow: 0 0 14px var(--cyan-glow);
+    }
+
+    .btn-primary:hover {
+      background: #4ef7ff;
+      transform: translateY(-1px);
+    }
+
+    /* Layout */
+    .wiki-layout {
+      display: flex;
+      flex: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Sidebar */
+    .wiki-sidebar {
+      width: 290px;
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 24px 18px;
+      height: calc(100vh - 67px);
+      position: sticky;
+      top: 67px;
+      overflow-y: auto;
+    }
+
+    .search-box {
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 36px;
+      background: #090d14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan-glow);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    .nav-category {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin: 18px 8px 8px 8px;
+      font-weight: 700;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      color: #c9d1d9;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-radius: 8px;
+      margin-bottom: 3px;
+      transition: all 0.15s ease;
+    }
+
+    .nav-item:hover {
+      color: #fff;
+      background: rgba(0, 242, 255, 0.09);
+      border-left: 3px solid var(--cyan);
+    }
+
+    /* Main Content Area */
+    .wiki-content {
+      flex: 1;
+      padding: 40px 50px;
+      max-width: 920px;
+    }
+
+    .hero-banner {
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-banner h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-banner p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .article-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 35px;
+      scroll-margin-top: 85px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .article-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .article-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 10px;
+      background: rgba(0, 242, 255, 0.12);
+      color: var(--cyan);
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .article-title {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .article-lead {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+
+    .article-body {
+      font-size: 0.94rem;
+      line-height: 1.7;
+      color: #c9d1d9;
+    }
+
+    .article-body h3 { font-size: 1.25rem; color: #fff; margin: 20px 0 10px 0; }
+    .article-body h4 { font-size: 1.05rem; color: #e6edf3; margin: 16px 0 8px 0; }
+    .article-body ul, .article-body ol { margin-left: 20px; margin-bottom: 18px; }
+    .article-body li { margin-bottom: 7px; }
+    .article-body p { margin-bottom: 14px; }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(0, 242, 255, 0.1);
+      color: var(--cyan);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+
+    pre {
+      background: #080c14;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 14px 0 18px 0;
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+      color: #38bdf8;
+    }
+
+    .actions-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    /* Command Table */
+    .table-responsive {
+      overflow-x: auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-top: 20px;
+    }
+
+    table.cmd-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    table.cmd-table th {
+      background: #090d15;
+      padding: 14px 18px;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.cmd-table td {
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: #c9d1d9;
+    }
+
+    table.cmd-table tr:hover td {
+      background: rgba(0, 242, 255, 0.03);
+    }
+
+    .cmd-badge {
+      cursor: pointer;
+      display: inline-block;
+      transition: background 0.15s;
+    }
+
+    .cmd-badge:hover {
+      background: rgba(0, 242, 255, 0.25);
+    }
+
+    .category-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+    }
+
+    /* Toast */
+    #copyToast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #065f46;
+      color: #a7f3d0;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      transform: translateY(10px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+    }
+
+    #copyToast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .wiki-sidebar { display: none; }
+      .wiki-content { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="wiki-header">
+    <a href="/wiki" class="brand-link">
+      <img src="/logo.png" alt="Krims Bot Logo" class="brand-logo-img">
+      <div>
+        <span class="brand-title">KRIMS COMMAND</span>
+        <span class="wiki-pill">WIKI</span>
+      </div>
+    </a>
+    <div class="header-actions">
+      <a href="/" class="btn btn-secondary">🎛️ Dashboard</a>
+      <a href="https://krims-discord-bot-d57m.onrender.com/" target="_blank" class="btn btn-secondary">📡 Live Status</a>
+      <a href="https://top.gg/bot/1523794466740371586/vote" target="_blank" class="btn btn-secondary">🗳️ Vote (2x XP)</a>
+      <a href="https://discord.gg/u2bpcHe3eC" target="_blank" class="btn btn-primary">💬 Support Server</a>
+    </div>
+  </header>
+
+  <!-- Layout -->
+  <div class="wiki-layout">
+    <!-- Sidebar -->
+    <aside class="wiki-sidebar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="wikiSearch" class="search-input" placeholder="Search guides & commands..." onkeyup="filterWiki()" />
+      </div>
+
+      <div class="nav-category">CORE DOCUMENTATION</div>
+      <a href="#getting-started" class="nav-item"><span>🚀</span> Getting Started</a>
+      <a href="#ai-engine" class="nav-item"><span>🧠</span> AI Neural & Vision</a>
+      <a href="#leveling-xp" class="nav-item"><span>⚡</span> Leveling & Leaderboards</a>
+      <a href="#vote-booster" class="nav-item"><span>🗳️</span> Top.gg Vote Booster</a>
+      <a href="#bot-spawner" class="nav-item"><span>⚙️</span> Custom Bot Spawner</a>
+      <a href="#moderation" class="nav-item"><span>🛡️</span> Moderation & AutoMod</a>
+      <a href="#tickets" class="nav-item"><span>🎫</span> Support Tickets</a>
+
+      <div class="nav-category">COMMAND REFERENCE</div>
+      <a href="#command-directory" class="nav-item"><span>📚</span> 100-Command Directory</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="wiki-content">
+      <div class="hero-banner">
+        <h1>Krims Command Documentation</h1>
+        <p>Comprehensive guide to Krims Code AI features, leveling formulas, custom bot fleet spawning, and Top.gg vote booster mechanics.</p>
+      </div>
+
+      <!-- 1. Getting Started -->
+      <article id="getting-started" class="article-card">
+        <span class="article-tag">Guide</span>
+        <h2 class="article-title">🚀 Getting Started</h2>
+        <p class="article-lead">Invite Krims Code AI, set up permissions, and configure your community server in seconds.</p>
+        <div class="article-body">
+          <p><strong>Krims Code AI</strong> is an enterprise-grade multi-purpose Discord bot designed for next-generation communities. Built on high-speed cloud infrastructure with 100% zero downtime, it brings intelligent AI conversational abilities, real-time message leveling, and custom bot hosting directly to your server.</p>
+
+          <h3>Inviting Krims Code AI:</h3>
+          <p>Authorize the bot using the official OAuth2 link with recommended Administrator or Manage Channels permissions:</p>
+          <div class="actions-row">
+            <a href="https://discord.com/oauth2/authorize?client_id=1523794466740371586&scope=bot%20applications.commands&permissions=8" target="_blank" class="btn btn-primary">🔗 Authorize Krims Code AI</a>
+            <a href="https://discord.gg/u2bpcHe3eC" target="_blank" class="btn btn-secondary">💬 Join Official Support Server</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. AI Engine -->
+      <article id="ai-engine" class="article-card">
+        <span class="article-tag">AI Feature</span>
+        <h2 class="article-title">🧠 AI Neural Chat & Multimodal Vision</h2>
+        <p class="article-lead">Powered by Google Gemini 3.5 Flash-Lite with ultra-low latency Groq fallback and persistent server memory.</p>
+        <div class="article-body">
+          <h3>Commands & Interaction Modes:</h3>
+          <ul>
+            <li><code>/ask prompt:&lt;your message&gt;</code> &mdash; Instant response in channel.</li>
+            <li><code>!ask &lt;your message&gt;</code> &mdash; Prefix command alternative.</li>
+            <li><code>@Krims Code AI &lt;question&gt;</code> &mdash; Direct bot mention reply.</li>
+            <li><strong>Direct Message:</strong> Send a DM directly to the bot for private AI consultation.</li>
+          </ul>
+
+          <h3>Multimodal Image Analysis:</h3>
+          <p>Upload any screenshot, photo, diagram, or code error with <code>!ask Describe this image</code> or <code>!ask What is this error?</code> and the bot will analyze the image in real time.</p>
+
+          <h3>Server Memory Context (<code>/memory</code>):</h3>
+          <p>Krims Code AI remembers facts and guidelines specific to your server:</p>
+          <ul>
+            <li><code>/memory action:view</code> &mdash; View current learned facts.</li>
+            <li><code>/memory action:learn fact:&lt;rule&gt;</code> &mdash; Teach the bot a custom server rule.</li>
+            <li><code>/memory action:reset</code> &mdash; Clear conversation history (Admin only).</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 3. Leveling & XP -->
+      <article id="leveling-xp" class="article-card">
+        <span class="article-tag">Progression</span>
+        <h2 class="article-title">⚡ Leveling, Message XP & Leaderboards</h2>
+        <p class="article-lead">Real-time text & voice XP engine with dual-mode leaderboards and quiet cross-server leveling.</p>
+        <div class="article-body">
+          <p>Every active chat message earns <strong>15 to 25 XP</strong> with a 60-second anti-spam cooldown. When a user has an active Top.gg Vote Booster, all XP is automatically doubled (<strong>2.0x Multiplier</strong>)!</p>
+
+          <h3>XP Calculation Formula:</h3>
+          <pre><code>Required XP for Level L = 5 * (L²) + (50 * L) + 100</code></pre>
+
+          <h3>Rank Cards (<code>/rank</code> or <code>!rank</code>):</h3>
+          <p>Shows current level, total XP, progress bar, message counter, server rank position, and active vote booster status.</p>
+
+          <h3>Interactive Leaderboards (<code>/leaderboard</code> or <code>!leaderboard</code>):</h3>
+          <ul>
+            <li><code>[💬 Messages]</code> &mdash; Ranks users by message activity count.</li>
+            <li><code>[⚡ XP & Levels]</code> &mdash; Ranks users by total XP and levels.</li>
+            <li><code>[🗳️ Vote for 2x XP]</code> &mdash; Direct link to vote on Top.gg.</li>
+          </ul>
+
+          <h3>Strict Quiet Leveling Policy:</h3>
+          <p>Level-up announcements are sent <strong>exclusively</strong> in the official Krims Code Support Server (<code>#💬・𝖦eneral-𝖢hat</code>). In all other servers, leveling is quiet and non-intrusive.</p>
+        </div>
+      </article>
+
+      <!-- 4. Top.gg Vote Booster -->
+      <article id="vote-booster" class="article-card">
+        <span class="article-tag">Voter Rewards</span>
+        <h2 class="article-title">🗳️ Top.gg Vote Booster Engine</h2>
+        <p class="article-lead">Automated 2.0x XP multiplier for 12 hours (24h on weekends) and streak bonuses.</p>
+        <div class="article-body">
+          <h3>Voter Rewards:</h3>
+          <ul>
+            <li>⚡ <strong>2.0x XP Multiplier:</strong> Doubles chat & voice XP for <strong>12 Hours</strong> (24h on double vote weekends).</li>
+            <li>🏆 <strong>Level Bonus XP:</strong> <strong>+500 to +1,000 Bonus XP</strong> directly credited based on vote streak.</li>
+            <li>🔥 <strong>Vote Streak Multiplier:</strong> Consecutive votes stack streak points.</li>
+            <li>⭐ <strong>Exclusive Voter Badge:</strong> Showcased on your <code>!rank</code> card and leaderboard!</li>
+          </ul>
+
+          <h3>Dedicated Vote Stream Channel (<code>🗳️・𝖵ote-𝖫ogs</code>):</h3>
+          <p>All incoming Top.gg votes are announced live in the support server with voter shoutouts and active booster durations.</p>
+        </div>
+      </article>
+
+      <!-- 5. Bot Spawner -->
+      <article id="bot-spawner" class="article-card">
+        <span class="article-tag">Multi-Bot Fleet</span>
+        <h2 class="article-title">⚙️ Custom Bot Fleet Spawner</h2>
+        <p class="article-lead">Spawn your own custom-branded Discord bot using the Krims Code AI brain at $0 cost.</p>
+        <div class="article-body">
+          <p>Server owners can spawn their very own custom-branded Discord bots running the Krims Code AI multi-process engine with zero hosting fees:</p>
+          <ol>
+            <li>Go to the <a href="https://discord.com/developers/applications" target="_blank" style="color: var(--cyan);">Discord Developer Portal</a>.</li>
+            <li>Click <strong>New Application</strong> and name your bot.</li>
+            <li>Under the <strong>Bot</strong> tab, enable all 3 <strong>Privileged Gateway Intents</strong>.</li>
+            <li>Copy your bot token and run <code>/setupbot token:&lt;your-token&gt;</code> in your server!</li>
+          </ol>
+        </div>
+      </article>
+
+      <!-- 6. Moderation -->
+      <article id="moderation" class="article-card">
+        <span class="article-tag">Admin</span>
+        <h2 class="article-title">🛡️ Moderation & AutoMod Protection</h2>
+        <p class="article-lead">Full suite of administrative moderation tools to maintain server safety.</p>
+        <div class="article-body">
+          <ul>
+            <li><code>!warn @user &lt;reason&gt;</code> &mdash; Issue an official warning.</li>
+            <li><code>!mute @user &lt;time&gt; &lt;reason&gt;</code> &mdash; Discord Timeout restriction.</li>
+            <li><code>!unmute @user</code> &mdash; Lift timeout.</li>
+            <li><code>!kick @user &lt;reason&gt;</code> &mdash; Kick member from server.</li>
+            <li><code>!ban @user &lt;reason&gt;</code> &mdash; Ban member permanently.</li>
+            <li><code>!purge &lt;1-100&gt;</code> &mdash; Bulk delete recent channel messages.</li>
+            <li><code>!lockdown</code> &mdash; Lock channel speaking permissions.</li>
+            <li><code>!unlock</code> &mdash; Restore channel speaking permissions.</li>
+            <li><code>!slowmode &lt;seconds&gt;</code> &mdash; Channel rate-limit slowmode.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 7. Support Tickets -->
+      <article id="tickets" class="article-card">
+        <span class="article-tag">Utility</span>
+        <h2 class="article-title">🎫 Private Support Ticketing</h2>
+        <p class="article-lead">Isolated private player support channels with transcript archiving.</p>
+        <div class="article-body">
+          <ul>
+            <li><code>/ticket reason:&lt;topic&gt;</code> or <code>!ticket &lt;topic&gt;</code> &mdash; Creates private ticket channel.</li>
+            <li><code>/close</code> &mdash; Closes and archives ticket channel.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 8. Command Reference Table -->
+      <article id="command-directory" class="article-card">
+        <span class="article-tag">Command Index</span>
+        <h2 class="article-title">📚 Complete Command Directory</h2>
+        <p class="article-lead">Full index of slash & prefix commands in Krims Code AI. Click any command to copy.</p>
+
+        <div class="table-responsive">
+          <table class="cmd-table">
+            <thead>
+              <tr>
+                <th>Slash Command</th>
+                <th>Prefix</th>
+                <th>Category</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody id="cmdTableBody">
+              <tr class="cmd-row" data-search="/ask !ask ai neural chat vision">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/ask')">/ask</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!ask')">!ask</code></td>
+                <td><span class="category-badge">AI & Neural</span></td>
+                <td>Chat with Krims Code AI neural brain or start counting partner mode</td>
+              </tr>
+              <tr class="cmd-row" data-search="/memory !memory ai memory">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/memory')">/memory</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!memory')">!memory</code></td>
+                <td><span class="category-badge">AI & Neural</span></td>
+                <td>View, learn, or reset persistent server memory context</td>
+              </tr>
+              <tr class="cmd-row" data-search="/setupbot !setupbot custom bot spawner">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/setupbot')">/setupbot</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!setupbot')">!setupbot</code></td>
+                <td><span class="category-badge">Custom Bot</span></td>
+                <td>Spawn a dedicated custom-branded bot for your server</td>
+              </tr>
+              <tr class="cmd-row" data-search="/rank !rank leveling xp">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/rank')">/rank</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!rank')">!rank</code></td>
+                <td><span class="category-badge">Leveling</span></td>
+                <td>View your level, XP, message stats, and active 2x vote booster</td>
+              </tr>
+              <tr class="cmd-row" data-search="/leaderboard !leaderboard !lb messages xp">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/leaderboard')">/leaderboard</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!leaderboard')">!leaderboard</code></td>
+                <td><span class="category-badge">Leveling</span></td>
+                <td>Interactive server leaderboard with Messages vs XP toggle</td>
+              </tr>
+              <tr class="cmd-row" data-search="/vote !vote topgg vote booster">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/vote')">/vote</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!vote')">!vote</code></td>
+                <td><span class="category-badge">Leveling</span></td>
+                <td>Vote on Top.gg to activate 2.0x XP booster and check streak</td>
+              </tr>
+              <tr class="cmd-row" data-search="/wiki !wiki docs documentation">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/wiki')">/wiki</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!wiki')">!wiki</code></td>
+                <td><span class="category-badge">Utility</span></td>
+                <td>Search official Krims Wiki guides, articles, and commands</td>
+              </tr>
+              <tr class="cmd-row" data-search="/warn !warn moderation">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/warn')">/warn</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!warn')">!warn</code></td>
+                <td><span class="category-badge">Moderation</span></td>
+                <td>Issue an official server warning with logged reason</td>
+              </tr>
+              <tr class="cmd-row" data-search="/mute !mute timeout moderation">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/mute')">/mute</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!mute')">!mute</code></td>
+                <td><span class="category-badge">Moderation</span></td>
+                <td>Timeout a user for a specified duration (e.g. 10m, 1h)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/unmute !unmute moderation">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/unmute')">/unmute</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!unmute')">!unmute</code></td>
+                <td><span class="category-badge">Moderation</span></td>
+                <td>Remove an active timeout from a member</td>
+              </tr>
+              <tr class="cmd-row" data-search="/kick !kick moderation">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/kick')">/kick</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!kick')">!kick</code></td>
+                <td><span class="category-badge">Moderation</span></td>
+                <td>Kick a member from the server</td>
+              </tr>
+              <tr class="cmd-row" data-search="/ban !ban moderation">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/ban')">/ban</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!ban')">!ban</code></td>
+                <td><span class="category-badge">Moderation</span></td>
+                <td>Ban a member permanently from the server</td>
+              </tr>
+              <tr class="cmd-row" data-search="/purge !purge moderation bulk delete">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/purge')">/purge</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!purge')">!purge</code></td>
+                <td><span class="category-badge">Moderation</span></td>
+                <td>Bulk delete up to 100 messages in current channel</td>
+              </tr>
+              <tr class="cmd-row" data-search="/lockdown !lockdown moderation">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/lockdown')">/lockdown</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!lockdown')">!lockdown</code></td>
+                <td><span class="category-badge">Moderation</span></td>
+                <td>Lock current channel preventing member messages</td>
+              </tr>
+              <tr class="cmd-row" data-search="/unlock !unlock moderation">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/unlock')">/unlock</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!unlock')">!unlock</code></td>
+                <td><span class="category-badge">Moderation</span></td>
+                <td>Restore channel permissions after lockdown</td>
+              </tr>
+              <tr class="cmd-row" data-search="/slowmode !slowmode moderation">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/slowmode')">/slowmode</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!slowmode')">!slowmode</code></td>
+                <td><span class="category-badge">Moderation</span></td>
+                <td>Set channel rate-limit slowmode interval</td>
+              </tr>
+              <tr class="cmd-row" data-search="/ticket !ticket support tickets">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/ticket')">/ticket</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!ticket')">!ticket</code></td>
+                <td><span class="category-badge">Support</span></td>
+                <td>Open a private 1-on-1 staff support ticket channel</td>
+              </tr>
+              <tr class="cmd-row" data-search="/close !close support tickets">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/close')">/close</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!close')">!close</code></td>
+                <td><span class="category-badge">Support</span></td>
+                <td>Close and archive the current ticket channel</td>
+              </tr>
+              <tr class="cmd-row" data-search="/ping !ping utility heartbeat">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/ping')">/ping</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!ping')">!ping</code></td>
+                <td><span class="category-badge">Utility</span></td>
+                <td>Check Discord WebSocket heartbeat and database ping</td>
+              </tr>
+              <tr class="cmd-row" data-search="/uptime !uptime utility">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/uptime')">/uptime</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!uptime')">!uptime</code></td>
+                <td><span class="category-badge">Utility</span></td>
+                <td>View live process uptime, system RAM, and cluster health</td>
+              </tr>
+              <tr class="cmd-row" data-search="/translate !translate utility">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/translate')">/translate</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!translate')">!translate</code></td>
+                <td><span class="category-badge">Utility</span></td>
+                <td>Translate text between any languages instantly</td>
+              </tr>
+              <tr class="cmd-row" data-search="/remind !remind utility timer">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/remind')">/remind</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!remind')">!remind</code></td>
+                <td><span class="category-badge">Utility</span></td>
+                <td>Set an active timer reminder with DM / ping notification</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </main>
+  </div>
+
+  <div id="copyToast">Copied command to clipboard!</div>
+
+  <script>
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('copyToast');
+        toast.textContent = 'Copied ' + text + ' to clipboard!';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      });
+    }
+
+    function filterWiki() {
+      const q = document.getElementById('wikiSearch').value.toLowerCase().trim();
+      
+      const rows = document.querySelectorAll('.cmd-row');
+      rows.forEach(r => {
+        const searchData = r.getAttribute('data-search') || '';
+        if (!q || searchData.includes(q)) {
+          r.style.display = '';
+        } else {
+          r.style.display = 'none';
+        }
+      });
+
+      const articles = document.querySelectorAll('.article-card');
+      articles.forEach(a => {
+        if (a.id === 'command-directory') return;
+        const text = a.innerText.toLowerCase();
+        if (!q || text.includes(q)) {
+          a.style.display = '';
+        } else {
+          a.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

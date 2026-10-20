@@ -9,6 +9,7 @@ export default defineConfig({
         terms: resolve(__dirname, 'terms.html'),
         privacy: resolve(__dirname, 'privacy.html'),
         linkedRoles: resolve(__dirname, 'linked-roles.html'),
+        wiki: resolve(__dirname, 'wiki.html'),
       },
     },
   },
