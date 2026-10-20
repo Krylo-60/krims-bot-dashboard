@@ -320,6 +320,59 @@
       margin-top: 22px;
     }
 
+    
+    /* Category Filter Pills */
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 14px 0;
+    }
+
+    .filter-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-pill:hover {
+      background: rgba(0, 242, 255, 0.1);
+      color: #fff;
+      border-color: rgba(0, 242, 255, 0.3);
+    }
+
+    .filter-pill.active {
+      background: var(--cyan);
+      color: #042429;
+      font-weight: 700;
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+
+    .cmd-counter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Color Coded Category Badges */
+    .category-badge.cat-ai { background: rgba(0, 242, 255, 0.15); color: #00f2ff; }
+    .category-badge.cat-mod { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .category-badge.cat-server { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .category-badge.cat-econ { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .category-badge.cat-rpg { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+    .category-badge.cat-fun { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
     /* Command Table */
     .table-responsive {
       overflow-x: auto;
@@ -594,7 +647,23 @@
       <article id="command-directory" class="article-card">
         <span class="article-tag">Command Index</span>
         <h2 class="article-title">📚 Complete Command Directory</h2>
-        <p class="article-lead">Full index of slash & prefix commands in Krims Code AI. Click any command to copy.</p>
+        
+        <p class="article-lead">Full index of all 100 slash & prefix commands in Krims Code AI. Click any command to copy.</p>
+
+        <div class="category-filters">
+          <button class="filter-pill active" onclick="setCategoryFilter('all', this)">All (100)</button>
+          <button class="filter-pill" onclick="setCategoryFilter('AI & Neural', this)">🤖 AI & Neural (8)</button>
+          <button class="filter-pill" onclick="setCategoryFilter('Moderation & Security', this)">🛡️ Moderation (12)</button>
+          <button class="filter-pill" onclick="setCategoryFilter('Server & Community', this)">📡 Server & Community (20)</button>
+          <button class="filter-pill" onclick="setCategoryFilter('Economy & Leveling', this)">💰 Economy & Leveling (26)</button>
+          <button class="filter-pill" onclick="setCategoryFilter('Combat & RPG', this)">⚔️ Combat & RPG (14)</button>
+          <button class="filter-pill" onclick="setCategoryFilter('Utility & Fun', this)">🧭 Utility & Fun (20)</button>
+        </div>
+
+        <div class="cmd-counter-bar">
+          <span id="cmdCountNotice">Showing 100 of 100 commands</span>
+          <span>Tip: Click any badge to copy</span>
+        </div>
 
         <div class="table-responsive">
           <table class="cmd-table">
@@ -607,137 +676,605 @@
               </tr>
             </thead>
             <tbody id="cmdTableBody">
-              <tr class="cmd-row" data-search="/ask !ask ai neural chat vision">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/ask')">/ask</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!ask')">!ask</code></td>
-                <td><span class="category-badge">AI & Neural</span></td>
-                <td>Chat with Krims Code AI neural brain or start counting partner mode</td>
-              </tr>
-              <tr class="cmd-row" data-search="/memory !memory ai memory">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/memory')">/memory</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!memory')">!memory</code></td>
-                <td><span class="category-badge">AI & Neural</span></td>
-                <td>View, learn, or reset persistent server memory context</td>
-              </tr>
-              <tr class="cmd-row" data-search="/setupbot !setupbot custom bot spawner">
+              <tr class="cmd-row" data-search="/setupbot !setupbot ai & neural deploy your own custom discord bot with the krims code ai brain!" data-category="AI & Neural">
                 <td><code class="cmd-badge" onclick="copyToClipboard('/setupbot')">/setupbot</code></td>
                 <td><code class="cmd-badge" onclick="copyToClipboard('!setupbot')">!setupbot</code></td>
-                <td><span class="category-badge">Custom Bot</span></td>
-                <td>Spawn a dedicated custom-branded bot for your server</td>
+                <td><span class="category-badge cat-ai">AI & Neural</span></td>
+                <td>Deploy your own custom Discord bot with the Krims Code AI brain!</td>
               </tr>
-              <tr class="cmd-row" data-search="/rank !rank leveling xp">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/rank')">/rank</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!rank')">!rank</code></td>
-                <td><span class="category-badge">Leveling</span></td>
-                <td>View your level, XP, message stats, and active 2x vote booster</td>
+              <tr class="cmd-row" data-search="/memory !memory ai & neural view, manage, or reset krims code ai server memory (admin can reset)" data-category="AI & Neural">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/memory')">/memory</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!memory')">!memory</code></td>
+                <td><span class="category-badge cat-ai">AI & Neural</span></td>
+                <td>View, manage, or reset Krims Code AI server memory (Admin can reset)</td>
               </tr>
-              <tr class="cmd-row" data-search="/leaderboard !leaderboard !lb messages xp">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/leaderboard')">/leaderboard</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!leaderboard')">!leaderboard</code></td>
-                <td><span class="category-badge">Leveling</span></td>
-                <td>Interactive server leaderboard with Messages vs XP toggle</td>
+              <tr class="cmd-row" data-search="/about !about ai & neural learn about the krims code ai multi-bot engine and get your own free bot!" data-category="AI & Neural">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/about')">/about</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!about')">!about</code></td>
+                <td><span class="category-badge cat-ai">AI & Neural</span></td>
+                <td>Learn about the Krims Code AI Multi-Bot Engine and get your own free bot!</td>
               </tr>
-              <tr class="cmd-row" data-search="/vote !vote topgg vote booster">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/vote')">/vote</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!vote')">!vote</code></td>
-                <td><span class="category-badge">Leveling</span></td>
-                <td>Vote on Top.gg to activate 2.0x XP booster and check streak</td>
+              <tr class="cmd-row" data-search="/getbot !getbot ai & neural claim a free custom-branded bot for your server!" data-category="AI & Neural">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/getbot')">/getbot</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!getbot')">!getbot</code></td>
+                <td><span class="category-badge cat-ai">AI & Neural</span></td>
+                <td>Claim a FREE custom-branded bot for your server!</td>
               </tr>
-              <tr class="cmd-row" data-search="/wiki !wiki docs documentation">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/wiki')">/wiki</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!wiki')">!wiki</code></td>
-                <td><span class="category-badge">Utility</span></td>
-                <td>Search official Krims Wiki guides, articles, and commands</td>
+              <tr class="cmd-row" data-search="/pricing !pricing ai & neural view krims code ai tiers (founder, pro, premium, enterprise)!" data-category="AI & Neural">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/pricing')">/pricing</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!pricing')">!pricing</code></td>
+                <td><span class="category-badge cat-ai">AI & Neural</span></td>
+                <td>View Krims Code AI tiers (Founder, Pro, Premium, Enterprise)!</td>
               </tr>
-              <tr class="cmd-row" data-search="/warn !warn moderation">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/warn')">/warn</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!warn')">!warn</code></td>
-                <td><span class="category-badge">Moderation</span></td>
-                <td>Issue an official server warning with logged reason</td>
+              <tr class="cmd-row" data-search="/ask !ask ai & neural ask krims code ai or activate /ai counting partner mode!" data-category="AI & Neural">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/ask')">/ask</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!ask')">!ask</code></td>
+                <td><span class="category-badge cat-ai">AI & Neural</span></td>
+                <td>Ask Krims Code AI or activate /ai counting partner mode!</td>
               </tr>
-              <tr class="cmd-row" data-search="/mute !mute timeout moderation">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/mute')">/mute</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!mute')">!mute</code></td>
-                <td><span class="category-badge">Moderation</span></td>
-                <td>Timeout a user for a specified duration (e.g. 10m, 1h)</td>
+              <tr class="cmd-row" data-search="/diagnose !diagnose ai & neural compile local and global network diagnostic telemetry (admin only)" data-category="AI & Neural">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/diagnose')">/diagnose</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!diagnose')">!diagnose</code></td>
+                <td><span class="category-badge cat-ai">AI & Neural</span></td>
+                <td>Compile local and global network diagnostic telemetry (Admin only)</td>
               </tr>
-              <tr class="cmd-row" data-search="/unmute !unmute moderation">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/unmute')">/unmute</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!unmute')">!unmute</code></td>
-                <td><span class="category-badge">Moderation</span></td>
-                <td>Remove an active timeout from a member</td>
+              <tr class="cmd-row" data-search="/github !github ai & neural view krims code and krylosmp official github repositories!" data-category="AI & Neural">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/github')">/github</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!github')">!github</code></td>
+                <td><span class="category-badge cat-ai">AI & Neural</span></td>
+                <td>View Krims Code and KryloSMP official GitHub repositories!</td>
               </tr>
-              <tr class="cmd-row" data-search="/kick !kick moderation">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/kick')">/kick</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!kick')">!kick</code></td>
-                <td><span class="category-badge">Moderation</span></td>
-                <td>Kick a member from the server</td>
-              </tr>
-              <tr class="cmd-row" data-search="/ban !ban moderation">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/ban')">/ban</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!ban')">!ban</code></td>
-                <td><span class="category-badge">Moderation</span></td>
-                <td>Ban a member permanently from the server</td>
-              </tr>
-              <tr class="cmd-row" data-search="/purge !purge moderation bulk delete">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/purge')">/purge</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!purge')">!purge</code></td>
-                <td><span class="category-badge">Moderation</span></td>
-                <td>Bulk delete up to 100 messages in current channel</td>
-              </tr>
-              <tr class="cmd-row" data-search="/lockdown !lockdown moderation">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/lockdown')">/lockdown</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!lockdown')">!lockdown</code></td>
-                <td><span class="category-badge">Moderation</span></td>
-                <td>Lock current channel preventing member messages</td>
-              </tr>
-              <tr class="cmd-row" data-search="/unlock !unlock moderation">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/unlock')">/unlock</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!unlock')">!unlock</code></td>
-                <td><span class="category-badge">Moderation</span></td>
-                <td>Restore channel permissions after lockdown</td>
-              </tr>
-              <tr class="cmd-row" data-search="/slowmode !slowmode moderation">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/slowmode')">/slowmode</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!slowmode')">!slowmode</code></td>
-                <td><span class="category-badge">Moderation</span></td>
-                <td>Set channel rate-limit slowmode interval</td>
-              </tr>
-              <tr class="cmd-row" data-search="/ticket !ticket support tickets">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/ticket')">/ticket</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!ticket')">!ticket</code></td>
-                <td><span class="category-badge">Support</span></td>
-                <td>Open a private 1-on-1 staff support ticket channel</td>
-              </tr>
-              <tr class="cmd-row" data-search="/close !close support tickets">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/close')">/close</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!close')">!close</code></td>
-                <td><span class="category-badge">Support</span></td>
-                <td>Close and archive the current ticket channel</td>
-              </tr>
-              <tr class="cmd-row" data-search="/ping !ping utility heartbeat">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/ping')">/ping</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!ping')">!ping</code></td>
-                <td><span class="category-badge">Utility</span></td>
-                <td>Check Discord WebSocket heartbeat and database ping</td>
-              </tr>
-              <tr class="cmd-row" data-search="/uptime !uptime utility">
-                <td><code class="cmd-badge" onclick="copyToClipboard('/uptime')">/uptime</code></td>
-                <td><code class="cmd-badge" onclick="copyToClipboard('!uptime')">!uptime</code></td>
-                <td><span class="category-badge">Utility</span></td>
-                <td>View live process uptime, system RAM, and cluster health</td>
-              </tr>
-              <tr class="cmd-row" data-search="/translate !translate utility">
+              <tr class="cmd-row" data-search="/translate !translate utility & fun translate text into any language (english, spanish, french, japanese, etc.)" data-category="Utility & Fun">
                 <td><code class="cmd-badge" onclick="copyToClipboard('/translate')">/translate</code></td>
                 <td><code class="cmd-badge" onclick="copyToClipboard('!translate')">!translate</code></td>
-                <td><span class="category-badge">Utility</span></td>
-                <td>Translate text between any languages instantly</td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Translate text into any language (English, Spanish, French, Japanese, etc.)</td>
               </tr>
-              <tr class="cmd-row" data-search="/remind !remind utility timer">
+              <tr class="cmd-row" data-search="/ping !ping utility & fun check krims code ai latency, discord websocket heartbeat, and database response time!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/ping')">/ping</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!ping')">!ping</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Check Krims Code AI latency, Discord WebSocket heartbeat, and database response time!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/remind !remind utility & fun set an active countdown timer reminder with dm / ping notification!" data-category="Utility & Fun">
                 <td><code class="cmd-badge" onclick="copyToClipboard('/remind')">/remind</code></td>
                 <td><code class="cmd-badge" onclick="copyToClipboard('!remind')">!remind</code></td>
-                <td><span class="category-badge">Utility</span></td>
-                <td>Set an active timer reminder with DM / ping notification</td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Set an active countdown timer reminder with DM / ping notification!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/crew !crew utility & fun manage skybase film crew applications status and panel (admin only)" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/crew')">/crew</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!crew')">!crew</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Manage Skybase Film Crew applications status and panel (Admin only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/gif !gif utility & fun search and send gifs, stickers, memes & clips powered by klipy!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/gif')">/gif</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!gif')">!gif</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Search and send GIFs, stickers, memes & clips powered by KLIPY!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/uptime !uptime utility & fun ️ view bot uptime, process memory usage, and system load status!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/uptime')">/uptime</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!uptime')">!uptime</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>️ View bot uptime, process memory usage, and system load status!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/ip !ip utility & fun get the official java & bedrock minecraft ip addresses and server port!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/ip')">/ip</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!ip')">!ip</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Get the official Java & Bedrock Minecraft IP addresses and server port!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/status !status utility & fun check the real-time online status and player count of the minecraft server!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/status')">/status</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!status')">!status</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Check the real-time online status and player count of the Minecraft server!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/help !help server & community view the official directory of all krims code ai bot commands & features!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/help')">/help</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!help')">!help</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>View the official directory of all Krims Code AI bot commands & features!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/rules !rules server & community view the official server rules, behavior guidelines & strike policy!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/rules')">/rules</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!rules')">!rules</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>View the official server rules, behavior guidelines & strike policy!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/apply !apply server & community apply for staff, builder, developer or media creator!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/apply')">/apply</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!apply')">!apply</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Apply for Staff, Builder, Developer or Media Creator!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/ticket !ticket server & community open a secure private support ticket channel with staff!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/ticket')">/ticket</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!ticket')">!ticket</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Open a secure private support ticket channel with staff!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/close !close server & community resolve and close the current support ticket channel!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/close')">/close</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!close')">!close</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Resolve and close the current support ticket channel!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/suggest !suggest server & community submit an official suggestion or improvement idea for the server!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/suggest')">/suggest</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!suggest')">!suggest</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Submit an official suggestion or improvement idea for the server!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/announce !announce server & community broadcast an announcement to the community (staff only)" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/announce')">/announce</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!announce')">!announce</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Broadcast an announcement to the community (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/poll !poll server & community create an interactive community voting poll!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/poll')">/poll</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!poll')">!poll</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Create an interactive community voting poll!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/giveaway !giveaway server & community launch an interactive server giveaway event!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/giveaway')">/giveaway</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!giveaway')">!giveaway</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Launch an interactive server giveaway event!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/serverinfo !serverinfo server & community display detailed server statistics, member counts, boost level & specs!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/serverinfo')">/serverinfo</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!serverinfo')">!serverinfo</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Display detailed server statistics, member counts, boost level & specs!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/userinfo !userinfo server & community display user account details, joined date, avatar & assigned roles!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/userinfo')">/userinfo</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!userinfo')">!userinfo</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Display user account details, joined date, avatar & assigned roles!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/avatar !avatar server & community ️ view and download high-resolution user avatar image!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/avatar')">/avatar</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!avatar')">!avatar</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>️ View and download high-resolution user avatar image!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/link !link utility & fun link your external gaming or social account with discord" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/link')">/link</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!link')">!link</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Link your external gaming or social account with Discord</td>
+              </tr>
+              <tr class="cmd-row" data-search="/verify !verify utility & fun submit verification code or link your gaming account" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/verify')">/verify</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!verify')">!verify</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Submit verification code or link your gaming account</td>
+              </tr>
+              <tr class="cmd-row" data-search="/startstream !startstream server & community broadcast live stream notification to the server (admin only)" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/startstream')">/startstream</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!startstream')">!startstream</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Broadcast live stream notification to the server (Admin only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/stopstream !stopstream server & community end active live stream broadcast and reset activity (admin only)" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/stopstream')">/stopstream</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!stopstream')">!stopstream</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>End active live stream broadcast and reset activity (Admin only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/adminabuse !adminabuse moderation & security trigger the official monthly admin abuse & chaos event (admin only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/adminabuse')">/adminabuse</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!adminabuse')">!adminabuse</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Trigger the official Monthly Admin Abuse & Chaos Event (Admin only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/genkey !genkey moderation & security generate a custom api key for integrations (admin only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/genkey')">/genkey</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!genkey')">!genkey</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Generate a custom API key for integrations (Admin only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/warn !warn moderation & security ️ issue an official warning strike to a user (staff only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/warn')">/warn</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!warn')">!warn</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>️ Issue an official warning strike to a user (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/mute !mute moderation & security timeout / mute a member from sending messages (staff only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/mute')">/mute</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!mute')">!mute</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Timeout / mute a member from sending messages (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/unmute !unmute moderation & security remove timeout / unmute a member (staff only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/unmute')">/unmute</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!unmute')">!unmute</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Remove timeout / unmute a member (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/kick !kick moderation & security kick a member from the server (staff only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/kick')">/kick</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!kick')">!kick</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Kick a member from the server (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/ban !ban moderation & security ban a user from the server (staff only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/ban')">/ban</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!ban')">!ban</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Ban a user from the server (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/purge !purge moderation & security bulk delete messages from the channel (staff only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/purge')">/purge</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!purge')">!purge</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Bulk delete messages from the channel (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/lockdown !lockdown moderation & security lock down channels or the entire server to prevent messages (staff only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/lockdown')">/lockdown</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!lockdown')">!lockdown</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Lock down channels or the entire server to prevent messages (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/unlock !unlock moderation & security unlock channels or the entire server (staff only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/unlock')">/unlock</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!unlock')">!unlock</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Unlock channels or the entire server (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/devlogs !devlogs moderation & security ️ developer audit telemetry and diagnostic logs from the last 3 days (owner only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/devlogs')">/devlogs</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!devlogs')">!devlogs</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>️ Developer audit telemetry and diagnostic logs from the last 3 days (Owner only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/slowmode !slowmode moderation & security set channel slowmode cooldown in seconds (staff only)" data-category="Moderation & Security">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/slowmode')">/slowmode</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!slowmode')">!slowmode</code></td>
+                <td><span class="category-badge cat-mod">Moderation & Security</span></td>
+                <td>Set channel slowmode cooldown in seconds (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/afk !afk utility & fun set your afk status with an automated notification message!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/afk')">/afk</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!afk')">!afk</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Set your AFK status with an automated notification message!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/activity !activity server & community launch discord voice activities & games (youtube together, chess, poker, gartic & more!)" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/activity')">/activity</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!activity')">!activity</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Launch Discord Voice Activities & Games (YouTube Together, Chess, Poker, Gartic & more!)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/embed !embed server & community create a custom styled announcement embed message (staff only)" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/embed')">/embed</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!embed')">!embed</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Create a custom styled announcement embed message (Staff only)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/wiki !wiki server & community search the official krims wiki guides, articles, and commands!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/wiki')">/wiki</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!wiki')">!wiki</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Search the official Krims Wiki guides, articles, and commands!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/locator !locator utility & fun calculate radar locator bar color and coordinates" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/locator')">/locator</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!locator')">!locator</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Calculate radar locator bar color and coordinates</td>
+              </tr>
+              <tr class="cmd-row" data-search="/coinflip !coinflip utility & fun flip a coin — heads or tails!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/coinflip')">/coinflip</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!coinflip')">!coinflip</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Flip a coin — Heads or Tails!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/roll !roll utility & fun roll a random dice number!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/roll')">/roll</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!roll')">!roll</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Roll a random dice number!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/eightball !eightball utility & fun ask the magic 8-ball a fortune question!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/eightball')">/eightball</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!eightball')">!eightball</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Ask the Magic 8-Ball a fortune question!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/joke !joke utility & fun get a funny minecraft or gaming joke!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/joke')">/joke</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!joke')">!joke</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Get a funny Minecraft or gaming joke!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/meme !meme utility & fun fetch a random funny minecraft meme!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/meme')">/meme</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!meme')">!meme</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Fetch a random funny Minecraft meme!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/bday !bday utility & fun celebrate a user birthday with fireworks, double xp & bonus coins!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/bday')">/bday</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!bday')">!bday</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Celebrate a user birthday with fireworks, double XP & bonus coins!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/gameboost !gameboost utility & fun optimize pc ram & close background apps for 100+ fps minecraft gaming!" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/gameboost')">/gameboost</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!gameboost')">!gameboost</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Optimize PC RAM & close background apps for 100+ FPS Minecraft gaming!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/voice !voice utility & fun control krims bot voice ai in voice channels" data-category="Utility & Fun">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/voice')">/voice</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!voice')">!voice</code></td>
+                <td><span class="category-badge cat-fun">Utility & Fun</span></td>
+                <td>Control Krims Bot Voice AI in voice channels</td>
+              </tr>
+              <tr class="cmd-row" data-search="/pvp !pvp combat & rpg toggle your access to the private community pvp channel" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/pvp')">/pvp</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!pvp')">!pvp</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Toggle your access to the private community PvP channel</td>
+              </tr>
+              <tr class="cmd-row" data-search="/tournament !tournament combat & rpg toggle your access to the private community tournaments channel" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/tournament')">/tournament</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!tournament')">!tournament</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Toggle your access to the private community tournaments channel</td>
+              </tr>
+              <tr class="cmd-row" data-search="/challenge !challenge combat & rpg challenge another member to an official 1v1 pvp duel" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/challenge')">/challenge</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!challenge')">!challenge</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Challenge another member to an official 1v1 PvP duel</td>
+              </tr>
+              <tr class="cmd-row" data-search="/endduel !endduel combat & rpg end the current pvp duel match and clear the match queue" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/endduel')">/endduel</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!endduel')">!endduel</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>End the current PvP duel match and clear the match queue</td>
+              </tr>
+              <tr class="cmd-row" data-search="/duel !duel combat & rpg challenge a player to a 1v1 coin wager duel" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/duel')">/duel</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!duel')">!duel</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Challenge a player to a 1v1 coin wager duel</td>
+              </tr>
+              <tr class="cmd-row" data-search="/rank !rank economy & leveling view your chat level, rank position, and total xp card!" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/rank')">/rank</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!rank')">!rank</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>View your chat level, rank position, and total XP card!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/calc !calc economy & leveling calculate any mathematical expression, equation, or formula!" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/calc')">/calc</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!calc')">!calc</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Calculate any mathematical expression, equation, or formula!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/weather !weather economy & leveling ️ get current real-time weather and forecast for any city or location!" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/weather')">/weather</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!weather')">!weather</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>️ Get current real-time weather and forecast for any city or location!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/daily !daily economy & leveling claim your free daily coin & reward streak with multiplier bonuses" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/daily')">/daily</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!daily')">!daily</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Claim your free daily coin & reward streak with multiplier bonuses</td>
+              </tr>
+              <tr class="cmd-row" data-search="/work !work economy & leveling work a minigame shift to earn economy coins" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/work')">/work</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!work')">!work</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Work a minigame shift to earn economy coins</td>
+              </tr>
+              <tr class="cmd-row" data-search="/counting !counting economy & leveling configure and manage the server counting game channel" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/counting')">/counting</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!counting')">!counting</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Configure and manage the server counting game channel</td>
+              </tr>
+              <tr class="cmd-row" data-search="/balance !balance economy & leveling check your current coins, bank account, and economy balance" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/balance')">/balance</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!balance')">!balance</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Check your current coins, bank account, and economy balance</td>
+              </tr>
+              <tr class="cmd-row" data-search="/pay !pay economy & leveling transfer coins securely to another server member" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/pay')">/pay</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!pay')">!pay</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Transfer coins securely to another server member</td>
+              </tr>
+              <tr class="cmd-row" data-search="/slots !slots economy & leveling spin the casino slot machine to win big coin payouts" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/slots')">/slots</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!slots')">!slots</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Spin the casino slot machine to win big coin payouts</td>
+              </tr>
+              <tr class="cmd-row" data-search="/spin !spin economy & leveling spin the wheel of fortune for free daily prizes and perks" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/spin')">/spin</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!spin')">!spin</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Spin the Wheel of Fortune for free daily prizes and perks</td>
+              </tr>
+              <tr class="cmd-row" data-search="/chest !chest economy & leveling open your free daily lucky chest for random loot and coins" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/chest')">/chest</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!chest')">!chest</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Open your FREE Daily Lucky Chest for random loot and coins</td>
+              </tr>
+              <tr class="cmd-row" data-search="/jackpot !jackpot economy & leveling view the live global server jackpot pool and lottery prize" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/jackpot')">/jackpot</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!jackpot')">!jackpot</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>View the live Global Server Jackpot Pool and lottery prize</td>
+              </tr>
+              <tr class="cmd-row" data-search="/quests !quests economy & leveling view active daily and season quests and claim coin rewards" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/quests')">/quests</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!quests')">!quests</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>View active daily and season quests and claim coin rewards</td>
+              </tr>
+              <tr class="cmd-row" data-search="/store !store economy & leveling view the official store link and custom perks catalog" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/store')">/store</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!store')">!store</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>View the official store link and custom perks catalog</td>
+              </tr>
+              <tr class="cmd-row" data-search="/vote !vote economy & leveling vote on top.gg to activate 2.0x xp booster, vote streak bonuses & rewards" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/vote')">/vote</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!vote')">!vote</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Vote on Top.gg to activate 2.0x XP booster, vote streak bonuses & rewards</td>
+              </tr>
+              <tr class="cmd-row" data-search="/refer !refer economy & leveling refer a friend to earn bonus coins and crate rewards" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/refer')">/refer</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!refer')">!refer</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Refer a friend to earn bonus coins and crate rewards</td>
+              </tr>
+              <tr class="cmd-row" data-search="/bump !bump economy & leveling check disboard bump status and set a 2-hour reminder" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/bump')">/bump</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!bump')">!bump</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Check Disboard bump status and set a 2-hour reminder</td>
+              </tr>
+              <tr class="cmd-row" data-search="/leaderboard !leaderboard economy & leveling view top community messages & xp activity leaderboards!" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/leaderboard')">/leaderboard</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!leaderboard')">!leaderboard</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>View top community messages & XP activity leaderboards!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/xpleaderboard !xpleaderboard economy & leveling view top 10 chat active users ranked by xp!" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/xpleaderboard')">/xpleaderboard</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!xpleaderboard')">!xpleaderboard</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>View top 10 chat active users ranked by XP!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/clan !clan economy & leveling clan & faction system (create, info, stats, and leaderboard)" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/clan')">/clan</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!clan')">!clan</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Clan & faction system (create, info, stats, and leaderboard)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/bounty !bounty economy & leveling place or claim active bounties on members for coin rewards" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/bounty')">/bounty</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!bounty')">!bounty</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Place or claim active bounties on members for coin rewards</td>
+              </tr>
+              <tr class="cmd-row" data-search="/trade !trade economy & leveling trade items, collectibles, and coins with another player securely" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/trade')">/trade</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!trade')">!trade</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Trade items, collectibles, and coins with another player securely</td>
+              </tr>
+              <tr class="cmd-row" data-search="/pet !pet combat & rpg adopt, view, feed, or train your virtual companion pet" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/pet')">/pet</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!pet')">!pet</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Adopt, view, feed, or train your virtual companion pet</td>
+              </tr>
+              <tr class="cmd-row" data-search="/fish !fish combat & rpg go fishing in community waters for rare catches and coin rewards" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/fish')">/fish</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!fish')">!fish</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Go fishing in community waters for rare catches and coin rewards</td>
+              </tr>
+              <tr class="cmd-row" data-search="/mine !mine combat & rpg go mining in deep caves for rare minerals, gems, and coins" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/mine')">/mine</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!mine')">!mine</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Go mining in deep caves for rare minerals, gems, and coins</td>
+              </tr>
+              <tr class="cmd-row" data-search="/craft !craft combat & rpg craft items, recipes, and tools from gathered materials" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/craft')">/craft</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!craft')">!craft</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Craft items, recipes, and tools from gathered materials</td>
+              </tr>
+              <tr class="cmd-row" data-search="/enchant !enchant combat & rpg enchant your gear with magical abilities for combat bonuses" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/enchant')">/enchant</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!enchant')">!enchant</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Enchant your gear with magical abilities for combat bonuses</td>
+              </tr>
+              <tr class="cmd-row" data-search="/raid !raid combat & rpg launch or join a server-wide cooperative raid boss battle for epic loot" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/raid')">/raid</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!raid')">!raid</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>Launch or join a server-wide cooperative raid boss battle for epic loot</td>
+              </tr>
+              <tr class="cmd-row" data-search="/profile !profile combat & rpg view full member profile, rank card, wealth, and badges" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/profile')">/profile</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!profile')">!profile</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>View full member profile, rank card, wealth, and badges</td>
+              </tr>
+              <tr class="cmd-row" data-search="/inventory !inventory combat & rpg view your inventory of items, keys, and collectibles" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/inventory')">/inventory</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!inventory')">!inventory</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>View your inventory of items, keys, and collectibles</td>
+              </tr>
+              <tr class="cmd-row" data-search="/achievements !achievements combat & rpg view your unlocked achievements, badges, and milestones" data-category="Combat & RPG">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/achievements')">/achievements</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!achievements')">!achievements</code></td>
+                <td><span class="category-badge cat-rpg">Combat & RPG</span></td>
+                <td>View your unlocked achievements, badges, and milestones</td>
+              </tr>
+              <tr class="cmd-row" data-search="/heist !heist economy & leveling attempt a daring coin heist on the bank vault for massive payouts" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/heist')">/heist</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!heist')">!heist</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Attempt a daring coin heist on the Bank vault for massive payouts</td>
+              </tr>
+              <tr class="cmd-row" data-search="/rob !rob economy & leveling attempt to pickpocket coins from another user (risk of getting caught!)" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/rob')">/rob</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!rob')">!rob</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Attempt to pickpocket coins from another user (risk of getting caught!)</td>
+              </tr>
+              <tr class="cmd-row" data-search="/lottery !lottery economy & leveling buy lottery tickets for the weekly mega jackpot pool" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/lottery')">/lottery</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!lottery')">!lottery</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Buy lottery tickets for the weekly mega jackpot pool</td>
+              </tr>
+              <tr class="cmd-row" data-search="/lootbox !lootbox economy & leveling open a mystery lootbox for random items and coin rewards" data-category="Economy & Leveling">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/lootbox')">/lootbox</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!lootbox')">!lootbox</code></td>
+                <td><span class="category-badge cat-econ">Economy & Leveling</span></td>
+                <td>Open a mystery lootbox for random items and coin rewards</td>
+              </tr>
+              <tr class="cmd-row" data-search="/supporters !supporters server & community view the live breakdown of youtube subscribers, twitch followers, and dual supporters!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/supporters')">/supporters</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!supporters')">!supporters</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>View the live breakdown of YouTube Subscribers, Twitch Followers, and Dual Supporters!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/verifytwitch !verifytwitch server & community get your secure code to link your twitch in stream chat & claim roles!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/verifytwitch')">/verifytwitch</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!verifytwitch')">!verifytwitch</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>Get your secure code to link your Twitch in stream chat & claim roles!</td>
+              </tr>
+              <tr class="cmd-row" data-search="/emojis !emojis server & community view all official custom application emojis available across krims code ai!" data-category="Server & Community">
+                <td><code class="cmd-badge" onclick="copyToClipboard('/emojis')">/emojis</code></td>
+                <td><code class="cmd-badge" onclick="copyToClipboard('!emojis')">!emojis</code></td>
+                <td><span class="category-badge cat-server">Server & Community</span></td>
+                <td>View all official custom Application Emojis available across Krims Code AI!</td>
               </tr>
             </tbody>
           </table>
@@ -749,6 +1286,8 @@
   <div id="copyToast">Copied command to clipboard!</div>
 
   <script>
+    let currentCategory = 'all';
+
     function copyToClipboard(text) {
       navigator.clipboard.writeText(text).then(() => {
         const toast = document.getElementById('copyToast');
@@ -758,18 +1297,36 @@
       });
     }
 
+    function setCategoryFilter(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterWiki();
+    }
+
     function filterWiki() {
       const q = document.getElementById('wikiSearch').value.toLowerCase().trim();
-      
       const rows = document.querySelectorAll('.cmd-row');
+      let visibleCount = 0;
+
       rows.forEach(r => {
         const searchData = r.getAttribute('data-search') || '';
-        if (!q || searchData.includes(q)) {
+        const rowCat = r.getAttribute('data-category') || '';
+        const matchesCategory = (currentCategory === 'all' || rowCat === currentCategory);
+        const matchesSearch = (!q || searchData.includes(q));
+
+        if (matchesCategory && matchesSearch) {
           r.style.display = '';
+          visibleCount++;
         } else {
           r.style.display = 'none';
         }
       });
+
+      const countNotice = document.getElementById('cmdCountNotice');
+      if (countNotice) {
+        countNotice.textContent = 'Showing ' + visibleCount + ' of ' + rows.length + ' commands';
+      }
 
       const articles = document.querySelectorAll('.article-card');
       articles.forEach(a => {
