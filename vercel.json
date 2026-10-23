@@ -1,11 +1,10 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/terms", "destination": "/terms.html" },
-    { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/linked-roles", "destination": "/linked-roles.html" },
-    { "source": "/wiki", "destination": "/wiki.html" },
-    { "source": "/custombot", "destination": "/custombot.html" },
-    { "source": "/custombot/:path*", "destination": "/custombot.html" }
+    { "source": "/terms", "destination": "/terms" },
+    { "source": "/privacy", "destination": "/privacy" },
+    { "source": "/linked-roles", "destination": "/linked-roles" },
+    { "source": "/wiki", "destination": "/wiki" },
+    { "source": "/custombot/:appid", "destination": "/custombot" }
   ]
 }
