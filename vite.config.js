@@ -10,7 +10,7 @@ export default defineConfig({
         privacy: resolve(__dirname, 'privacy.html'),
         linkedRoles: resolve(__dirname, 'linked-roles.html'),
         wiki: resolve(__dirname, 'wiki.html'),
-        custombot: resolve(__dirname, 'custombot/index.html'),
+        custombot: resolve(__dirname, 'custombot.html'),
       },
     },
   },
