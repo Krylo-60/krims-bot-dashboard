@@ -63,22 +63,22 @@ const TIER_CONFIG = {
     summary: 'Basic milestone rewards (Up to 2 roles). Switch to Pro for 10 slots + stacking, or Premium for unlimited + XP boosters!'
   },
   pro: {
-    name: 'Pro Tier',
+    name: 'Pro Tier (Coming Soon)',
     badgeClass: 'tier-pro',
     maxMilestones: 10,
     canStack: true,
     canBoostXP: false,
     canDMNotify: false,
-    summary: 'Up to 10 milestone roles with Role Stacking enabled. Switch to Premium for unlimited slots, XP boosters & auto-DM!'
+    summary: '⏳ In active development: Dedicated white-label cloud clusters, custom subdomains, and private compute nodes.'
   },
   premium: {
-    name: 'Premium Tier',
+    name: 'Premium Tier (Out & Free Right Now!)',
     badgeClass: 'tier-premium',
     maxMilestones: Infinity,
     canStack: true,
     canBoostXP: true,
     canDMNotify: true,
-    summary: '👑 Unlimited milestone roles, custom XP multiplier boosts, and automated direct message level-up notifications!'
+    summary: '👑 Dedicated 0ms Groq LPUs, 2.0x XP multiplier, unlimited milestone roles, and all 100 slash commands unlocked — 100% Free!'
   }
 };
 
