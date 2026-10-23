@@ -4,6 +4,8 @@
     { "source": "/terms", "destination": "/terms.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/linked-roles", "destination": "/linked-roles.html" },
-    { "source": "/wiki", "destination": "/wiki.html" }
+    { "source": "/wiki", "destination": "/wiki.html" },
+    { "source": "/custombot", "destination": "/custombot.html" },
+    { "source": "/custombot/:appid", "destination": "/custombot.html" }
   ]
 }
