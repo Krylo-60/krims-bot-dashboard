@@ -3,29 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Krims Command • Custom Bot Dashboard</title>
-  <meta name="description" content="Manage your custom Discord bot deployed with the Krims Code AI Multi-Bot Engine. Configure AI personas, presence, and prefixes.">
+  <title>Krims Code • Custom Bot Control Room</title>
+  <meta name="description" content="Manage and configure your custom Discord bot powered by the Krims Code AI Neural Core. Set system personas, presence, and prefixes.">
   <link rel="icon" type="image/png" href="/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #07090e;
-      --panel: #0c1017;
-      --card-bg: rgba(14, 19, 29, 0.85);
+      --bg: #070a12;
+      --card-bg: rgba(13, 18, 30, 0.75);
       --card-border: rgba(255, 255, 255, 0.08);
-      --card-hover: rgba(0, 242, 255, 0.35);
-      --cyan: #00f2ff;
-      --cyan-light: #67e8f9;
-      --cyan-glow: rgba(0, 242, 255, 0.25);
-      --cyan-subtle: rgba(0, 242, 255, 0.08);
+      --card-border-hover: rgba(56, 189, 248, 0.3);
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --indigo: #6366f1;
+      --indigo-glow: rgba(99, 102, 241, 0.2);
+      --emerald: #10b981;
       --amber: #f59e0b;
-      --green: #10b981;
-      --red: #ef4444;
+      --rose: #f43f5e;
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
+      --input-bg: rgba(8, 12, 20, 0.85);
+      --input-border: rgba(255, 255, 255, 0.1);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,40 +34,44 @@
       min-height: 100vh;
       background: var(--bg);
       color: var(--text);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow-x: hidden;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Ambient Background Cyber Glow */
-    .ambient-glow {
+    /* Ambient Glow Background */
+    .ambient-mesh {
       position: fixed;
-      top: -20%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 900px;
-      height: 500px;
-      background: radial-gradient(ellipse at center, rgba(0, 242, 255, 0.12), transparent 70%);
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 600px;
+      background: 
+        radial-gradient(circle at 50% -10%, rgba(99, 102, 241, 0.18), transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.12), transparent 50%),
+        radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.08), transparent 50%);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* Top Navigation Header */
-    header.portal-header {
-      position: relative;
-      z-index: 10;
-      height: 70px;
+    /* Top Navigation */
+    header.nav-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 68px;
       padding: 0 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(7, 9, 14, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(7, 10, 18, 0.8);
+      backdrop-filter: blur(16px);
     }
 
-    .brand-wrap {
+    .nav-brand {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -74,491 +79,751 @@
       color: var(--text);
     }
 
-    .brand-logo {
-      width: 38px;
-      height: 38px;
+    .nav-logo {
+      width: 36px;
+      height: 36px;
       border-radius: 10px;
-      border: 1px solid var(--cyan-glow);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
-    .brand-title {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 900;
-      font-size: 1.1rem;
-      letter-spacing: 0.05em;
+    .nav-title-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
       color: #fff;
-    }
-
-    .brand-tag {
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      background: var(--cyan-subtle);
-      border: 1px solid var(--cyan-glow);
-      color: var(--cyan);
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .header-links {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
-    .header-link-btn {
+    .badge-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--accent);
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-btn {
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.85rem;
       font-weight: 600;
-      padding: 6px 14px;
+      padding: 8px 14px;
       border-radius: 8px;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .header-link-btn:hover {
-      color: var(--cyan);
-      background: rgba(255, 255, 255, 0.04);
+    .nav-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
     }
 
-    .ticket-nav-btn {
+    .nav-btn-ticket {
       background: rgba(245, 158, 11, 0.1);
       border: 1px solid rgba(245, 158, 11, 0.3);
       color: var(--amber) !important;
     }
 
-    .ticket-nav-btn:hover {
+    .nav-btn-ticket:hover {
       background: rgba(245, 158, 11, 0.2) !important;
       border-color: var(--amber) !important;
+      transform: translateY(-1px);
     }
 
     /* Main Container */
-    main.portal-main {
+    main.portal-container {
       position: relative;
       z-index: 1;
       flex: 1;
-      max-width: 900px;
+      max-width: 820px;
       width: 100%;
-      margin: 2.5rem auto;
-      padding: 0 1.5rem;
+      margin: 2.5rem auto 4rem;
+      padding: 0 1.25rem;
     }
 
-    /* Card Panels */
-    .portal-card {
+    /* Glass Cards */
+    .glass-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 2.5rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(16px);
-      transition: border-color 0.3s;
+      border-radius: 20px;
+      padding: 2.25rem;
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(20px);
+      transition: border-color 0.25s ease;
     }
 
-    .portal-card:hover {
-      border-color: rgba(0, 242, 255, 0.2);
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.14);
     }
 
-    .portal-hero {
+    /* Hero Section */
+    .hero-header {
       text-align: center;
       margin-bottom: 2rem;
     }
 
-    .portal-hero h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.8rem;
-      font-weight: 900;
-      letter-spacing: 0.03em;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #fff, var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.28);
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #a5b4fc;
+      margin-bottom: 12px;
     }
 
-    .portal-hero p {
+    .hero-header h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .hero-header p {
       color: var(--text-muted);
       font-size: 0.95rem;
-      max-width: 580px;
+      max-width: 540px;
       margin: 0 auto;
+      line-height: 1.55;
     }
 
     /* Live Bot Header Badge */
-    .bot-preview-badge {
+    .bot-active-badge {
       display: none;
       align-items: center;
-      gap: 16px;
-      background: rgba(0, 242, 255, 0.05);
-      border: 1px solid var(--cyan-glow);
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(56, 189, 248, 0.25);
       border-radius: 14px;
-      padding: 14px 20px;
-      margin-bottom: 2rem;
+      padding: 14px 18px;
+      margin-bottom: 1.75rem;
     }
 
-    .bot-preview-avatar {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      border: 2px solid var(--cyan);
+    .bot-badge-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .bot-badge-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 1.5px solid var(--accent);
       object-fit: cover;
+      background: #0f172a;
     }
 
-    .bot-preview-info h3 {
-      font-size: 1.15rem;
+    .bot-badge-name {
+      font-size: 1.05rem;
       font-weight: 700;
       color: #fff;
+      margin-bottom: 2px;
     }
 
-    .bot-preview-info span {
-      font-size: 0.8rem;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--cyan);
-    }
-
-    /* Form Fields */
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .form-label-hint {
-      color: var(--text-dim);
-      font-weight: 400;
-    }
-
-    .input-wrap {
-      position: relative;
-    }
-
-    .input-field {
-      width: 100%;
-      background: rgba(7, 9, 14, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
-      padding: 14px 18px;
-      color: #fff;
-      font-size: 0.95rem;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      transition: all 0.2s;
-    }
-
-    .input-field:focus {
-      outline: none;
-      border-color: var(--cyan);
-      box-shadow: 0 0 15px var(--cyan-glow);
-    }
-
-    .input-field.mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-    }
-
-    /* Action Buttons */
-    .submit-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #00f2ff, #0099ff);
-      border: none;
-      border-radius: 12px;
-      color: #050a14;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 800;
-      font-size: 0.95rem;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      box-shadow: 0 8px 24px var(--cyan-glow);
-      transition: all 0.2s;
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(0, 242, 255, 0.45);
-    }
-
-    .submit-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Policy / Reset Warning Box */
-    .policy-box {
-      margin-top: 2rem;
-      padding: 1.25rem 1.5rem;
-      background: rgba(245, 158, 11, 0.05);
-      border: 1px solid rgba(245, 158, 11, 0.25);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .policy-title {
+    .bot-badge-meta {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: var(--amber);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .policy-desc {
-      font-size: 0.82rem;
+    .status-dot-pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Form Design */
+    .field-group {
+      margin-bottom: 1.4rem;
+    }
+
+    .field-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 7px;
+    }
+
+    .field-hint {
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .field-input-wrap {
+      position: relative;
+    }
+
+    .field-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      padding: 13px 16px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .field-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      background: rgba(10, 15, 26, 0.95);
+    }
+
+    .field-input.mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+    }
+
+    .field-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    /* Submit Button */
+    .btn-submit-action {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.45);
+      background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+    }
+
+    .btn-submit-action:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* High-Trust Security Notice */
+    .security-notice-card {
+      margin-top: 1.75rem;
+      padding: 1.25rem 1.4rem;
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .security-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .security-desc {
+      font-size: 0.8rem;
       color: var(--text-muted);
       line-height: 1.5;
     }
 
-    .ticket-btn {
-      align-self: flex-start;
-      display: inline-flex;
+    .security-action-row {
+      margin-top: 4px;
+      display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: var(--amber);
-      color: #050a14;
-      font-weight: 700;
-      font-size: 0.82rem;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: all 0.2s;
+      gap: 10px;
     }
 
-    .ticket-btn:hover {
-      background: #fbbf24;
+    .btn-support-ticket {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      color: #fbbf24;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-support-ticket:hover {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: #f59e0b;
       transform: translateY(-1px);
     }
 
-    /* Control Room View (When Signed In) */
+    /* Control Room View */
     #control-room {
       display: none;
     }
 
-    .stats-grid {
+    .cr-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .cr-identity {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cr-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      border: 2px solid var(--accent);
+      object-fit: cover;
+      background: #0f172a;
+    }
+
+    .cr-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .cr-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cr-id-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .cr-status-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .cr-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-invite-discord {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      background: #5865f2;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+    }
+
+    .btn-invite-discord:hover {
+      background: #4752c4;
+      transform: translateY(-1px);
+    }
+
+    .btn-signout {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-signout:hover {
+      color: var(--rose);
+      border-color: rgba(244, 63, 94, 0.35);
+      background: rgba(244, 63, 94, 0.05);
+    }
+
+    /* Live Metric Tiles */
+    .metric-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      gap: 14px;
       margin-bottom: 2rem;
     }
 
-    .stat-pill {
-      background: rgba(7, 9, 14, 0.6);
+    .metric-tile {
+      background: rgba(15, 23, 42, 0.6);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 1rem;
-      text-align: center;
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .stat-val {
+    .metric-val {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--cyan);
     }
 
-    .stat-lbl {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 4px;
+    .metric-label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
-    .logout-btn-text {
-      background: transparent;
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.8rem;
+    /* Preset Persona Pills */
+    .preset-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .preset-pill {
+      font-size: 0.74rem;
       font-weight: 600;
-      transition: all 0.2s;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: var(--text-muted);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
 
-    .logout-btn-text:hover {
-      color: var(--red);
-      border-color: rgba(239, 68, 68, 0.4);
+    .preset-pill:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.08);
     }
 
-    .alert-msg {
+    /* Alert Boxes */
+    .toast-alert {
       padding: 12px 16px;
       border-radius: 10px;
-      font-size: 0.88rem;
-      margin-bottom: 1.5rem;
+      font-size: 0.86rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
       display: none;
+      align-items: center;
+      gap: 8px;
     }
-    .alert-error {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      color: #fca5a5;
+
+    .toast-error {
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #fda4af;
     }
-    .alert-success {
+
+    .toast-success {
       background: rgba(16, 185, 129, 0.1);
       border: 1px solid rgba(16, 185, 129, 0.3);
       color: #6ee7b7;
     }
 
-    @media (max-width: 680px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .portal-card { padding: 1.5rem; }
-      header.portal-header { padding: 0 1rem; }
+    @media (max-width: 640px) {
+      .metric-grid { grid-template-columns: 1fr; }
+      .glass-card { padding: 1.5rem; }
+      header.nav-header { padding: 0 1rem; }
+      .cr-header { flex-direction: column; align-items: flex-start; }
+      .cr-header-actions { width: 100%; justify-content: space-between; }
     }
   </style>
 </head>
 <body>
-  <div class="ambient-glow"></div>
+  <div class="ambient-mesh"></div>
 
-  <!-- Top Header -->
-  <header class="portal-header">
-    <a href="/" class="brand-wrap">
-      <img src="/logo.png" alt="Logo" class="brand-logo">
-      <span class="brand-title">KRIMS COMMAND</span>
-      <span class="brand-tag">CUSTOM BOT</span>
+  <!-- Header -->
+  <header class="nav-header">
+    <a href="/" class="nav-brand">
+      <img src="/logo.png" alt="Krims Code" class="nav-logo">
+      <div class="nav-title-wrap">
+        <div class="nav-title">
+          <span>Krims Code</span>
+          <span class="badge-tag">Custom Core</span>
+        </div>
+      </div>
     </a>
-    <div class="header-links">
-      <a href="/" class="header-link-btn">Overview</a>
-      <a href="/wiki" class="header-link-btn">Wiki</a>
-      <a href="https://discord.gg/sYaVJtXgQb" target="_blank" class="header-link-btn ticket-nav-btn">🎫 Support Server</a>
+    <div class="nav-links">
+      <a href="/" class="nav-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Overview
+      </a>
+      <a href="/wiki" class="nav-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+        Wiki
+      </a>
+      <a href="https://discord.gg/sYaVJtXgQb" target="_blank" class="nav-btn nav-btn-ticket">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Support Server
+      </a>
     </div>
   </header>
 
   <!-- Main Container -->
-  <main class="portal-main">
+  <main class="portal-container">
 
-    <!-- 1. AUTH / SIGN IN CARD -->
-    <div id="auth-panel" class="portal-card">
-      <div class="portal-hero">
-        <h1 id="portal-heading">CUSTOM BOT PORTAL</h1>
-        <p id="portal-subheading">Access your custom-branded Discord bot dashboard. Configure AI thinking parameters, activity presence, and server settings.</p>
+    <!-- 1. AUTH PANEL -->
+    <div id="auth-panel" class="glass-card">
+      <div class="hero-header">
+        <div class="hero-chip" id="portal-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span id="portal-chip-text">Dedicated Bot Node</span>
+        </div>
+        <h1 id="portal-heading">Custom Bot Control Room</h1>
+        <p id="portal-subheading">Unlock your server's customized bot brain. Fine-tune AI system prompts, configure command triggers, and manage activity presence in real-time.</p>
       </div>
 
-      <!-- Live Bot Info Card (when appid is loaded) -->
-      <div id="bot-badge" class="bot-preview-badge">
-        <img id="bot-avatar-img" class="bot-preview-avatar" src="/logo.png" alt="Bot Avatar">
-        <div class="bot-preview-info">
-          <h3 id="bot-name-text">Loading Bot Profile...</h3>
-          <span id="bot-id-text">APP ID: --</span>
-        </div>
-      </div>
-
-      <div id="auth-alert" class="alert-msg"></div>
-
-      <form id="bot-auth-form">
-        <!-- Application ID Field (Only editable if not pre-locked from URL) -->
-        <div class="form-group" id="appid-group">
-          <label class="form-label" for="input-appid">
-            <span>Discord Application ID</span>
-            <span class="form-label-hint">Found in Discord Developer Portal</span>
-          </label>
-          <div class="input-wrap">
-            <input type="text" id="input-appid" class="input-field mono" placeholder="e.g. 1562208078517243977" required>
-          </div>
-        </div>
-
-        <!-- Password Field -->
-        <div class="form-group">
-          <label class="form-label" for="input-password">
-            <span id="password-label">Master Password</span>
-            <span class="form-label-hint" id="password-hint">Enter your dashboard password</span>
-          </label>
-          <div class="input-wrap">
-            <input type="password" id="input-password" class="input-field" placeholder="••••••••••••" required>
-          </div>
-        </div>
-
-        <!-- Confirm Password Field (Only shown during first-time setup) -->
-        <div class="form-group" id="confirm-password-group" style="display: none;">
-          <label class="form-label" for="input-confirm-password">
-            <span>Confirm Master Password</span>
-            <span class="form-label-hint">Re-enter your chosen password</span>
-          </label>
-          <div class="input-wrap">
-            <input type="password" id="input-confirm-password" class="input-field" placeholder="••••••••••••">
-          </div>
-        </div>
-
-        <button type="submit" id="submit-auth-btn" class="submit-btn">UNLOCK CONTROL ROOM</button>
-      </form>
-
-      <!-- Password Policy & Ticket Notice -->
-      <div class="policy-box">
-        <div class="policy-title">
-          <span>🔒</span>
-          <span>Forgot or Need to Change Password?</span>
-        </div>
-        <div class="policy-desc">
-          To protect your bot token and configuration from unauthorized hijacking or malicious takeover, passwords <strong>cannot be reset automatically</strong> by email or web. If you need a password change or forgot your credentials, please open a verified <strong>Support Ticket</strong> in the official Krims Code Support Server.
-        </div>
-        <a href="https://discord.gg/sYaVJtXgQb" target="_blank" class="ticket-btn">
-          <span>🎫</span>
-          <span>Open Ticket in Main Support Server</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- 2. CONTROL ROOM CARD (SHOWN ON SUCCESSFUL AUTH) -->
-    <div id="control-room" class="portal-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <img id="cr-bot-avatar" src="/logo.png" style="width: 58px; height: 58px; border-radius: 50%; border: 2px solid var(--cyan);" alt="Avatar">
+      <!-- Live Detected Bot Banner -->
+      <div id="bot-badge" class="bot-active-badge">
+        <div class="bot-badge-left">
+          <img id="bot-avatar-img" class="bot-badge-avatar" src="/logo.png" alt="Bot Avatar">
           <div>
-            <h2 id="cr-bot-name" style="font-family: 'Orbitron', sans-serif; font-size: 1.3rem;">--</h2>
-            <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
-              <span id="cr-bot-id" style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--cyan);">APP ID: --</span>
-              <span style="font-size: 0.72rem; padding: 2px 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid var(--green); color: var(--green); border-radius: 4px; font-weight: 700;">LIVE ON RENDER</span>
+            <div id="bot-name-text" class="bot-badge-name">Krylo Custom Bot</div>
+            <div class="bot-badge-meta">
+              <span id="bot-id-text">APP ID: --</span>
+              <span>•</span>
+              <span class="status-dot-pulse"></span>
+              <span style="color: #34d399; font-weight: 600;">Online in Neural Pool</span>
             </div>
           </div>
         </div>
-        <button type="button" id="btn-logout" class="logout-btn-text">SIGN OUT</button>
       </div>
 
-      <div class="stats-grid">
-        <div class="stat-pill">
-          <div class="stat-val" id="cr-stat-status">ACTIVE</div>
-          <div class="stat-lbl">Runtime Status</div>
+      <div id="auth-alert" class="toast-alert"></div>
+
+      <form id="bot-auth-form">
+        <!-- Application ID Field -->
+        <div class="field-group" id="appid-group">
+          <label class="field-label" for="input-appid">
+            <span>Discord Application ID</span>
+            <span class="field-hint">From Discord Developer Portal</span>
+          </label>
+          <div class="field-input-wrap">
+            <input type="text" id="input-appid" class="field-input mono" placeholder="e.g. 1563000891299336284" required>
+          </div>
         </div>
-        <div class="stat-pill">
-          <div class="stat-val" id="cr-stat-ping">~18ms</div>
-          <div class="stat-lbl">Cloud Latency</div>
+
+        <!-- Master Password Field -->
+        <div class="field-group">
+          <label class="field-label" for="input-password">
+            <span id="password-label">Master Password</span>
+            <span class="field-hint" id="password-hint">Enter your dashboard access password</span>
+          </label>
+          <div class="field-input-wrap">
+            <input type="password" id="input-password" class="field-input" placeholder="••••••••••••" required>
+          </div>
         </div>
-        <div class="stat-pill">
-          <div class="stat-val" id="cr-stat-uptime">100.0%</div>
-          <div class="stat-lbl">Cluster SLA</div>
+
+        <!-- Confirm Password Field (Shown during First-Time Setup) -->
+        <div class="field-group" id="confirm-password-group" style="display: none;">
+          <label class="field-label" for="input-confirm-password">
+            <span>Confirm Master Password</span>
+            <span class="field-hint">Re-enter your password to confirm</span>
+          </label>
+          <div class="field-input-wrap">
+            <input type="password" id="input-confirm-password" class="field-input" placeholder="••••••••••••">
+          </div>
+        </div>
+
+        <button type="submit" id="submit-auth-btn" class="btn-submit-action">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span id="submit-btn-text">Unlock Control Room</span>
+        </button>
+      </form>
+
+      <!-- Security Assurance Card -->
+      <div class="security-notice-card">
+        <div class="security-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>Security &amp; Password Recovery Policy</span>
+        </div>
+        <div class="security-desc">
+          To ensure strict protection against hijacking, bot credentials are encrypted via salted SHA-256 hashes in Neon Cloud and cannot be reset through automated web forms. If you ever forget your password, ownership verification is handled via ticket in our support server.
+        </div>
+        <div class="security-action-row">
+          <a href="https://discord.gg/sYaVJtXgQb" target="_blank" class="btn-support-ticket">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+            Request Reset via Official Support Ticket
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. CONTROL ROOM PANEL (WHEN SIGNED IN) -->
+    <div id="control-room" class="glass-card">
+      <div class="cr-header">
+        <div class="cr-identity">
+          <img id="cr-bot-avatar" src="/logo.png" class="cr-avatar" alt="Avatar">
+          <div>
+            <h2 id="cr-bot-name" class="cr-name">Custom Bot</h2>
+            <div class="cr-badges">
+              <span id="cr-bot-id" class="cr-id-badge">APP ID: --</span>
+              <span class="cr-status-badge">
+                <span class="status-dot-pulse"></span>
+                Active on Render Cloud
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="cr-header-actions">
+          <a id="btn-invite-bot" href="#" target="_blank" class="btn-invite-discord">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+            Invite Bot to Server
+          </a>
+          <button type="button" id="btn-logout" class="btn-signout">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Sign Out
+          </button>
         </div>
       </div>
 
+      <!-- Live Metric Tiles -->
+      <div class="metric-grid">
+        <div class="metric-tile">
+          <div class="metric-val" id="cr-stat-status" style="color: #34d399;">OPERATIONAL</div>
+          <div class="metric-label">Runtime Engine</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-val" id="cr-stat-ping" style="color: #38bdf8;">~18ms</div>
+          <div class="metric-label">Cloud Latency</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-val" id="cr-stat-uptime" style="color: #a78bfa;">Neon Cloud</div>
+          <div class="metric-label">Sync Pipeline</div>
+        </div>
+      </div>
+
+      <div id="cfg-alert" class="toast-alert"></div>
+
+      <!-- Configuration Form -->
       <form id="bot-config-form">
-        <div class="form-group">
-          <label class="form-label" for="cfg-prefix">
+        <div class="field-group">
+          <label class="field-label" for="cfg-prefix">
             <span>Custom Command Prefix</span>
-            <span class="form-label-hint">Default is !</span>
+            <span class="field-hint">Trigger prefix for legacy chat commands (default: !)</span>
           </label>
-          <input type="text" id="cfg-prefix" class="input-field mono" style="width: 120px;" maxlength="5" value="!">
+          <input type="text" id="cfg-prefix" class="field-input mono" style="max-width: 130px;" maxlength="5" value="!">
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="cfg-activity">
-            <span>Activity Presence Text</span>
-            <span class="form-label-hint">What your bot is "Playing"</span>
+        <div class="field-group">
+          <label class="field-label" for="cfg-activity">
+            <span>Bot Activity Presence Text</span>
+            <span class="field-hint">Displayed under bot name in Discord member list</span>
           </label>
-          <input type="text" id="cfg-activity" class="input-field" placeholder="e.g. Guarding Server | /help">
+          <input type="text" id="cfg-activity" class="field-input" placeholder="e.g. Guarding Krylo SMP | /help">
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="cfg-persona">
-            <span>Custom AI System Persona / Brain Prompt</span>
-            <span class="form-label-hint">Shapes how your bot speaks and answers</span>
+        <div class="field-group">
+          <label class="field-label" for="cfg-persona">
+            <span>AI Brain Personality / System Prompt</span>
+            <span class="field-hint">Defines how your bot speaks, thinks, and responds to member queries</span>
           </label>
-          <textarea id="cfg-persona" class="input-field" style="height: 110px; resize: vertical;" placeholder="e.g. You are a tactical warrior bot for our Minecraft clan. Speak with confidence and strategy."></textarea>
+          <div class="preset-pills-row">
+            <span style="font-size: 0.73rem; color: var(--text-dim); margin-right: 2px;">Presets:</span>
+            <button type="button" class="preset-pill" onclick="applyPreset('assistant')">⚡ Friendly Assistant</button>
+            <button type="button" class="preset-pill" onclick="applyPreset('warrior')">⚔️ Clan Tactician</button>
+            <button type="button" class="preset-pill" onclick="applyPreset('moderator')">🛡️ Server Enforcer</button>
+            <button type="button" class="preset-pill" onclick="applyPreset('gamer')">🎮 Gaming Buddy</button>
+          </div>
+          <textarea id="cfg-persona" class="field-input" style="height: 120px; resize: vertical; line-height: 1.5;" placeholder="e.g. You are a helpful, witty, and loyal assistant for our Discord server. When users ask questions, answer accurately and politely."></textarea>
         </div>
 
-        <button type="submit" id="btn-save-cfg" class="submit-btn" style="margin-top: 10px;">SAVE CONFIGURATION</button>
+        <button type="submit" id="btn-save-cfg" class="btn-submit-action">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span>Save Bot Configuration</span>
+        </button>
       </form>
     </div>
 
@@ -570,79 +835,77 @@
     let currentPassword = '';
     let isSetupMode = false;
 
-    // 1. Detect App ID from URL path or query string
-    // Supports: /custombot/:appid or /custombot?appid=:appid
+    const PRESETS = {
+      assistant: "You are the official server assistant for our Discord community. Be warm, welcoming, polite, and helpful at all times.",
+      warrior: "You are an elite guild tactician and warrior for our gaming clan. Speak with confidence, tactical prowess, and honor.",
+      moderator: "You are the vigilance core of this Discord server. Maintain order, promote respectful discussions, and uphold server rules.",
+      gamer: "You are a fun-loving gaming companion and hype machine. Keep the energy high, share gaming tips, and vibe with members."
+    };
+
+    function applyPreset(key) {
+      if (PRESETS[key]) {
+        document.getElementById('cfg-persona').value = PRESETS[key];
+      }
+    }
+
+    function showAlert(msg, isError = true, targetId = 'auth-alert') {
+      const el = document.getElementById(targetId);
+      el.textContent = msg;
+      el.className = 'toast-alert ' + (isError ? 'toast-error' : 'toast-success');
+      el.style.display = 'flex';
+      setTimeout(() => { el.style.display = 'none'; }, 6000);
+    }
+
     function parseAppIdFromUrl() {
-      const pathSegments = window.location.pathname.split('/').filter(Boolean);
-      // If path is like /custombot/123456789
-      if (pathSegments.length >= 2 && pathSegments[0].toLowerCase() === 'custombot') {
-        return pathSegments[1].trim();
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      if (pathParts.length >= 2 && pathParts[0] === 'custombot') {
+        return pathParts[1].trim();
       }
       const params = new URLSearchParams(window.location.search);
-      return params.get('appid') || params.get('id') || '';
+      return (params.get('appid') || params.get('id') || '').trim();
     }
 
     async function loadBotInfo(appId) {
       if (!appId) return;
       currentAppId = appId;
-      document.getElementById('input-appid').value = appId;
+      const inputAppId = document.getElementById('input-appid');
+      inputAppId.value = appId;
+      inputAppId.readOnly = true;
 
       try {
         const res = await fetch(`${API_BASE}?action=info&appid=${encodeURIComponent(appId)}`);
         const data = await res.json();
 
         if (res.ok && data.ok) {
-          // Display Bot Badge
           const badge = document.getElementById('bot-badge');
-          badge.style.display = 'flex';
           document.getElementById('bot-name-text').textContent = data.botName || 'Custom Bot';
           document.getElementById('bot-id-text').textContent = `APP ID: ${data.botId}`;
           if (data.botAvatar) {
             document.getElementById('bot-avatar-img').src = data.botAvatar;
           }
+          badge.style.display = 'flex';
 
-          // Check if password has been established
           if (!data.hasPassword) {
             enableFirstTimeSetupMode();
-          } else {
-            enableStandardLoginMode();
           }
         }
       } catch (err) {
-        console.warn('Failed to load bot info:', err);
+        console.warn('Could not auto-fetch bot info:', err.message);
       }
     }
 
     function enableFirstTimeSetupMode() {
       isSetupMode = true;
-      document.getElementById('portal-heading').textContent = 'INITIAL BOT ACTIVATION';
-      document.getElementById('portal-subheading').textContent = 'Welcome! Since this is your first time accessing your bot, please set your Master Password below.';
-      document.getElementById('password-label').textContent = 'Set Your Master Password';
+      document.getElementById('portal-heading').textContent = 'First-Time Security Setup';
+      document.getElementById('portal-chip-text').textContent = 'Initial Node Activation';
+      document.getElementById('portal-subheading').textContent = 'Establish a master password to secure your custom bot. Once saved, this master password will unlock your control room permanently.';
+      document.getElementById('password-label').textContent = 'Set Master Password';
       document.getElementById('password-hint').textContent = 'Minimum 6 characters';
+      document.getElementById('submit-btn-text').textContent = 'Set Password & Enter Control Room';
       document.getElementById('confirm-password-group').style.display = 'block';
-      document.getElementById('input-confirm-password').required = true;
-      document.getElementById('submit-auth-btn').textContent = 'SET PASSWORD & ENTER DASHBOARD';
     }
 
-    function enableStandardLoginMode() {
-      isSetupMode = false;
-      document.getElementById('portal-heading').textContent = 'CUSTOM BOT CONTROL ROOM';
-      document.getElementById('portal-subheading').textContent = 'Enter your Master Password to manage your custom Discord bot.';
-      document.getElementById('password-label').textContent = 'Master Password';
-      document.getElementById('password-hint').textContent = 'Enter your established password';
-      document.getElementById('confirm-password-group').style.display = 'none';
-      document.getElementById('input-confirm-password').required = false;
-      document.getElementById('submit-auth-btn').textContent = 'UNLOCK CONTROL ROOM';
-    }
-
-    function showAlert(msg, isError = true) {
-      const el = document.getElementById('auth-alert');
-      el.className = `alert-msg ${isError ? 'alert-error' : 'alert-success'}`;
-      el.textContent = msg;
-      el.style.display = 'block';
-    }
-
-    // 2. Auth Form Handler
+    // Auth Submission
     document.getElementById('bot-auth-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const appId = document.getElementById('input-appid').value.trim();
@@ -659,7 +922,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'AUTHENTICATING...';
+      submitBtn.querySelector('span').textContent = 'Authenticating...';
 
       try {
         const res = await fetch(API_BASE, {
@@ -676,26 +939,26 @@
         submitBtn.disabled = false;
 
         if (!res.ok) {
-          showAlert(data.error || 'Authentication failed. Please check your credentials.');
-          submitBtn.textContent = isSetupMode ? 'SET PASSWORD & ENTER DASHBOARD' : 'UNLOCK CONTROL ROOM';
+          showAlert(data.error || 'Authentication failed. Please verify your credentials.');
+          submitBtn.querySelector('span').textContent = isSetupMode ? 'Set Password & Enter Control Room' : 'Unlock Control Room';
           return;
         }
 
         if (data.needsSetup) {
           enableFirstTimeSetupMode();
-          showAlert('Please establish your master password for this bot.', false);
+          showAlert('This bot requires first-time password establishment.', false);
           return;
         }
 
-        // Authentication Success! Unlock Control Room
+        // Authenticated!
         currentAppId = appId;
         currentPassword = password;
         sessionStorage.setItem('krims_custom_bot_session', JSON.stringify({ appId, password }));
-        showControlRoom(data.bot);
+        showControlRoom(data.bot || { botId: appId, botName: 'Custom Bot' });
 
       } catch (err) {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'UNLOCK CONTROL ROOM';
+        submitBtn.querySelector('span').textContent = 'Unlock Control Room';
         showAlert('Network error communicating with Krims backend: ' + err.message);
       }
     });
@@ -709,17 +972,21 @@
       document.getElementById('cr-bot-id').textContent = `APP ID: ${bot.botId}`;
       if (bot.botAvatar) document.getElementById('cr-bot-avatar').src = bot.botAvatar;
 
+      const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(bot.botId)}&permissions=8&scope=bot%20applications.commands`;
+      document.getElementById('btn-invite-bot').href = inviteUrl;
+
       document.getElementById('cfg-prefix').value = bot.customPrefix || '!';
       document.getElementById('cfg-activity').value = bot.activityName || '';
       document.getElementById('cfg-persona').value = bot.aiPersona || '';
     }
 
-    // Config Save Handler
+    // Config Save
     document.getElementById('bot-config-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const saveBtn = document.getElementById('btn-save-cfg');
       saveBtn.disabled = true;
-      saveBtn.textContent = 'SAVING CONFIG...';
+      const originalText = saveBtn.querySelector('span').textContent;
+      saveBtn.querySelector('span').textContent = 'Saving Changes...';
 
       try {
         const res = await fetch(API_BASE, {
@@ -737,11 +1004,19 @@
 
         const data = await res.json();
         saveBtn.disabled = false;
-        saveBtn.textContent = 'SAVED SUCCESSFULLY!';
-        setTimeout(() => { saveBtn.textContent = 'SAVE CONFIGURATION'; }, 2500);
+
+        if (res.ok && data.ok) {
+          saveBtn.querySelector('span').textContent = 'Saved Successfully!';
+          showAlert('Configuration synchronized to Neon Cloud memory pool!', false, 'cfg-alert');
+          setTimeout(() => { saveBtn.querySelector('span').textContent = originalText; }, 2500);
+        } else {
+          saveBtn.querySelector('span').textContent = originalText;
+          showAlert(data.error || 'Failed to save configuration.', true, 'cfg-alert');
+        }
       } catch (err) {
         saveBtn.disabled = false;
-        saveBtn.textContent = 'ERROR SAVING';
+        saveBtn.querySelector('span').textContent = originalText;
+        showAlert('Network error saving configuration: ' + err.message, true, 'cfg-alert');
       }
     });
 
@@ -751,14 +1026,13 @@
       window.location.reload();
     });
 
-    // On Initial Load
+    // Initial Load
     window.addEventListener('DOMContentLoaded', () => {
       const detectedAppId = parseAppIdFromUrl();
       if (detectedAppId) {
         loadBotInfo(detectedAppId);
       }
 
-      // Check for saved session
       const saved = sessionStorage.getItem('krims_custom_bot_session');
       if (saved) {
         try {

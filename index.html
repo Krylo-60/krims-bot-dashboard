@@ -712,10 +712,13 @@
               <div class="tab-header">
                 <div>
                   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-                    <h2>🤖 Custom Bot Personalizer</h2>
+                    <h2 style="display: flex; align-items: center; gap: 8px;">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+                      Custom Bot Personalizer
+                    </h2>
                     <span class="personalizer-header-badge">FOUNDER 100 FREE</span>
                   </div>
-                  <p class="tab-sub">Deploy a Discord bot under your own custom name, avatar, and server identity — completely powered by the <strong>Krims Code Proprietary Neural Core</strong>!</p>
+                  <p class="tab-sub">Deploy a Discord bot under your own custom name, avatar, and server identity — completely powered by the <strong>Krims Code Proprietary Neural Core</strong>.</p>
                 </div>
               </div>
 
@@ -723,17 +726,20 @@
               <div class="founder-banner">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
                   <div>
-                    <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #10B981; margin-bottom: 4px;">🚀 LIMITED FOUNDER LAUNCH OFFER</div>
-                    <div style="font-size: 1.15rem; font-weight: 800; color: #F8FAFC;">First 100 Server Owners Get 100% FREE Custom Bots Forever!</div>
+                    <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #34d399; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      LIMITED FOUNDER LAUNCH OFFER
+                    </div>
+                    <div style="font-size: 1.15rem; font-weight: 800; color: #F8FAFC;">First 100 Server Owners Get 100% FREE Custom Bots Forever</div>
                   </div>
                   <div style="text-align: right;">
-                    <span style="font-size: 1.5rem; font-weight: 900; color: #00E5FF;" id="founder-claimed-slots">7</span>
+                    <span style="font-size: 1.5rem; font-weight: 900; color: #38bdf8;" id="founder-claimed-slots">8</span>
                     <span style="font-size: 0.95rem; color: #94A3B8; font-weight: 700;"> / 100 Claimed</span>
-                    <div style="font-size: 0.75rem; color: #34D399; font-weight: 600; margin-top: 2px;">93 Free Slots Remaining</div>
+                    <div style="font-size: 0.75rem; color: #34D399; font-weight: 600; margin-top: 2px;">92 Free Slots Remaining</div>
                   </div>
                 </div>
                 <div class="founder-progress-track">
-                  <div class="founder-progress-fill" id="founder-progress-bar" style="width: 7%;"></div>
+                  <div class="founder-progress-fill" id="founder-progress-bar" style="width: 8%;"></div>
                 </div>
               </div>
 
@@ -743,10 +749,12 @@
                 <!-- CARD 1: DEPLOY YOUR BOT (BYOT) -->
                 <div class="personalizer-card">
                   <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
-                    <div class="personalizer-card-icon" style="background: rgba(88, 101, 242, 0.2); color: #818CF8;">⚡</div>
+                    <div class="personalizer-card-icon" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    </div>
                     <div>
                       <h3 style="margin: 0; font-size: 1.05rem; color: #F8FAFC; font-weight: 800;">Option 1: Deploy Custom Bot (BYOT)</h3>
-                      <p style="margin: 0; font-size: 0.75rem; color: #94A3B8;">Paste your Discord Bot Token to connect our Krims AI brain.</p>
+                      <p style="margin: 0; font-size: 0.75rem; color: #94A3B8;">Connect your Discord Bot Token to the Krims AI Neural Engine.</p>
                     </div>
                   </div>
 
@@ -755,12 +763,15 @@
                       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                         <label class="form-label" style="margin: 0; font-size: 0.8rem;">Discord Bot Token <span style="color: #EF4444;">*</span></label>
                         <span style="font-size: 0.68rem; color: #34D399; font-weight: 600; display: flex; align-items: center; gap: 4px;">
-                          <span>🔒</span> Encrypted with AES-256-GCM
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                          Encrypted with AES-256-GCM
                         </span>
                       </div>
                       <div class="token-input-wrapper">
                         <input type="password" id="custom-bot-token" class="personalizer-input" placeholder="MTIzNDU2Nzg5MDEyMzQ1Njc4OQ.SAMPLE_TOKEN..." required />
-                        <button type="button" id="toggle-token-visibility" class="token-toggle-btn" title="Toggle token visibility">👁️</button>
+                        <button type="button" id="toggle-token-visibility" class="token-toggle-btn" title="Toggle token visibility">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
                       </div>
                       <span style="display: block; font-size: 0.7rem; color: #64748B; margin-top: 5px;">From Discord Developer Portal &gt; Applications &gt; Bot &gt; Reset Token.</span>
                     </div>
@@ -781,22 +792,33 @@
                     </div>
 
                     <button type="button" id="btn-deploy-custom-bot" class="btn-deploy-bot">
-                      <span>🚀 Deploy Bot with Krims AI Brain</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
+                      <span>Deploy Bot to Krims Cloud</span>
                     </button>
                   </form>
 
                   <!-- DEPLOY RESULT BOX -->
-                  <div id="custom-bot-result" style="display: none; margin-top: 18px; padding: 18px; border-radius: 10px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.4);">
+                  <div id="custom-bot-result" style="display: none; margin-top: 18px; padding: 18px; border-radius: 12px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);">
                     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-                      <img id="deployed-bot-avatar" src="/logo.png" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #10B981;" />
+                      <img id="deployed-bot-avatar" src="/logo.png" style="width: 44px; height: 44px; border-radius: 10px; border: 1.5px solid #10B981; object-fit: cover;" />
                       <div>
                         <div id="deployed-bot-name" style="font-weight: 800; color: #F8FAFC; font-size: 0.95rem;">Bot Connected!</div>
-                        <div style="font-size: 0.75rem; color: #34D399; font-weight: 700;">● Online &amp; Loaded in Memory Pool</div>
+                        <div style="font-size: 0.75rem; color: #34D399; font-weight: 700; display: flex; align-items: center; gap: 5px;">
+                          <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10B981;"></span>
+                          Online &amp; Loaded in Memory Pool
+                        </div>
                       </div>
                     </div>
-                    <a id="deployed-bot-invite-btn" href="#" target="_blank" class="btn-primary" style="display: block; text-align: center; text-decoration: none; font-weight: 800; padding: 11px; background: #5865F2; border-radius: 8px;">
-                      👑 Click Here to Invite Bot to Your Server
-                    </a>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                      <a id="deployed-bot-invite-btn" href="#" target="_blank" class="btn-primary" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; text-decoration: none; font-weight: 800; padding: 11px; background: #5865F2; border-radius: 8px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                        Invite Bot to Your Discord Server
+                      </a>
+                      <a id="deployed-bot-portal-btn" href="/custombot" class="btn-secondary" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; text-decoration: none; font-weight: 700; padding: 9px; font-size: 0.85rem; border-color: rgba(56, 189, 248, 0.35); color: #38bdf8; border-radius: 8px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        Open Bot Control Room
+                      </a>
+                    </div>
                   </div>
                 </div>
 
@@ -804,25 +826,31 @@
                 <div style="display: flex; flex-direction: column; gap: 20px;">
                   
                   <!-- CARD 2: MADE BY US (1-CLICK) -->
-                  <div class="personalizer-card" style="border-color: rgba(0, 229, 255, 0.35); background: linear-gradient(135deg, rgba(0, 229, 255, 0.04), rgba(88, 101, 242, 0.04));">
+                  <div class="personalizer-card" style="border-color: rgba(56, 189, 248, 0.25); background: linear-gradient(135deg, rgba(56, 189, 248, 0.05), rgba(99, 102, 241, 0.05));">
                     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-                      <div class="personalizer-card-icon" style="background: rgba(0, 229, 255, 0.15); color: #00E5FF;">👑</div>
+                      <div class="personalizer-card-icon" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                      </div>
                       <div>
                         <h3 style="margin: 0; font-size: 1.05rem; color: #F8FAFC; font-weight: 800;">Option 2: Made By Us (1-Click)</h3>
-                        <p style="margin: 0; font-size: 0.75rem; color: #94A3B8;">Don't want to deal with tokens? Use our official pre-made bot!</p>
+                        <p style="margin: 0; font-size: 0.75rem; color: #94A3B8;">Prefer a pre-configured bot? Invite our official flagship build!</p>
                       </div>
                     </div>
-                    <p style="font-size: 0.82rem; color: #CBD5E1; margin: 0 0 18px 0; line-height: 1.5;">
-                      Instant 5-second setup. Pre-configured with our official Krylo Cyber branding, Krims Deep Neural AI chat, leveling XP, and AutoMod!
+                    <p style="font-size: 0.82rem; color: #CBD5E1; margin: 0 0 18px 0; line-height: 1.55;">
+                      Instant 5-second setup. Fully loaded with Krims Deep Neural AI chat, Minecraft cross-play sync, server economy, leveling XP, and AutoMod!
                     </p>
-                    <a href="https://discord.com/api/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot%20applications.commands" target="_blank" class="btn-secondary" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; text-decoration: none; font-weight: 800; padding: 11px; border-color: rgba(0, 229, 255, 0.5); color: #00E5FF; border-radius: 8px; box-sizing: border-box;">
-                      <span>🚀 1-Click Invite Official Krylo Bot</span>
+                    <a href="https://discord.com/api/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot%20applications.commands" target="_blank" class="btn-secondary" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; text-decoration: none; font-weight: 800; padding: 11px; border-color: rgba(56, 189, 248, 0.4); color: #38bdf8; border-radius: 8px; box-sizing: border-box;">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                      <span>1-Click Invite Official Bot</span>
                     </a>
                   </div>
 
                   <!-- CARD 3: 60-SECOND GUIDE -->
-                  <div class="personalizer-card" style="border-color: rgba(255, 255, 255, 0.1);">
-                    <h3 style="margin: 0 0 14px 0; font-size: 0.95rem; color: #F8FAFC; font-weight: 800;">📖 How to Get Your Bot Token in 60 Seconds</h3>
+                  <div class="personalizer-card" style="border-color: rgba(255, 255, 255, 0.08);">
+                    <h3 style="margin: 0 0 14px 0; font-size: 0.95rem; color: #F8FAFC; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                      How to Get Your Bot Token in 60 Seconds
+                    </h3>
                     <div style="display: flex; flex-direction: column; gap: 10px;">
                       <div class="guide-step-item">
                         <span class="guide-step-num">1</span>
