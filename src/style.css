@@ -26,43 +26,42 @@
   margin: 0;
   padding: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  scrollbar-color: #00f2ff rgba(8, 12, 22, 0.85);
 }
 
 /* ==========================================================================
-   CUSTOM DARK SCROLLBAR (Discord / Cyberpunk Style)
+   CUSTOM CYBER SCROLLBAR (Electric Cyan & Neon Glow)
    ========================================================================== */
-html {
+html, body {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.18) rgba(10, 13, 20, 0.6);
+  scrollbar-color: #00f2ff rgba(8, 12, 22, 0.85);
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(10, 13, 20, 0.6);
+  background: rgba(8, 12, 22, 0.85);
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  background: linear-gradient(180deg, #00f2ff 0%, #7000ff 100%);
+  border-radius: 8px;
+  border: 2px solid rgba(8, 12, 22, 0.85);
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+  transition: all 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--cyan);
-  background-clip: content-box;
-  box-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+  background: linear-gradient(180deg, #38bdf8 0%, #a855f7 100%);
+  box-shadow: 0 0 18px rgba(0, 242, 255, 0.8);
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: #00c8d6;
-  background-clip: content-box;
+  background: #00f2ff;
 }
 
 ::-webkit-scrollbar-corner {
@@ -3501,7 +3500,7 @@ input:checked + .slider:before {
   flex-shrink: 0;
   background: #080b12;
   border-top: 1px solid rgba(0, 242, 255, 0.1);
-  display: flex;
+  display: none; /* Hidden on landing page; shown when inside dashboard view */
   align-items: center;
   justify-content: center;
   gap: 12px;
@@ -3816,11 +3815,18 @@ input:checked + .slider:before {
 /* Landing Page Wrapper inside #login-screen */
 .login-screen.notifyme-landing {
   flex-direction: column;
-  padding: 0;
+  padding: 0 0 5rem 0;
   width: 100%;
   max-width: 100%;
   background: radial-gradient(circle at top center, rgba(0, 242, 255, 0.06) 0%, transparent 70%);
   display: flex;
+  flex: 1;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Nav Links like NotifyMe */

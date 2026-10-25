@@ -29,7 +29,7 @@
       --input-border: rgba(255, 255, 255, 0.1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: thin; scrollbar-color: #00f2ff rgba(8, 12, 22, 0.85); }
     html, body {
       min-height: 100vh;
       background: var(--bg);
@@ -39,6 +39,29 @@
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
+      scrollbar-width: thin;
+      scrollbar-color: #00f2ff rgba(8, 12, 22, 0.85);
+    }
+
+    /* Custom Cyber Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(8, 12, 22, 0.85);
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #00f2ff 0%, #7000ff 100%);
+      border-radius: 8px;
+      border: 2px solid rgba(8, 12, 22, 0.85);
+      box-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+      transition: all 0.2s ease;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #38bdf8 0%, #a855f7 100%);
+      box-shadow: 0 0 18px rgba(0, 242, 255, 0.8);
     }
 
     /* Ambient Glow Background */

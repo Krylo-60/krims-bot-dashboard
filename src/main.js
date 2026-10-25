@@ -383,6 +383,8 @@ function startDemoMode() {
   const dashScreen = document.getElementById('dashboard-screen');
   if (loginScreen) loginScreen.style.display = 'none';
   if (dashScreen) dashScreen.style.display = 'grid';
+  const bottomFooter = document.querySelector('.bottom-footer');
+  if (bottomFooter) bottomFooter.style.display = 'flex';
   
   // Render Profile
   const avatarEl = document.getElementById('header-avatar');
@@ -445,6 +447,8 @@ async function loadDiscordData(token) {
     document.getElementById('header-profile').style.display = 'flex';
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard-screen').style.display = 'grid';
+    const bottomFooter = document.querySelector('.bottom-footer');
+    if (bottomFooter) bottomFooter.style.display = 'flex';
 
     // Fetch User Guilds
     const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
@@ -2108,6 +2112,8 @@ function logout() {
   document.getElementById('dashboard-screen').style.display = 'none';
   document.getElementById('header-server-pill').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
+  const bottomFooter = document.querySelector('.bottom-footer');
+  if (bottomFooter) bottomFooter.style.display = 'none';
 }
 
 // ==========================================
