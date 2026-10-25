@@ -22,7 +22,7 @@ export default async function handler(req, res) {
         {
           name: 'Founder 100',
           price: '$0 / forever',
-          badge: 'EARLY FOUNDER',
+          badge: '100% FREE',
           customBots: 1,
           features: [
             '1 Custom-Branded Bot',
@@ -34,11 +34,11 @@ export default async function handler(req, res) {
         },
         {
           name: 'Pro Tier',
-          price: '$4.99 / mo',
-          badge: 'POPULAR',
-          customBots: 1,
+          price: '$0 / 100% Free',
+          badge: 'UNLOCKED',
+          customBots: 5,
           features: [
-            '1 Custom Automated Bot',
+            'Up to 5 Custom Automated Bots',
             'Custom AI Personality / Persona',
             'Unlimited Gemini AI Chat',
             'Custom Embed & Rank Colors',
@@ -47,11 +47,11 @@ export default async function handler(req, res) {
         },
         {
           name: 'Premium Tier',
-          price: '$14.99 / mo',
-          badge: 'NETWORKS',
-          customBots: 5,
+          price: '$0 / 100% Free',
+          badge: 'VIP FREE',
+          customBots: 10,
           features: [
-            'Up to 5 Custom Bots',
+            'Up to 10 Custom Bots',
             'Multi-Gamemode Server Linking',
             'Minecraft MySQL Economy Sync',
             'VIP 24/7 Dedicated Priority',
@@ -60,13 +60,13 @@ export default async function handler(req, res) {
         },
         {
           name: 'Enterprise',
-          price: 'Custom Quote',
-          badge: 'SCALE',
-          customBots: '10 to 1,000+ Bots',
+          price: '$0 / 100% Free',
+          badge: 'ENTERPRISE',
+          customBots: 'Unlimited Bots',
           features: [
-            'Custom Bot Fleet (10 – 1,000+)',
+            'Unlimited Custom Bot Fleet',
             'Dedicated Cloud Cluster',
-            'Optional White-Labeling (Remove watermark)',
+            'Full White-Labeling (Zero watermarks)',
             'Direct Developer Support & SLA',
             'Custom In-Game Minecraft Bridges'
           ],
