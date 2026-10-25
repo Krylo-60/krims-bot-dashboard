@@ -78,7 +78,7 @@ const TIER_CONFIG = {
     canStack: true,
     canBoostXP: true,
     canDMNotify: true,
-    summary: '👑 Dedicated 0ms Groq LPUs, 2.0x XP multiplier, unlimited milestone roles, and all 100 slash commands unlocked — 100% Free!'
+    summary: '👑 Dedicated 0ms Neural Compute, 3.0x XP multiplier, unlimited milestone roles, and all 100 slash commands unlocked — 100% Free!'
   }
 };
 
@@ -117,11 +117,13 @@ function initDashboardApp() {
     if (e.target.id === 'tiers-coming-soon-modal') closeTiersComingSoonModal();
   });
 
-  document.getElementById('join-vip-waitlist-btn')?.addEventListener('click', () => {
-    const successMsg = document.getElementById('waitlist-success-msg');
-    if (successMsg) successMsg.style.display = 'block';
-    showToast('👑 Added to VIP Waitlist! Pro & Premium features will unlock first for you.');
-  });
+  const handleClaimPremium = () => {
+    claimFreeEnterprisePremium();
+  };
+
+  document.getElementById('claim-premium-modal-btn')?.addEventListener('click', handleClaimPremium);
+  document.getElementById('premium-claim-btn')?.addEventListener('click', handleClaimPremium);
+  document.getElementById('join-vip-waitlist-btn')?.addEventListener('click', handleClaimPremium);
 
   document.getElementById('test-drive-tiers-btn')?.addEventListener('click', () => {
     closeTiersComingSoonModal();
@@ -419,12 +421,25 @@ function closeTiersComingSoonModal() {
   if (modal) modal.style.display = 'none';
 }
 
+function claimFreeEnterprisePremium() {
+  currentGuildTier = 'premium';
+  document.querySelectorAll('#milestone-tier-selector .tier-pill-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-tier') === 'premium');
+  });
+  updateTierUI();
+  renderMilestoneList();
+  closeTiersComingSoonModal();
+  showToast('👑 Enterprise Premium Claimed & Activated! 0ms Dedicated Neural Compute & 3.0x XP Multiplier active for this server!');
+  showUnsavedChangesBar();
+}
+
 // Expose key handlers globally on window
 window.startInstantLogin = startInstantLogin;
 window.startDemoMode = startDemoMode;
 window.loginWithDiscord = loginWithDiscord;
 window.openTiersComingSoonModal = openTiersComingSoonModal;
 window.closeTiersComingSoonModal = closeTiersComingSoonModal;
+window.claimFreeEnterprisePremium = claimFreeEnterprisePremium;
 
 async function loadDiscordData(token) {
   try {
@@ -1469,8 +1484,12 @@ function initMilestoneSystem() {
   document.querySelectorAll('#milestone-tier-selector .tier-pill-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const selectedTier = btn.getAttribute('data-tier');
-      if (selectedTier === 'pro' || selectedTier === 'premium') {
+      if (selectedTier === 'pro') {
         openTiersComingSoonModal(selectedTier);
+        return;
+      }
+      if (selectedTier === 'premium') {
+        claimFreeEnterprisePremium();
         return;
       }
       currentGuildTier = 'free';

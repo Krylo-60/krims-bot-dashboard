@@ -26,7 +26,7 @@ export default async function handler(req, res) {
           customBots: 1,
           features: [
             '1 Custom-Branded Bot',
-            'Full Krims Gemini AI Brain',
+            'Full Krims Proprietary Neural Brain',
             'MEE6-Grade Leveling & Rank Cards',
             'Dyno AutoMod Suite',
             'Powered by Krims Code AI Footer'
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
           features: [
             'Up to 5 Custom Automated Bots',
             'Custom AI Personality / Persona',
-            'Unlimited Gemini AI Chat',
+            'Unlimited 0ms Neural AI Chat',
             'Custom Embed & Rank Colors',
             'Priority Uptime'
           ]
