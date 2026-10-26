@@ -194,10 +194,12 @@ function initDashboardApp() {
 
   // Handle OAuth2 Implicit grant redirect hash
   const hash = window.location.hash;
+  let justReceivedToken = false;
   if (hash) {
     const params = new URLSearchParams(hash.substring(1));
     const accessToken = params.get('access_token');
     if (accessToken) {
+      justReceivedToken = true;
       localStorage.setItem('discord_access_token', accessToken);
       history.replaceState("", document.title, window.location.pathname);
     }
@@ -206,10 +208,16 @@ function initDashboardApp() {
   const token = localStorage.getItem('discord_access_token');
   const wantsDashboard = searchParams.has('dashboard') || searchParams.has('demo') || window.location.hash.includes('dashboard');
 
-  if (token && wantsDashboard) {
+  if (justReceivedToken) {
+    // User just completed Discord OAuth login! Open dashboard immediately!
+    loadDiscordData(token);
+  } else if (token && wantsDashboard) {
     loadDiscordData(token);
   } else if (wantsDashboard) {
     startDemoMode();
+  } else if (token) {
+    // If user already logged in with Discord, restore their dashboard session
+    loadDiscordData(token);
   } else {
     returnToLanding();
   }
@@ -363,6 +371,11 @@ function initMobileMenu() {
 // ==========================================
 function loginWithDiscord(e) {
   if (e) e.preventDefault();
+  const token = localStorage.getItem('discord_access_token');
+  if (token) {
+    loadDiscordData(token);
+    return;
+  }
   const currentRedirect = window.location.origin;
   const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(currentRedirect)}&response_type=token&scope=identify%20guilds`;
   try {
@@ -471,10 +484,19 @@ function claimFreeEnterprisePremium() {
   showUnsavedChangesBar();
 }
 
+function openDashboard() {
+  const token = localStorage.getItem('discord_access_token');
+  if (token) {
+    loadDiscordData(token);
+  } else {
+    startDemoMode();
+  }
+}
+
 // Expose key handlers globally on window
+window.openDashboard = openDashboard;
 window.startInstantLogin = startInstantLogin;
 window.startDemoMode = startDemoMode;
-window.openDashboard = startDemoMode;
 window.returnToLanding = returnToLanding;
 window.loginWithDiscord = loginWithDiscord;
 window.openTiersComingSoonModal = openTiersComingSoonModal;
