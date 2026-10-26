@@ -3936,6 +3936,21 @@ body:not(.in-dashboard) #landing-wiki-link {
   box-shadow: 0 0 25px rgba(0, 242, 255, 0.5);
 }
 
+/* Custom Vector Glowing Emojis for Buttons */
+.custom-btn-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
+}
+
+button:hover .custom-btn-icon,
+a:hover .custom-btn-icon {
+  transform: scale(1.15) translateY(-1px);
+  filter: drop-shadow(0 0 8px rgba(0, 242, 255, 0.85));
+}
+
 /* Hero Section */
 .landing-hero {
   text-align: center;
