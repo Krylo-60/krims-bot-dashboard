@@ -204,13 +204,14 @@ function initDashboardApp() {
   }
 
   const token = localStorage.getItem('discord_access_token');
-  const demoModeActive = localStorage.getItem('demo_mode_active');
   const wantsDashboard = searchParams.has('dashboard') || searchParams.has('demo') || window.location.hash.includes('dashboard');
 
-  if (token) {
+  if (token && wantsDashboard) {
     loadDiscordData(token);
-  } else if (demoModeActive === 'true' || wantsDashboard) {
+  } else if (wantsDashboard) {
     startDemoMode();
+  } else {
+    returnToLanding();
   }
 }
 
@@ -427,6 +428,12 @@ function returnToLanding() {
   if (loginScreen) loginScreen.style.display = 'flex';
   if (dashScreen) dashScreen.style.display = 'none';
   
+  const headerServerPill = document.getElementById('header-server-pill');
+  if (headerServerPill) headerServerPill.style.display = 'none';
+  
+  const headerProfile = document.getElementById('header-profile');
+  if (headerProfile) headerProfile.style.display = 'none';
+  
   const bottomFooter = document.querySelector('.bottom-footer');
   if (bottomFooter) bottomFooter.style.display = 'none';
   
@@ -435,6 +442,9 @@ function returnToLanding() {
   
   const quickLinks = document.getElementById('dash-quick-links');
   if (quickLinks) quickLinks.style.display = 'none';
+
+  const notifymeLinks = document.getElementById('notifyme-top-links');
+  if (notifymeLinks) notifymeLinks.style.display = 'flex';
   
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
