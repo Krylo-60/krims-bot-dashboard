@@ -381,6 +381,51 @@ body::after {
   background: rgba(239, 68, 68, 0.2);
 }
 
+/* Dashboard In-App Mode Header & Layout Optimizations (Uncluttered Workspace) */
+body.in-dashboard #notifyme-top-links,
+body.in-dashboard #landing-wiki-link,
+body.in-dashboard .wiki-nav-link,
+body.in-dashboard #landing-floating-bar,
+body.in-dashboard .bottom-footer {
+  display: none !important;
+}
+
+body.in-dashboard #dash-quick-links {
+  display: flex !important;
+}
+
+body.in-dashboard .main-container {
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+
+.dash-quick-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.dash-nav-pill:hover {
+  background: rgba(0, 242, 255, 0.08);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
 /* ==========================================================================
    LOGIN SCREEN
    ========================================================================== */
@@ -605,7 +650,7 @@ body::after {
    ========================================================================== */
 .dashboard-shell {
   display: grid;
-  grid-template-columns: 310px 1fr;
+  grid-template-columns: 260px 1fr;
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -862,8 +907,8 @@ body::after {
    DASHBOARD MAIN CONTENT AREA
    ========================================================================== */
 .dashboard-content {
-  padding: 2.25rem 3rem 6rem 3rem;
-  max-width: 1400px;
+  padding: 1.75rem 2.5rem 5rem 2.5rem;
+  max-width: 1550px;
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -1070,9 +1115,9 @@ body::after {
 /* Stat Counters Grid */
 .stat-counters-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
 }
 
 .stat-card {
@@ -1133,8 +1178,8 @@ body::after {
 /* Toggle Matrix Grid */
 .toggle-matrix-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
 }
 
 .toggle-card {
@@ -3769,19 +3814,23 @@ input:checked + .slider:before {
    NOTIFYME-INSPIRED MODERN LANDING PAGE
    ========================================================================== */
 
-/* Cookie Consent Banner */
+/* Cookie Consent Banner (Bottom Fixed) */
 .cookie-banner {
-  background: rgba(10, 15, 29, 0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 242, 255, 0.2);
-  padding: 0.6rem 1.5rem;
+  background: rgba(10, 15, 29, 0.96);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(0, 242, 255, 0.25);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
+  padding: 0.75rem 1.5rem;
   font-size: 0.85rem;
   color: #94a3b8;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  z-index: 9999;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
 }
 .cookie-content {
   display: flex;

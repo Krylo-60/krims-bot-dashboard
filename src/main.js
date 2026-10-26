@@ -90,19 +90,19 @@ const PERSONALITY_PROMPTS = {
   scientist: 'You are Krims AI v5, engineered by Krims Code Studio (parent company of Krims Code AI). Provide extremely detailed, academic, and highly technical explanations with formal structure.'
 };
 
-// Demo Mock Data
+// Demo Mock Data (Generic sample communities for interactive demo testing)
 const mockUser = {
-  username: 'Krylo',
-  avatar: 'https://cdn.discordapp.com/embed/avatars/1.png'
+  username: 'Demo Commander',
+  avatar: 'https://cdn.discordapp.com/embed/avatars/0.png'
 };
 
 const mockGuilds = [
-  { id: '1538225337048236082', name: 'KryloSMP', icon: null, botActive: true, memberCount: 11 },
-  { id: '1557852594242719775', name: 'The_Half_Lifes', icon: null, botActive: true, memberCount: 11 },
-  { id: '1561174283294609479', name: 'Krims Code • Support & Updates', icon: null, botActive: true, memberCount: 6 },
-  { id: '1549875778575929446', name: "Krylo's Skybase", icon: null, botActive: true, memberCount: 6 },
-  { id: '1547787216627961907', name: 'KevinMC', icon: null, botActive: true, memberCount: 12 },
-  { id: '1546229086274457610', name: 'Hyperloom studios', icon: null, botActive: false, memberCount: 7 }
+  { id: 'demo_cyber_haven', name: 'Cyber Haven SMP', icon: null, botActive: true, memberCount: 1420 },
+  { id: 'demo_nexus_legends', name: 'Nexus Legends Gaming', icon: null, botActive: true, memberCount: 890 },
+  { id: 'demo_pixel_vanguard', name: 'Pixel Vanguard Clan', icon: null, botActive: true, memberCount: 2150 },
+  { id: 'demo_aetheria_realm', name: 'Aetheria Realm', icon: null, botActive: true, memberCount: 340 },
+  { id: 'demo_quantum_lounge', name: 'Quantum Lounge', icon: null, botActive: true, memberCount: 560 },
+  { id: 'demo_solstice_net', name: 'Solstice Network', icon: null, botActive: false, memberCount: 125 }
 ];
 
 function initDashboardApp() {
@@ -374,20 +374,27 @@ function loginWithDiscord(e) {
 
 function startInstantLogin() {
   startDemoMode();
-  showToast('⚡ Instant Login successful! Welcome back, Krylo Member.');
+  showToast('⚡ Instant Demo Login successful! Welcome to Krims Command.');
 }
 
 function startDemoMode() {
   isDemo = true;
   localStorage.setItem('demo_mode_active', 'true');
+  document.body.classList.add('in-dashboard');
+  
   const loginScreen = document.getElementById('login-screen');
   const dashScreen = document.getElementById('dashboard-screen');
   if (loginScreen) loginScreen.style.display = 'none';
   if (dashScreen) dashScreen.style.display = 'grid';
+  
   const bottomFooter = document.querySelector('.bottom-footer');
-  if (bottomFooter) bottomFooter.style.display = 'flex';
+  if (bottomFooter) bottomFooter.style.display = 'none';
+  
   const floatingBar = document.getElementById('landing-floating-bar');
   if (floatingBar) floatingBar.style.display = 'none';
+  
+  const quickLinks = document.getElementById('dash-quick-links');
+  if (quickLinks) quickLinks.style.display = 'flex';
   
   // Render Profile
   const avatarEl = document.getElementById('header-avatar');
@@ -407,21 +414,28 @@ function startDemoMode() {
   if (lastGuild) {
     selectGuild(lastGuild.id);
   } else if (guilds.length > 0) {
-    // Automatically select the primary server (KryloSMP) so user immediately sees live data!
     selectGuild(guilds[0].id);
   }
 }
 
 function returnToLanding() {
   localStorage.removeItem('demo_mode_active');
+  document.body.classList.remove('in-dashboard');
+  
   const loginScreen = document.getElementById('login-screen');
   const dashScreen = document.getElementById('dashboard-screen');
   if (loginScreen) loginScreen.style.display = 'flex';
   if (dashScreen) dashScreen.style.display = 'none';
+  
   const bottomFooter = document.querySelector('.bottom-footer');
   if (bottomFooter) bottomFooter.style.display = 'none';
+  
   const floatingBar = document.getElementById('landing-floating-bar');
   if (floatingBar) floatingBar.style.display = 'block';
+  
+  const quickLinks = document.getElementById('dash-quick-links');
+  if (quickLinks) quickLinks.style.display = 'none';
+  
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -473,13 +487,21 @@ async function loadDiscordData(token) {
       ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
       : `https://cdn.discordapp.com/embed/avatars/${userData.discriminator % 5}.png`;
     
+    document.body.classList.add('in-dashboard');
     document.getElementById('header-avatar').src = avatarUrl;
     document.getElementById('header-username').innerText = userData.username;
     document.getElementById('header-profile').style.display = 'flex';
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard-screen').style.display = 'grid';
+    
     const bottomFooter = document.querySelector('.bottom-footer');
-    if (bottomFooter) bottomFooter.style.display = 'flex';
+    if (bottomFooter) bottomFooter.style.display = 'none';
+    
+    const floatingBar = document.getElementById('landing-floating-bar');
+    if (floatingBar) floatingBar.style.display = 'none';
+    
+    const quickLinks = document.getElementById('dash-quick-links');
+    if (quickLinks) quickLinks.style.display = 'flex';
 
     // Fetch User Guilds
     const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
@@ -518,7 +540,7 @@ async function loadDiscordData(token) {
     // If user has no eligible servers, include demo servers so dashboard remains fully functional
     if (guilds.length === 0) {
       guilds = [...mockGuilds];
-      showToast('ℹ️ No managed Discord servers found. Loaded KryloSMP demo workspace!');
+      showToast('ℹ️ No managed Discord servers found. Loaded sample community demo workspace!');
     }
 
     renderGuilds();
@@ -2140,6 +2162,7 @@ function updateLivePreviews(primaryColor, rankColor) {
 function logout() {
   localStorage.removeItem('discord_access_token');
   localStorage.removeItem('demo_mode_active');
+  document.body.classList.remove('in-dashboard');
   isDemo = false;
   selectedGuildId = null;
 
@@ -2147,8 +2170,15 @@ function logout() {
   document.getElementById('dashboard-screen').style.display = 'none';
   document.getElementById('header-server-pill').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
+  
   const bottomFooter = document.querySelector('.bottom-footer');
   if (bottomFooter) bottomFooter.style.display = 'none';
+  
+  const floatingBar = document.getElementById('landing-floating-bar');
+  if (floatingBar) floatingBar.style.display = 'block';
+  
+  const quickLinks = document.getElementById('dash-quick-links');
+  if (quickLinks) quickLinks.style.display = 'none';
 }
 
 // ==========================================

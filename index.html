@@ -12,12 +12,19 @@
 <body>
   <div id="app">
     <!-- Cookie Consent Banner (NotifyMe Style) -->
-    <div id="cookie-banner" class="cookie-banner">
+    <div id="cookie-banner" class="cookie-banner" style="display: none;">
       <div class="cookie-content">
         <span>🍪 This website uses cookies to ensure that you get the best experience on our website. <a href="/privacy" class="cookie-link">Learn more</a></span>
         <button id="cookie-accept-btn" class="cookie-accept-btn" onclick="document.getElementById('cookie-banner').style.display='none'; localStorage.setItem('cookie_accepted','true');">Got it!</button>
       </div>
     </div>
+    <script>
+      try {
+        if (!localStorage.getItem('cookie_accepted')) {
+          document.getElementById('cookie-banner').style.display = 'flex';
+        }
+      } catch (e) {}
+    </script>
     <!-- Top Navbar -->
     <header class="top-nav">
       <div class="nav-left">
@@ -66,10 +73,22 @@
           </button>
         </nav>
         <!-- Krims Wiki Portal Link -->
-        <a href="/wiki" class="wiki-nav-link" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(0, 242, 255, 0.1); border: 1px solid rgba(0, 242, 255, 0.3); border-radius: 8px; color: #00f2ff; font-weight: 700; font-size: 0.8rem; text-decoration: none; margin-right: 8px; transition: all 0.2s;">
+        <a href="/wiki" class="wiki-nav-link" id="landing-wiki-link" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(0, 242, 255, 0.1); border: 1px solid rgba(0, 242, 255, 0.3); border-radius: 8px; color: #00f2ff; font-weight: 700; font-size: 0.8rem; text-decoration: none; margin-right: 8px; transition: all 0.2s;">
           <span>📖</span>
           <span>KRIMS WIKI</span>
         </a>
+
+        <!-- In-Dashboard Quick Links (Clean & Space-Saving) -->
+        <div class="dash-quick-links" id="dash-quick-links" style="display: none;">
+          <a href="/wiki" target="_blank" class="dash-nav-pill" title="Documentation & Guides">
+            <span>📖</span>
+            <span class="pill-text">Wiki</span>
+          </a>
+          <a href="https://discord.gg/sYaVJtXgQb" target="_blank" class="dash-nav-pill" title="Join Discord Community">
+            <span>💬</span>
+            <span class="pill-text">Support</span>
+          </a>
+        </div>
 
         <!-- Theme Accent Picker -->
         <div class="theme-bar" title="Customize Dashboard Accent Color">
