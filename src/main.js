@@ -97,10 +97,12 @@ const mockUser = {
 };
 
 const mockGuilds = [
-  { id: '111111', name: 'Krylo Dev Center', icon: null, botActive: true },
-  { id: '222222', name: 'Krims AI Hub', icon: null, botActive: true },
-  { id: '333333', name: 'Cyberpunk Labs', icon: null, botActive: false },
-  { id: '444444', name: 'Gaming Arena', icon: null, botActive: false }
+  { id: '1538225337048236082', name: 'KryloSMP', icon: null, botActive: true, memberCount: 11 },
+  { id: '1557852594242719775', name: 'The_Half_Lifes', icon: null, botActive: true, memberCount: 11 },
+  { id: '1561174283294609479', name: 'Krims Code • Support & Updates', icon: null, botActive: true, memberCount: 6 },
+  { id: '1549875778575929446', name: "Krylo's Skybase", icon: null, botActive: true, memberCount: 6 },
+  { id: '1547787216627961907', name: 'KevinMC', icon: null, botActive: true, memberCount: 12 },
+  { id: '1546229086274457610', name: 'Hyperloom studios', icon: null, botActive: false, memberCount: 7 }
 ];
 
 function initDashboardApp() {
@@ -123,7 +125,6 @@ function initDashboardApp() {
 
   document.getElementById('claim-premium-modal-btn')?.addEventListener('click', handleClaimPremium);
   document.getElementById('premium-claim-btn')?.addEventListener('click', handleClaimPremium);
-  document.getElementById('join-vip-waitlist-btn')?.addEventListener('click', handleClaimPremium);
 
   document.getElementById('test-drive-tiers-btn')?.addEventListener('click', () => {
     closeTiersComingSoonModal();
@@ -170,9 +171,6 @@ function initDashboardApp() {
   document.getElementById('ai-personality')?.addEventListener('change', changePersonalityPreset);
   document.getElementById('broadcast-embed-btn')?.addEventListener('click', broadcastEmbed);
   document.getElementById('refresh-tickets-btn')?.addEventListener('click', renderSupportTickets);
-  document.getElementById('premium-waitlist-btn')?.addEventListener('click', () => {
-    openTiersComingSoonModal('premium');
-  });
 
   // Sync Overview toggles with dedicated tabs
   initOverviewTogglesSync();
@@ -207,10 +205,11 @@ function initDashboardApp() {
 
   const token = localStorage.getItem('discord_access_token');
   const demoModeActive = localStorage.getItem('demo_mode_active');
-  
+  const wantsDashboard = searchParams.has('dashboard') || searchParams.has('demo') || window.location.hash.includes('dashboard');
+
   if (token) {
     loadDiscordData(token);
-  } else if (demoModeActive === 'true') {
+  } else if (demoModeActive === 'true' || wantsDashboard) {
     startDemoMode();
   }
 }
@@ -387,6 +386,8 @@ function startDemoMode() {
   if (dashScreen) dashScreen.style.display = 'grid';
   const bottomFooter = document.querySelector('.bottom-footer');
   if (bottomFooter) bottomFooter.style.display = 'flex';
+  const floatingBar = document.getElementById('landing-floating-bar');
+  if (floatingBar) floatingBar.style.display = 'none';
   
   // Render Profile
   const avatarEl = document.getElementById('header-avatar');
@@ -409,6 +410,19 @@ function startDemoMode() {
     // Automatically select the primary server (KryloSMP) so user immediately sees live data!
     selectGuild(guilds[0].id);
   }
+}
+
+function returnToLanding() {
+  localStorage.removeItem('demo_mode_active');
+  const loginScreen = document.getElementById('login-screen');
+  const dashScreen = document.getElementById('dashboard-screen');
+  if (loginScreen) loginScreen.style.display = 'flex';
+  if (dashScreen) dashScreen.style.display = 'none';
+  const bottomFooter = document.querySelector('.bottom-footer');
+  if (bottomFooter) bottomFooter.style.display = 'none';
+  const floatingBar = document.getElementById('landing-floating-bar');
+  if (floatingBar) floatingBar.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function openTiersComingSoonModal(tier = 'pro') {
@@ -436,6 +450,8 @@ function claimFreeEnterprisePremium() {
 // Expose key handlers globally on window
 window.startInstantLogin = startInstantLogin;
 window.startDemoMode = startDemoMode;
+window.openDashboard = startDemoMode;
+window.returnToLanding = returnToLanding;
 window.loginWithDiscord = loginWithDiscord;
 window.openTiersComingSoonModal = openTiersComingSoonModal;
 window.closeTiersComingSoonModal = closeTiersComingSoonModal;

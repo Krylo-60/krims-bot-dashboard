@@ -56,6 +56,14 @@
           <a href="https://krims-discord-bot-d57m.onrender.com/api/status" target="_blank" class="notifyme-nav-link">Status</a>
           <a href="https://top.gg/bot/1523794466740371586/vote" target="_blank" class="notifyme-nav-link">Vote</a>
           <a href="https://discord.com/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot%20applications.commands" target="_blank" class="btn-nav-invite">Add Bot</a>
+          <button type="button" class="btn-nav-dashboard" id="top-nav-dashboard-btn" onclick="window.startDemoMode ? window.startDemoMode() : location.reload()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: linear-gradient(135deg, #00f2ff, #7000ff); border: none; border-radius: 8px; color: #fff; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-decoration: none; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); transition: transform 0.2s;">
+            <span>🎛️</span>
+            <span>DASHBOARD</span>
+          </button>
+          <button type="button" class="btn-nav-login" id="top-nav-login-btn" onclick="window.loginWithDiscord ? window.loginWithDiscord() : location.reload()" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #5865F2; border: none; border-radius: 8px; color: #fff; font-weight: 700; font-size: 0.82rem; cursor: pointer; text-decoration: none;">
+            <span>🔑</span>
+            <span>LOGIN</span>
+          </button>
         </nav>
         <!-- Krims Wiki Portal Link -->
         <a href="/wiki" class="wiki-nav-link" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(0, 242, 255, 0.1); border: 1px solid rgba(0, 242, 255, 0.3); border-radius: 8px; color: #00f2ff; font-weight: 700; font-size: 0.8rem; text-decoration: none; margin-right: 8px; transition: all 0.2s;">
@@ -263,6 +271,12 @@
           <div class="features-header">
             <h2>Set everything up in minutes.</h2>
             <p>Skip the complex slash commands. Configure your bot, auto-moderation, leveling, and AI visually from your browser.</p>
+            <div style="margin-top: 1.5rem;">
+              <button type="button" class="btn-primary" onclick="window.startDemoMode ? window.startDemoMode() : location.reload()" style="background: linear-gradient(135deg, #00f2ff, #7000ff); color: #fff; font-weight: 800; font-size: 1rem; border: none; padding: 12px 28px; border-radius: 10px; cursor: pointer; box-shadow: 0 0 25px rgba(0, 242, 255, 0.4); display: inline-flex; align-items: center; gap: 8px;">
+                <span>🎛️</span>
+                <span>Open Dashboard & Configure Visually</span>
+              </button>
+            </div>
           </div>
 
           <div class="features-grid">
@@ -425,6 +439,14 @@
           </div>
         </footer>
 
+        <!-- Floating Dashboard Launcher Button -->
+        <div id="landing-floating-bar" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999;">
+          <button type="button" onclick="window.startDemoMode ? window.startDemoMode() : location.reload()" style="background: linear-gradient(135deg, #00f2ff, #7000ff); color: #fff; font-weight: 800; border: none; padding: 12px 22px; border-radius: 9999px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 255, 0.5); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 0.92rem; transition: transform 0.2s;">
+            <span>🎛️</span>
+            <span>Open Dashboard Workspace</span>
+          </button>
+        </div>
+
       </section>
 
       <!-- Screen 2: Dashboard Workspace -->
@@ -536,6 +558,10 @@
 
           <!-- Sidebar Footer Links -->
           <div class="sidebar-footer">
+            <button type="button" class="btn-return-home" onclick="window.returnToLanding && window.returnToLanding()" style="width: 100%; margin-bottom: 8px; padding: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; color: #94a3b8; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+              <span>🏠</span>
+              <span>Landing & Docs Page</span>
+            </button>
             <div class="sidebar-brand-pill">
               <img src="/logo.png" alt="Krims Bot Logo" class="sidebar-footer-logo">
               <div class="bot-version">KRIMS BOT v5.3 • KRIMS AI v3.1</div>
@@ -1467,6 +1493,10 @@
                           <p>Award XP automatically to active members in voice lounges.</p>
                         </div>
                       </div>
+                      <label class="switch" title="Toggle Voice XP">
+                        <input type="checkbox" id="toggle-voice-xp" checked>
+                        <span class="slider"></span>
+                      </label>
                     </div>
                     <div class="setting-row">
                       <div class="setting-meta">
@@ -1502,6 +1532,10 @@
                           <p>Configure message experience rewards and spam-cooldown guards.</p>
                         </div>
                       </div>
+                      <label class="switch" title="Toggle Text XP">
+                        <input type="checkbox" id="toggle-text-xp" checked>
+                        <span class="slider"></span>
+                      </label>
                     </div>
                     <div class="setting-row">
                       <div class="setting-meta">
@@ -2242,6 +2276,32 @@
                       <span class="swatch-btn" data-color="#f59e0b" style="background:#f59e0b;" title="Solar Gold"></span>
                       <span class="swatch-btn" data-color="#ef4444" style="background:#ef4444;" title="Crimson Red"></span>
                       <span class="swatch-btn" data-color="#ec4899" style="background:#ec4899;" title="Neon Pink"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card module-box" style="grid-column: 1 / -1; margin-top: 1rem;">
+                  <div class="card-header">
+                    <div class="card-title-group">
+                      <span class="card-icon">👁️</span>
+                      <div>
+                        <h3>Live Glassmorphic Rank Card Preview</h3>
+                        <p>Real-time visual simulation of your server's customized member rank card.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="background: rgba(13, 18, 31, 0.85); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 20px; max-width: 650px; margin: 10px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                    <div id="rank-avatar-mock" style="width: 72px; height: 72px; border-radius: 50%; border: 3px solid #00f2ff; overflow: hidden; flex-shrink: 0; box-shadow: 0 0 14px rgba(0, 242, 255, 0.5);">
+                      <img src="https://cdn.discordapp.com/embed/avatars/1.png" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="flex: 1;">
+                      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                        <span style="font-weight: 800; font-size: 1.15rem; color: #fff;">Krylo <span id="rank-tag-mock" style="font-size: 0.85rem; color: #00f2ff; font-weight: 700;">#0001</span></span>
+                        <span id="rank-xp-mock" style="font-size: 0.85rem; font-weight: 800; color: #00f2ff;">Level 25 • 4,850 / 5,000 XP</span>
+                      </div>
+                      <div style="background: rgba(255, 255, 255, 0.1); height: 12px; border-radius: 9999px; overflow: hidden;">
+                        <div id="rank-bar-fill" style="width: 75%; height: 100%; background: linear-gradient(90deg, #00f2ff, #7000ff); border-radius: 9999px;"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
