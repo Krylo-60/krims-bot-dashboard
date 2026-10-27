@@ -11,6 +11,7 @@ export default defineConfig({
         linkedRoles: resolve(__dirname, 'linked-roles.html'),
         wiki: resolve(__dirname, 'wiki.html'),
         custombot: resolve(__dirname, 'custombot.html'),
+        rewards: resolve(__dirname, 'rewards.html'),
       },
     },
   },
