@@ -108,8 +108,10 @@ const mockGuilds = [
 function initDashboardApp() {
   // Bind Static Controls FIRST (Guaranteed to work immediately)
   document.getElementById('login-btn')?.addEventListener('click', loginWithDiscord);
+  document.getElementById('top-nav-login-btn')?.addEventListener('click', loginWithDiscord);
   document.getElementById('demo-link')?.addEventListener('click', startDemoMode);
   document.getElementById('logout-btn')?.addEventListener('click', logout);
+  document.getElementById('sidebar-logout-btn')?.addEventListener('click', logout);
 
   // Pro & Premium Coming Soon Modal Handlers
   document.getElementById('open-tiers-modal-btn')?.addEventListener('click', () => openTiersComingSoonModal('pro'));
@@ -459,6 +461,13 @@ function returnToLanding() {
   localStorage.removeItem('demo_mode_active');
   document.body.classList.remove('in-dashboard');
   
+  // Close mobile drawer if open
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (sidebar) sidebar.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('active');
+  document.body.classList.remove('sidebar-drawer-open');
+
   const loginScreen = document.getElementById('login-screen');
   const dashScreen = document.getElementById('dashboard-screen');
   if (loginScreen) loginScreen.style.display = 'flex';
@@ -2221,6 +2230,13 @@ function logout() {
   isDemo = false;
   selectedGuildId = null;
 
+  // Close mobile drawer if open
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (sidebar) sidebar.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('active');
+  document.body.classList.remove('sidebar-drawer-open');
+
   document.getElementById('header-profile').style.display = 'none';
   document.getElementById('dashboard-screen').style.display = 'none';
   document.getElementById('header-server-pill').style.display = 'none';
@@ -2234,7 +2250,14 @@ function logout() {
   
   const quickLinks = document.getElementById('dash-quick-links');
   if (quickLinks) quickLinks.style.display = 'none';
+
+  const notifymeLinks = document.getElementById('notifyme-top-links');
+  if (notifymeLinks) notifymeLinks.style.display = 'flex';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  showToast('Logged out successfully.');
 }
+window.logout = logout;
 
 // ==========================================
 // CUSTOM BOT PERSONALIZER (BYOT & MADE BY US)
