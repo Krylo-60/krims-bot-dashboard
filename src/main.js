@@ -109,7 +109,6 @@ function initDashboardApp() {
   // Bind Static Controls FIRST (Guaranteed to work immediately)
   document.getElementById('login-btn')?.addEventListener('click', loginWithDiscord);
   document.getElementById('top-nav-login-btn')?.addEventListener('click', loginWithDiscord);
-  document.getElementById('demo-link')?.addEventListener('click', startDemoMode);
   document.getElementById('logout-btn')?.addEventListener('click', logout);
   document.getElementById('sidebar-logout-btn')?.addEventListener('click', logout);
 
@@ -189,7 +188,7 @@ function initDashboardApp() {
     const errorMsg = document.getElementById('oauth-error-msg');
     if (errorBox && errorMsg) {
       errorBox.style.display = 'block';
-      errorMsg.textContent = `Discord returned "${oauthError}". If Redirect URI is not registered in Discord Dev Portal, use 1-Click Instant Login below!`;
+      errorMsg.textContent = `Discord returned "${oauthError}". Please authorize with Discord to access the dashboard.`;
     }
     history.replaceState("", document.title, window.location.pathname);
   }
@@ -215,8 +214,6 @@ function initDashboardApp() {
     loadDiscordData(token);
   } else if (token && wantsDashboard) {
     loadDiscordData(token);
-  } else if (wantsDashboard) {
-    startDemoMode();
   } else if (token) {
     // If user already logged in with Discord, restore their dashboard session
     loadDiscordData(token);
@@ -407,7 +404,7 @@ function loginWithDiscord(e) {
     window.location.href = authUrl;
   } catch (err) {
     console.error("Redirect error:", err);
-    startInstantLogin();
+    showToast("Failed to redirect to Discord. Please check your browser connection.");
   }
 }
 
@@ -521,7 +518,7 @@ function openDashboard() {
   if (token) {
     loadDiscordData(token);
   } else {
-    startDemoMode();
+    loginWithDiscord();
   }
 }
 
@@ -625,7 +622,8 @@ async function loadDiscordData(token) {
     }
   } catch (err) {
     console.error("Failed to load Discord credentials:", err);
-    startDemoMode();
+    logout();
+    showToast("Session expired or Discord authorization failed. Please log in again.");
   }
 }
 
