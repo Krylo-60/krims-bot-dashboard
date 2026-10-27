@@ -3047,62 +3047,7 @@ input:checked + .slider:before {
   color: var(--text-dim);
 }
 
-/* ==========================================================================
-   RESPONSIVE DESIGN (Tablets & Mobile)
-   ========================================================================== */
-@media (max-width: 1024px) {
-  .dashboard-shell {
-    grid-template-columns: 240px 1fr;
-  }
-  .levels-dashboard-grid, .embed-studio-grid, .branding-studio-grid {
-    grid-template-columns: 1fr;
-  }
-  .stat-counters-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .mobile-menu-btn {
-    display: flex;
-  }
-  .dashboard-shell {
-    grid-template-columns: 1fr;
-  }
-  .dashboard-sidebar {
-    position: fixed;
-    top: 64px;
-    left: -280px;
-    bottom: 0;
-    width: 280px;
-    z-index: 999;
-    transition: left 0.3s ease;
-  }
-  .dashboard-sidebar.open {
-    left: 0;
-    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
-  }
-  .dashboard-content {
-    padding: 1.5rem 1rem 6rem 1rem;
-  }
-  .toggle-matrix-grid {
-    grid-template-columns: 1fr;
-  }
-  .create-trigger-form {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .unsaved-changes-banner {
-    width: 90%;
-    flex-direction: column;
-    gap: 0.75rem;
-    text-align: center;
-  }
-  /* Disable grid animation on mobile for performance */
-  body::before {
-    animation: none;
-  }
-}
+/* (Responsive rules consolidated at end of stylesheet for priority cascade) */
 
 /* ==========================================================================
    ENHANCED CONTROLS, GRIDS & LIVE SIMULATOR (Fixed CSS Overhaul)
@@ -4462,8 +4407,550 @@ a:hover .custom-btn-icon {
 }
 
 
+/* ==========================================================================
+   RESPONSIVE DESIGN: TABLETS & MOBILE PHONES
+   ========================================================================== */
+
+/* Base drawer & mobile elements default state for desktop */
+.sidebar-mobile-header {
+  display: none;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+/* TABLET BREAKPOINT (<= 1024px) */
+@media (max-width: 1024px) {
+  .dashboard-shell {
+    grid-template-columns: 230px 1fr;
+  }
+  
+  .levels-dashboard-grid,
+  .embed-studio-grid,
+  .branding-studio-grid,
+  .welcome-designer-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .personalizer-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  }
+  
+  .stat-counters-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* NAVBAR COLLAPSE BREAKPOINT (<= 900px) */
 @media (max-width: 900px) {
   .notifyme-nav-links {
     display: none !important;
+  }
+}
+
+/* MOBILE PHONES & SMALL TABLETS BREAKPOINT (<= 768px) */
+@media (max-width: 768px) {
+  /* Prevent horizontal scroll on root */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  body.sidebar-drawer-open {
+    overflow: hidden !important;
+  }
+
+  /* Disable heavy background animation for mobile performance */
+  body::before {
+    animation: none !important;
+  }
+
+  /* Top Navbar */
+  .top-nav {
+    height: 58px !important;
+    padding: 0 0.85rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 242, 255, 0.25);
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .brand-badge {
+    gap: 8px;
+  }
+
+  .brand-title {
+    font-size: 0.92rem !important;
+    letter-spacing: 0.02em;
+  }
+
+  .bot-status-pill {
+    font-size: 0.65rem !important;
+    padding: 2px 6px !important;
+  }
+
+  .theme-label {
+    display: none !important;
+  }
+
+  .server-breadcrumb {
+    max-width: 140px;
+    overflow: hidden;
+  }
+
+  .active-server-btn {
+    max-width: 120px;
+    padding: 4px 8px !important;
+    font-size: 0.75rem !important;
+  }
+
+  #header-server-name {
+    max-width: 75px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Mobile Slide-out Navigation Drawer */
+  .dashboard-shell {
+    grid-template-columns: 1fr !important;
+    display: block !important;
+  }
+
+  .dashboard-sidebar {
+    position: fixed !important;
+    top: 58px !important;
+    left: -320px !important;
+    width: min(300px, 86vw) !important;
+    height: calc(100vh - 58px) !important;
+    height: calc(100dvh - 58px) !important;
+    z-index: 10001 !important;
+    background: #090d16 !important;
+    border-right: 1px solid rgba(0, 242, 255, 0.25) !important;
+    box-shadow: none;
+    transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .dashboard-sidebar.open {
+    left: 0 !important;
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.9) !important;
+  }
+
+  .sidebar-mobile-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .sidebar-mobile-title {
+    font-family: 'Orbitron', var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--neon-cyan);
+    letter-spacing: 0.06em;
+  }
+
+  .sidebar-close-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .sidebar-close-btn:active {
+    background: rgba(255, 59, 48, 0.3);
+    border-color: rgba(255, 59, 48, 0.5);
+  }
+
+  /* Mobile Backdrop */
+  .sidebar-backdrop {
+    display: block !important;
+    position: fixed !important;
+    top: 58px !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 58px) !important;
+    height: calc(100dvh - 58px) !important;
+    background: rgba(3, 5, 10, 0.8) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+    z-index: 10000 !important;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease !important;
+  }
+
+  .sidebar-backdrop.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Main Content Area */
+  .dashboard-content {
+    padding: 1rem 0.85rem 6.5rem 0.85rem !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  .tab-pane {
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Headers */
+  .tab-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.85rem !important;
+    margin-bottom: 1.5rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .tab-header h2 {
+    font-size: 1.45rem !important;
+    line-height: 1.25;
+  }
+
+  .tab-header .header-actions {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  .btn-save-tab {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* Cards & Headers */
+  .card, .module-box, .config-card {
+    padding: 1.15rem 1rem !important;
+    border-radius: 12px !important;
+    margin-bottom: 1.25rem !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .card-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.85rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .card-header .header-actions {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+  .switch-with-label {
+    width: 100% !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    padding: 9px 14px !important;
+  }
+
+  /* Setting Rows & Form Controls (Stack vertically on mobile) */
+  .setting-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+    padding: 0.85rem 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Keep toggle-only rows compact and horizontal */
+  .setting-row:has(> .switch:last-child),
+  .setting-row:has(> label.switch:last-child) {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .setting-meta {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .setting-title {
+    font-size: 0.95rem !important;
+    word-break: break-word;
+  }
+
+  .setting-desc {
+    font-size: 0.8rem !important;
+    word-break: break-word;
+    line-height: 1.45 !important;
+  }
+
+  .setting-input-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box !important;
+  }
+
+  .setting-input-wrap select,
+  .setting-input-wrap input,
+  .setting-input-wrap textarea,
+  .form-input,
+  .form-select {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+  }
+
+  .input-unit-group {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+  }
+
+  .input-unit-group .form-input {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  /* Grids Stack to 1 Column */
+  .personalizer-grid,
+  .welcome-designer-grid,
+  .levels-dashboard-grid,
+  .embed-studio-grid,
+  .branding-studio-grid,
+  .toggle-matrix-grid,
+  .reaction-roles-grid,
+  .stat-counters-grid,
+  .quick-nav-grid,
+  .resource-pools-grid,
+  .premium-perks-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    width: 100% !important;
+  }
+
+  .levels-config-col,
+  .rank-card-preview-col {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .tier-pill-group {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    gap: 4px !important;
+  }
+
+  .tier-pill-btn {
+    flex: 1 1 auto !important;
+    text-align: center !important;
+    padding: 5px 6px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .tier-soon-pill {
+    font-size: 0.6rem !important;
+    padding: 1px 4px !important;
+  }
+
+  .role-rewards-action-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+
+  .btn-add-milestone {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .rank-card-simulator {
+    padding: 12px 10px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .rank-card-inner {
+    gap: 10px !important;
+  }
+
+  .rank-avatar-frame {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .rank-header-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+  }
+
+  .personalizer-card {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1.15rem 1rem !important;
+  }
+
+  .welcome-controls {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .welcome-preview-box {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #welcome-canvas-mock {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 12px !important;
+    height: auto !important;
+    min-height: 180px !important;
+  }
+
+  /* Tables with responsive horizontal scroll */
+  .commands-table-container,
+  .table-wrapper,
+  .reaction-roles-list,
+  .automod-rules-list {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+  }
+
+  .commands-table {
+    min-width: 540px !important;
+  }
+
+  /* Floating unsaved changes banner centered on mobile */
+  .unsaved-changes-banner {
+    position: fixed !important;
+    bottom: 16px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100vw - 28px) !important;
+    max-width: 480px !important;
+    box-sizing: border-box !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    padding: 0.9rem 1rem !important;
+    border-radius: 12px !important;
+    text-align: center !important;
+    z-index: 9999 !important;
+  }
+
+  .unsaved-actions {
+    width: 100% !important;
+    display: flex !important;
+    gap: 0.5rem !important;
+  }
+
+  .unsaved-actions button {
+    flex: 1 !important;
+    justify-content: center !important;
+  }
+
+  /* Modals */
+  .modal-card {
+    width: calc(100vw - 24px) !important;
+    max-width: 480px !important;
+    padding: 1.25rem 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .server-list-grid {
+    grid-template-columns: 1fr !important;
+    max-height: 50vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* Quick action buttons */
+  .quick-actions-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+
+  .quick-actions-bar .btn-secondary,
+  .quick-actions-bar .btn-primary {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* SMALL PHONES (<= 480px) */
+@media (max-width: 480px) {
+  .theme-presets {
+    display: none !important;
+  }
+
+  .wiki-nav-link {
+    display: none !important;
+  }
+
+  .brand-title {
+    font-size: 0.85rem !important;
+  }
+
+  .bot-status-pill {
+    display: none !important;
+  }
+
+  .tab-header h2 {
+    font-size: 1.3rem !important;
+  }
+
+  .stat-counter-card {
+    padding: 1rem 0.85rem !important;
+  }
+
+  .stat-counter-value {
+    font-size: 1.5rem !important;
   }
 }

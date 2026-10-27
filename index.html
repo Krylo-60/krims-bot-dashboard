@@ -511,6 +511,12 @@
       <div class="dashboard-shell" id="dashboard-screen" style="display: none;">
         <!-- Left Sidebar Navigation -->
         <aside class="dashboard-sidebar" id="sidebar">
+          <!-- Mobile Sidebar Header & Close Button -->
+          <div class="sidebar-mobile-header" id="sidebar-mobile-header">
+            <span class="sidebar-mobile-title">KRIMS COMMAND</span>
+            <button type="button" class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close Navigation">✕</button>
+          </div>
+
           <!-- Active Server Card -->
           <div class="sidebar-server-card" id="sidebar-server-box">
             <div class="server-card-info">
@@ -626,6 +632,9 @@
             </div>
           </div>
         </aside>
+
+        <!-- Mobile Sidebar Touch Backdrop -->
+        <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
 
         <!-- Main Workspace View Container -->
         <div class="dashboard-content" id="dashboard-content-area">
@@ -1405,7 +1414,7 @@
                   </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; margin-top: 0.5rem;" class="welcome-designer-grid">
+                <div class="welcome-designer-grid">
                   <!-- Configuration Controls -->
                   <div class="welcome-controls">
                     <div class="setting-row">
