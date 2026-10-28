@@ -97,7 +97,7 @@ export default async function handler(req, res) {
         icon: '⚔️',
         title: 'KSMP Tournaments & Events',
         rate: '+2,000 - 10,000 KR',
-        description: 'Compete in weekly Minecraft KSMP PvP clashes, faction events, and boss battles.'
+        description: 'Compete in weekly Minecraft KSMP PvP clashes, faction events, and boss battles to earn huge KR bonus rewards and trophy kits.'
       },
       {
         icon: '🔬',
@@ -128,8 +128,8 @@ export default async function handler(req, res) {
       {
         date: 'December 2026',
         tag: 'Global Season 1',
-        title: 'Rewards Season 1 & Nitro Prize Pool',
-        summary: 'Top 50 Krims Rewards holders on the global leaderboard receive real Discord Nitro gifts and KSMP hardware perks.'
+        title: 'Season 1 Leaderboard & Elite Pass Hall of Fame',
+        summary: 'Top Krims Rewards holders on the global leaderboard unlock Enterprise Lifetime passes, exclusive KSMP champion titles, and massive KR jackpot multipliers.'
       }
     ],
     userVault
