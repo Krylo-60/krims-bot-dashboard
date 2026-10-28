@@ -203,6 +203,13 @@ function initDashboardApp() {
       justReceivedToken = true;
       localStorage.setItem('discord_access_token', accessToken);
       history.replaceState("", document.title, window.location.pathname);
+
+      const returnUrl = localStorage.getItem('krims_auth_return');
+      if (returnUrl) {
+        localStorage.removeItem('krims_auth_return');
+        window.location.href = returnUrl;
+        return;
+      }
     }
   }
 

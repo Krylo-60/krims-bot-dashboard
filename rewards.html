@@ -1600,7 +1600,8 @@
 
     // Trigger Discord Login Redirect
     function loginWithDiscord() {
-      const redirectUri = window.location.origin + '/rewards';
+      localStorage.setItem('krims_auth_return', '/rewards');
+      const redirectUri = window.location.origin;
       const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
       window.location.href = authUrl;
     }
