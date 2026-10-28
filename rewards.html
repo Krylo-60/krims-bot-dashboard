@@ -634,6 +634,17 @@
       box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
     }
 
+    .action-btn-bonus:disabled,
+    .action-btn-bonus.claimed {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: var(--text-dim) !important;
+      cursor: not-allowed !important;
+      box-shadow: none !important;
+      transform: none !important;
+      opacity: 0.6 !important;
+    }
+
     .action-btn-alpha {
       background: rgba(139, 92, 246, 0.15);
       border: 1px solid var(--purple);
@@ -1671,9 +1682,16 @@
           console.warn('API rewards fetch fallback:', e);
         }
 
+        const userKey = getBonusUserKey();
+        const cachedBal = localStorage.getItem('krims_balance_cache_' + userKey);
+        if (cachedBal) {
+          userBalance = parseInt(cachedBal, 10);
+        }
+
         document.getElementById('vault-kr-val').textContent = userBalance.toLocaleString() + ' KR';
         document.getElementById('vault-streak-val').textContent = userStreak + ' Days';
         document.getElementById('vault-clearance-val').textContent = 'Verified Discord User';
+        checkBonusCooldown();
 
         // Connect user to DM subscription box
         const subWrap = document.getElementById('sub-logged-in-wrap');
@@ -1715,10 +1733,58 @@
       showToast(`Loaded vault for Discord User ID: ${val.slice(0, 8)}...`, '💎');
     });
 
-    // Claim Alpha Bonus Button
-    document.getElementById('btn-claim-bonus').addEventListener('click', () => {
+    // Anti-Spam Alpha Bonus Cooldown System (24-Hour Timer)
+    const BONUS_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+    function getBonusUserKey() {
+      return currentUser && currentUser.id ? currentUser.id : 'guest_alpha';
+    }
+
+    function checkBonusCooldown() {
+      const btn = document.getElementById('btn-claim-bonus');
+      if (!btn) return false;
+
+      const userKey = getBonusUserKey();
+      const lastClaim = parseInt(localStorage.getItem('krims_bonus_time_' + userKey) || '0', 10);
+      const now = Date.now();
+      const diff = now - lastClaim;
+
+      if (lastClaim > 0 && diff < BONUS_COOLDOWN_MS) {
+        const remainingMs = BONUS_COOLDOWN_MS - diff;
+        const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+        const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        btn.disabled = true;
+        btn.classList.add('claimed');
+        btn.innerHTML = `<span>⏳ Bonus Claimed (${hours}h ${mins}m left)</span>`;
+        return false;
+      } else {
+        btn.disabled = false;
+        btn.classList.remove('claimed');
+        btn.innerHTML = `<span>🎁 Claim Web Alpha Bonus (+250 KR)</span>`;
+        return true;
+      }
+    }
+
+    // Initial check and periodic countdown refresh
+    checkBonusCooldown();
+    setInterval(checkBonusCooldown, 30000);
+
+    // Claim Alpha Bonus Button with strict anti-spam cooldown
+    document.getElementById('btn-claim-bonus')?.addEventListener('click', () => {
+      const isEligible = checkBonusCooldown();
+      if (!isEligible) {
+        showToast('⚠️ Daily Alpha Bonus already claimed! You can only claim once every 24 hours.', '⏳');
+        return;
+      }
+
+      const userKey = getBonusUserKey();
+      localStorage.setItem('krims_bonus_time_' + userKey, Date.now().toString());
+
       userBalance += 250;
+      localStorage.setItem('krims_balance_cache_' + userKey, userBalance.toString());
+
       document.getElementById('vault-kr-val').textContent = userBalance.toLocaleString() + ' KR';
+      checkBonusCooldown();
       showToast(`+250 KR Alpha Bonus Claimed! New Balance: ${userBalance.toLocaleString()} KR`, '🎁');
     });
 
