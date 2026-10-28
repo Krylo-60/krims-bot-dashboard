@@ -1489,13 +1489,24 @@
         </div>
       </div>
 
-      <!-- Update Alerts Subscription Box -->
+      <!-- Update Alerts Subscription Box via Discord Bot DMs -->
       <div class="sub-box">
-        <h3>Stay Tuned For Weekly Updates</h3>
-        <p>Subscribe to instant update drop notifications whenever new Krims Rewards features and pass drops go live.</p>
-        <form class="sub-form" id="sub-form">
-          <input type="email" id="sub-email" class="vault-input" placeholder="Enter your email or Discord tag..." required>
-          <button type="submit" class="vault-btn" style="background: var(--purple); color: #fff;">Notify Me</button>
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🤖 📬</div>
+        <h3>Get Instant Discord DM Update Alerts</h3>
+        <p>Subscribe to receive direct message alerts straight to your Discord inbox whenever weekly Krims Rewards drops, pass unlocks, and KSMP features go live.</p>
+        
+        <div id="sub-logged-in-wrap" style="display: none; margin-top: 15px;">
+          <p style="font-size: 0.88rem; color: var(--cyan); margin-bottom: 14px;">
+            Enrolling connected Discord user: <strong id="sub-user-display">@User</strong>
+          </p>
+          <button type="button" id="btn-sub-direct-dm" class="vault-btn" style="background: #5865F2; color: #fff; padding: 12px 26px; font-size: 0.92rem; margin: 0 auto; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+            <span>🔔 Send Me Discord DM Alerts</span>
+          </button>
+        </div>
+
+        <form class="sub-form" id="sub-form" style="display: flex;">
+          <input type="text" id="sub-user-input" class="vault-input" placeholder="Enter your Discord User ID..." required>
+          <button type="submit" class="vault-btn" style="background: #5865F2; color: #fff;">🔔 Subscribe via DM</button>
         </form>
       </div>
     </section>
@@ -1600,6 +1611,12 @@
       currentUser = null;
       document.getElementById('vault-logged-in').style.display = 'none';
       document.getElementById('vault-logged-out').style.display = 'block';
+      const subWrap = document.getElementById('sub-logged-in-wrap');
+      const subForm = document.getElementById('sub-form');
+      if (subWrap && subForm) {
+        subWrap.style.display = 'none';
+        subForm.style.display = 'flex';
+      }
       showToast('Signed out of Discord', '🚪');
     }
 
@@ -1657,6 +1674,16 @@
         document.getElementById('vault-streak-val').textContent = userStreak + ' Days';
         document.getElementById('vault-clearance-val').textContent = 'Verified Discord User';
 
+        // Connect user to DM subscription box
+        const subWrap = document.getElementById('sub-logged-in-wrap');
+        const subForm = document.getElementById('sub-form');
+        const subDisplay = document.getElementById('sub-user-display');
+        if (subWrap && subForm && subDisplay) {
+          subWrap.style.display = 'block';
+          subDisplay.textContent = '@' + (user.global_name || user.username) + ` (${user.id})`;
+          subForm.style.display = 'none';
+        }
+
         showToast(`Welcome back, ${user.global_name || user.username}! Vault synchronized.`, '💎');
       } catch (err) {
         console.warn('Discord session load error:', err);
@@ -1708,14 +1735,42 @@
       }
     });
 
-    // Subscription form
-    document.getElementById('sub-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const input = document.getElementById('sub-email').value;
-      if (input) {
-        showToast(`Subscribed! You'll receive instant alerts when updates drop.`, '🔔');
-        document.getElementById('sub-email').value = '';
+    // Discord Bot DM Subscription Handlers
+    async function handleDMSubscription(userId) {
+      if (!userId) {
+        showToast('Please enter your Discord User ID', '⚠️');
+        return;
       }
+      showToast('Dispatching confirmation alert to your Discord DMs...', '⏳');
+      try {
+        const res = await fetch('/api/subscribe-dm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: userId.trim() })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast(data.message || 'Subscribed! Check your Discord DMs.', '🔔');
+        } else {
+          showToast(data.error || 'Failed to send Discord DM.', '⚠️');
+        }
+      } catch (err) {
+        showToast('Network error while connecting to Discord DM service.', '⚠️');
+      }
+    }
+
+    document.getElementById('btn-sub-direct-dm')?.addEventListener('click', () => {
+      if (currentUser && currentUser.id) {
+        handleDMSubscription(currentUser.id);
+      } else {
+        showToast('Please log in with Discord first.', '⚠️');
+      }
+    });
+
+    document.getElementById('sub-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = document.getElementById('sub-user-input').value.trim();
+      handleDMSubscription(val);
     });
   </script>
 </body>
