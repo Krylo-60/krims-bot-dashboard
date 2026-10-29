@@ -1226,7 +1226,7 @@
       </a>
       <a href="/rewards" class="nav-pill-btn active">
         <span>💎</span>
-        <span>Rewards</span>
+        <span>Rewards (Beta)</span>
       </a>
       <a href="/wiki" class="nav-pill-btn ">
         <span>📖</span>
@@ -1257,26 +1257,28 @@
           <path d="M2 9h20"></path>
         </svg>
       </div>
-      <div class="sneakpeek-pill">
-        <span class="pulse-dot"></span>
-        <span>CLASSIFIED SNEAK PEEK • OFFICIAL LAUNCH NOVEMBER 9, 2026</span>
+      <div class="sneakpeek-pill" style="border-color: rgba(0, 242, 255, 0.45); background: rgba(0, 242, 255, 0.12); color: #00f2ff; box-shadow: 0 0 20px rgba(0, 242, 255, 0.25);">
+        <span class="pulse-dot" style="background: #00f2ff; box-shadow: 0 0 10px #00f2ff;"></span>
+        <span>🚀 KRIMS REWARDS PUBLIC BETA IS LIVE • EARLY ACCESS UNLOCKED</span>
       </div>
       <h1 class="hero-title">
         The Evolution to <span class="glow-cyan">Krims Rewards</span>.<br>
         The Only Key to <span class="glow-gold">Krims Code Premium</span>.
       </h1>
       <p class="hero-subtitle">
-        KryloCoins are officially retiring and transitioning into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. On <strong>Monday, November 9, 2026</strong>, KR will be the single exclusive gateway to unlock Premium AI features, custom bots, and KSMP perks. Claim your daily Alpha bonus now to stack your balance before launch!
+        KryloCoins are officially retiring and transitioning into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. The <strong>Public Beta is NOW LIVE</strong>! Claim your daily bonuses, test redemption passes, and synchronize your balance across Discord and KSMP before full public launch on November 9, 2026!
       </p>
 
       <!-- Launch Countdown Bar -->
-      <div class="countdown-bar">
-        <span class="countdown-label">⏳ Public Launch In:</span>
-        <div class="countdown-units">
-          <div class="cd-block">
-            <span class="cd-number" id="cd-days">10</span>
-            <span class="cd-unit-text">Days</span>
-          </div>
+      <div class="countdown-bar" style="border-color: rgba(0, 242, 255, 0.35); background: rgba(0, 242, 255, 0.08); padding: 14px 24px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="pulse-dot" style="background: #10b981; box-shadow: 0 0 10px #10b981; width: 10px; height: 10px;"></span>
+          <span style="color: #34d399; font-weight: 800; font-family: var(--font-mono, monospace); font-size: 0.9rem; letter-spacing: 0.05em;">SYSTEM STATUS: PUBLIC BETA LIVE & ACTIVE</span>
+        </div>
+        <div style="color: #cbd5e1; font-size: 0.86rem; font-weight: 600;">
+          Interactive Vault, Discord OAuth & Beta Daily Bonus (+250 KR) Active • Official Full Launch Nov 9
+        </div>
+      </div>
           <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
           <div class="cd-block">
             <span class="cd-number" id="cd-hours">05</span>
@@ -1428,7 +1430,7 @@
             </li>
           </ul>
           <button class="pass-unlock-btn" onclick="triggerPassNotice('7-Day Premium Sprint', 2500)">
-            <span>⏳ Unlocks Nov 9</span>
+            <span>✨ Unlock Sprint Pass (2,500 KR)</span>
           </button>
         </div>
 
@@ -1459,7 +1461,7 @@
             </li>
           </ul>
           <button class="pass-unlock-btn" onclick="triggerPassNotice('30-Day Pro Season Pass', 8000)">
-            <span>👑 Preview Pro Pass</span>
+            <span>👑 Unlock 30-Day Pro (8,000 KR)</span>
           </button>
         </div>
 
@@ -1490,7 +1492,7 @@
             </li>
           </ul>
           <button class="pass-unlock-btn" onclick="triggerPassNotice('Enterprise Lifetime Access', 25000)">
-            <span>⚡ Lifetime Clearance</span>
+            <span>⚡ Unlock Lifetime Access (25,000 KR)</span>
           </button>
         </div>
       </div>
@@ -1710,7 +1712,12 @@
 
     // Pass Notice Trigger
     window.triggerPassNotice = function(passName, cost) {
-      showToast(`${passName} costs ${cost.toLocaleString()} KR. Official redemption unlocks Monday, Nov 9!`, '⏳');
+      if (userBalance >= cost) {
+        showToast(`🎉 Beta Access Granted: You have ${userBalance.toLocaleString()} KR! ${passName} is active for your account.`, '🚀');
+      } else {
+        const need = cost - userBalance;
+        showToast(`You have ${userBalance.toLocaleString()} KR. Need ${need.toLocaleString()} more KR for ${passName}! Claim your daily Beta bonus above!`, '💎');
+      }
     };
 
     // Discord OAuth2 Session & Vault Management
