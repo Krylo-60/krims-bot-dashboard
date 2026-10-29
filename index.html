@@ -165,8 +165,8 @@
               Direct Dashboard Access
             </div>
             
-            <div id="oauth-error-box" class="oauth-error-banner" style="display: none;">
-              <div class="oauth-error-title">⚠️ Discord OAuth Notice</div>
+            <div id="oauth-error-box" class="oauth-error-banner" style="display: none; cursor: pointer;" onclick="this.style.display='none'" title="Click to dismiss">
+              <div class="oauth-error-title">⚠️ Discord OAuth Notice <span style="float: right; opacity: 0.7; font-size: 0.8rem;">✖</span></div>
               <div class="oauth-error-msg" id="oauth-error-msg">Please authorize with Discord to access your servers and bot controls.</div>
             </div>
 
