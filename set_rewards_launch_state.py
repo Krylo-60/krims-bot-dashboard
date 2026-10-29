@@ -12,6 +12,18 @@ def set_state(state):
     with open(index_path, 'r', encoding='utf-8') as f:
         index_content = f.read()
 
+    # Always update roadmap date & countdown target to Nov 9, 2026
+    rewards_content = re.sub(
+        r'<span class="roadmap-date">(Next Monday • Nov 2|Monday • Nov 9, 2026)</span>',
+        '<span class="roadmap-date">Monday • Nov 9, 2026</span>',
+        rewards_content
+    )
+    rewards_content = re.sub(
+        r'const target = new Date\(Date\.UTC\(2026, 10, \d+, 0, 0, 0\)\);.*',
+        'const target = new Date(Date.UTC(2026, 10, 9, 0, 0, 0)); // Nov 9, 2026',
+        rewards_content
+    )
+
     if state == 'on':
         # 1. Update sneakpeek pill
         rewards_content = re.sub(
@@ -28,7 +40,7 @@ def set_state(state):
         rewards_content = re.sub(
             r'<p class="hero-subtitle">.*?</p>',
             '''<p class="hero-subtitle">
-        KryloCoins are officially retiring and transitioning into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. The Rewards Vault is now open for live claims, pass unlocks, and cross-network synchronization!
+        KryloCoins are officially retiring and transitioning into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. The Rewards Vault is now open for live claims, pass unlocks, and cross-network synchronization ahead of our public launch on November 9, 2026!
       </p>''',
             rewards_content,
             flags=re.DOTALL
@@ -44,7 +56,7 @@ def set_state(state):
           <span style="color: #34d399; font-weight: 800; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 0.05em;">SYSTEM STATUS: ONLINE & ACTIVE</span>
         </div>
         <div style="color: #fff; font-size: 0.88rem; font-weight: 600;">
-          Interactive Vault, Discord OAuth, & Web Alpha Bonus (+250 KR) are Live
+          Interactive Vault, Discord OAuth, & Web Alpha Bonus (+250 KR) are Live (Public Launch: Nov 9)
         </div>
       </div>''',
             rewards_content,
@@ -52,14 +64,11 @@ def set_state(state):
         )
 
         # 4. Pass Buttons to Live Unlocks
-        rewards_content = rewards_content.replace('<span>⏳ Unlocks Next Monday</span>', '<span>✨ Unlock Sprint Pass (2,500 KR)</span>')
-        rewards_content = rewards_content.replace('<span>👑 Preview Pro Pass</span>', '<span>👑 Unlock 30-Day Pro (8,000 KR)</span>')
-        rewards_content = rewards_content.replace('<span>⚡ Lifetime Clearance</span>', '<span>⚡ Unlock Lifetime Access (25,000 KR)</span>')
+        rewards_content = re.sub(r'<span>(⏳ Unlocks Next Monday|⏳ Unlocks Nov 9|✨ Unlock Sprint Pass \(2,500 KR\))</span>', '<span>✨ Unlock Sprint Pass (2,500 KR)</span>', rewards_content)
+        rewards_content = re.sub(r'<span>(👑 Preview Pro Pass|👑 Unlock 30-Day Pro \(8,000 KR\))</span>', '<span>👑 Unlock 30-Day Pro (8,000 KR)</span>', rewards_content)
+        rewards_content = re.sub(r'<span>(⚡ Lifetime Clearance|⚡ Unlock Lifetime Access \(25,000 KR\))</span>', '<span>⚡ Unlock Lifetime Access (25,000 KR)</span>', rewards_content)
 
         # 5. Dynamic triggerPassNotice handler
-        old_fn = '''window.triggerPassNotice = function(passName, cost) {
-      showToast(`${passName} costs ${cost.toLocaleString()} KR. Official redemption unlocks Next Monday!`, '⏳');
-    };'''
         new_fn = '''window.triggerPassNotice = function(passName, cost) {
       if (userBalance >= cost) {
         showToast(`🎉 Live Launch Promo: You have ${userBalance.toLocaleString()} KR! Unlocking ${passName}...`, '🚀');
@@ -68,7 +77,7 @@ def set_state(state):
         showToast(`You have ${userBalance.toLocaleString()} KR. Need ${need.toLocaleString()} more KR for ${passName}! Claim your daily bonus above!`, '💎');
       }
     };'''
-        rewards_content = rewards_content.replace(old_fn, new_fn)
+        rewards_content = re.sub(r'window\.triggerPassNotice\s*=\s*function\(passName,\s*cost\)\s*\{.*?\};', new_fn, rewards_content, flags=re.DOTALL)
 
         # 6. Update index navbar link
         index_content = re.sub(
@@ -84,7 +93,7 @@ def set_state(state):
             r'<div class="sneakpeek-pill".*?>.*?</div>',
             '''<div class="sneakpeek-pill">
         <span class="pulse-dot"></span>
-        <span>CLASSIFIED SNEAK PEEK • REVEAL NEXT MONDAY</span>
+        <span>CLASSIFIED SNEAK PEEK • OFFICIAL LAUNCH NOVEMBER 9, 2026</span>
       </div>''',
             rewards_content,
             flags=re.DOTALL
@@ -94,7 +103,7 @@ def set_state(state):
         rewards_content = re.sub(
             r'<p class="hero-subtitle">.*?</p>',
             '''<p class="hero-subtitle">
-        KryloCoins are officially retiring and transitioning into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. Starting next Monday, KR will be the single exclusive gateway to unlock Premium AI features, custom bots, and KSMP perks.
+        KryloCoins are officially retiring and transitioning into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. On <strong>Monday, November 9, 2026</strong>, KR will be the single exclusive gateway to unlock Premium AI features, custom bots, and KSMP perks. Claim your daily Alpha bonus now to stack your balance before launch!
       </p>''',
             rewards_content,
             flags=re.DOTALL
@@ -105,15 +114,15 @@ def set_state(state):
             r'<!-- Launch Countdown Bar -->\s*<div class="countdown-bar".*?>.*?</div>(\s*</div>)?',
             '''<!-- Launch Countdown Bar -->
       <div class="countdown-bar">
-        <span class="countdown-label">⏳ Public Reveal Launch In:</span>
+        <span class="countdown-label">⏳ Public Launch In:</span>
         <div class="countdown-units">
           <div class="cd-block">
-            <span class="cd-number" id="cd-days">05</span>
+            <span class="cd-number" id="cd-days">10</span>
             <span class="cd-unit-text">Days</span>
           </div>
           <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
           <div class="cd-block">
-            <span class="cd-number" id="cd-hours">04</span>
+            <span class="cd-number" id="cd-hours">05</span>
             <span class="cd-unit-text">Hours</span>
           </div>
           <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
@@ -133,23 +142,15 @@ def set_state(state):
         )
 
         # 4. Pass Buttons back to Pre-Launch
-        rewards_content = rewards_content.replace('<span>✨ Unlock Sprint Pass (2,500 KR)</span>', '<span>⏳ Unlocks Next Monday</span>')
-        rewards_content = rewards_content.replace('<span>👑 Unlock 30-Day Pro (8,000 KR)</span>', '<span>👑 Preview Pro Pass</span>')
-        rewards_content = rewards_content.replace('<span>⚡ Unlock Lifetime Access (25,000 KR)</span>', '<span>⚡ Lifetime Clearance</span>')
+        rewards_content = re.sub(r'<span>(⏳ Unlocks Next Monday|⏳ Unlocks Nov 9|✨ Unlock Sprint Pass \(2,500 KR\))</span>', '<span>⏳ Unlocks Nov 9</span>', rewards_content)
+        rewards_content = re.sub(r'<span>(👑 Preview Pro Pass|👑 Unlock 30-Day Pro \(8,000 KR\))</span>', '<span>👑 Preview Pro Pass</span>', rewards_content)
+        rewards_content = re.sub(r'<span>(⚡ Lifetime Clearance|⚡ Unlock Lifetime Access \(25,000 KR\))</span>', '<span>⚡ Lifetime Clearance</span>', rewards_content)
 
-        # 5. Handler back to Next Monday notice
-        old_fn = '''window.triggerPassNotice = function(passName, cost) {
-      if (userBalance >= cost) {
-        showToast(`🎉 Live Launch Promo: You have ${userBalance.toLocaleString()} KR! Unlocking ${passName}...`, '🚀');
-      } else {
-        const need = cost - userBalance;
-        showToast(`You have ${userBalance.toLocaleString()} KR. Need ${need.toLocaleString()} more KR for ${passName}! Claim your daily bonus above!`, '💎');
-      }
+        # 5. Handler back to Nov 9 notice
+        off_fn = '''window.triggerPassNotice = function(passName, cost) {
+      showToast(`${passName} costs ${cost.toLocaleString()} KR. Official redemption unlocks Monday, Nov 9!`, '⏳');
     };'''
-        new_fn = '''window.triggerPassNotice = function(passName, cost) {
-      showToast(`${passName} costs ${cost.toLocaleString()} KR. Official redemption unlocks Next Monday!`, '⏳');
-    };'''
-        rewards_content = rewards_content.replace(old_fn, new_fn)
+        rewards_content = re.sub(r'window\.triggerPassNotice\s*=\s*function\(passName,\s*cost\)\s*\{.*?\};', off_fn, rewards_content, flags=re.DOTALL)
 
         # 6. Restore index navbar link
         index_content = re.sub(
@@ -157,7 +158,7 @@ def set_state(state):
             '<a href="/rewards" class="notifyme-nav-link">Rewards</a>',
             index_content
         )
-        print("Set state to PRE-LAUNCH COUNTDOWN (OFF)")
+        print("Set state to PRE-LAUNCH COUNTDOWN (OFF - NOV 9 LAUNCH)")
 
     with open(rewards_path, 'w', encoding='utf-8') as f:
         f.write(rewards_content)
@@ -166,5 +167,5 @@ def set_state(state):
         f.write(index_content)
 
 if __name__ == '__main__':
-    mode = sys.argv[1] if len(sys.argv) > 1 else 'on'
+    mode = sys.argv[1] if len(sys.argv) > 1 else 'off'
     set_state(mode)
