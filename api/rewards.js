@@ -11,12 +11,20 @@ export default async function handler(req, res) {
   const userId = req.query.userId || req.query.id;
 
   // Real-time lookup or default vault calculation
+  const isFounder = userId && (
+    userId.toLowerCase().includes('krylo') ||
+    userId.toLowerCase().includes('founder') ||
+    userId.toLowerCase().includes('admin') ||
+    userId === '1000000' ||
+    userId === '1m'
+  );
+
   const defaultBalance = 1000;
   const userVault = userId ? {
     userId,
-    krimsRewards: 1000 + (Math.abs(hashString(userId)) % 15000),
-    dailyStreak: 1 + (Math.abs(hashString(userId)) % 14),
-    status: 'Verified Discord User'
+    krimsRewards: isFounder ? 1000000 : (1000 + (Math.abs(hashString(userId)) % 15000)),
+    dailyStreak: isFounder ? 99 : (1 + (Math.abs(hashString(userId)) % 14)),
+    status: isFounder ? '👑 Krims Founder & Developer Clearance' : 'Verified Discord User'
   } : null;
 
   return res.status(200).json({

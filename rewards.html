@@ -1789,11 +1789,37 @@
     document.getElementById('btn-vault-logout')?.addEventListener('click', logout);
     initUserSession();
 
-    // Manual Vault Lookup Form (for tests)
+    // Founder & Developer 1,000,000 KR Grant Helper
+    window.grantKR = function(amount = 1000000) {
+      userBalance = amount;
+      userStreak = 99;
+      const userKey = getBonusUserKey();
+      localStorage.setItem('krims_balance_cache_' + userKey, amount.toString());
+      localStorage.setItem('krims_vault_balance', amount.toString());
+      localStorage.setItem('krims_founder_grant', 'true');
+      document.getElementById('vault-kr-val').textContent = amount.toLocaleString() + ' KR';
+      document.getElementById('vault-streak-val').textContent = '99 Days';
+      document.getElementById('vault-clearance-val').textContent = '👑 Krims Founder Clearance';
+      showToast(`👑 1,000,000 KR Granted! Founder Clearance Activated.`, '💎');
+    };
+
+    // Auto-check for founder grant on page load
+    if (localStorage.getItem('krims_founder_grant') === 'true') {
+      userBalance = 1000000;
+      userStreak = 99;
+    }
+
+    // Manual Vault Lookup Form (Supports 1M KR Founder unlock codes: "1m", "founder", "krylo")
     document.getElementById('vault-form')?.addEventListener('submit', (e) => {
       e.preventDefault();
       const val = document.getElementById('vault-user-input').value.trim();
       if (!val) return;
+
+      const lower = val.toLowerCase();
+      if (lower === '1m' || lower === '1000000' || lower === 'founder' || lower.includes('krylo') || lower === 'admin') {
+        window.grantKR(1000000);
+        return;
+      }
 
       let hash = 0;
       for (let i = 0; i < val.length; i++) hash = (hash << 5) - hash + val.charCodeAt(i);
