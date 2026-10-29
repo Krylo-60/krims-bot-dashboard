@@ -1135,41 +1135,26 @@
           <path d="M2 9h20"></path>
         </svg>
       </div>
-      <div class="sneakpeek-pill">
-        <span class="pulse-dot"></span>
-        <span>CLASSIFIED SNEAK PEEK • REVEAL NEXT MONDAY</span>
+      <div class="sneakpeek-pill" style="border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.12); color: #34d399;">
+        <span class="pulse-dot" style="background: #10b981; box-shadow: 0 0 10px #10b981;"></span>
+        <span>🚀 OFFICIAL PRE-LAUNCH LIVE • KRIMS REWARDS SYSTEM ACTIVE</span>
       </div>
       <h1 class="hero-title">
         The Evolution to <span class="glow-cyan">Krims Rewards</span>.<br>
         The Only Key to <span class="glow-gold">Krims Code Premium</span>.
       </h1>
       <p class="hero-subtitle">
-        KryloCoins are officially retiring and transitioning into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. Starting next Monday, KR will be the single exclusive gateway to unlock Premium AI features, custom bots, and KSMP perks.
+        KryloCoins are officially retiring and transitioning into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. The Rewards Vault is now open for live claims, pass unlocks, and cross-network synchronization!
       </p>
 
       <!-- Launch Countdown Bar -->
-      <div class="countdown-bar">
-        <span class="countdown-label">⏳ Public Reveal Launch In:</span>
-        <div class="countdown-units">
-          <div class="cd-block">
-            <span class="cd-number" id="cd-days">05</span>
-            <span class="cd-unit-text">Days</span>
-          </div>
-          <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
-          <div class="cd-block">
-            <span class="cd-number" id="cd-hours">04</span>
-            <span class="cd-unit-text">Hours</span>
-          </div>
-          <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
-          <div class="cd-block">
-            <span class="cd-number" id="cd-mins">18</span>
-            <span class="cd-unit-text">Mins</span>
-          </div>
-          <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
-          <div class="cd-block">
-            <span class="cd-number" id="cd-secs">29</span>
-            <span class="cd-unit-text">Secs</span>
-          </div>
+      <div class="countdown-bar" style="border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); padding: 14px 24px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="pulse-dot" style="background: #10b981; box-shadow: 0 0 10px #10b981; width: 10px; height: 10px;"></span>
+          <span style="color: #34d399; font-weight: 800; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 0.05em;">SYSTEM STATUS: ONLINE & ACTIVE</span>
+        </div>
+        <div style="color: #fff; font-size: 0.88rem; font-weight: 600;">
+          Interactive Vault, Discord OAuth, & Web Alpha Bonus (+250 KR) are Live
         </div>
       </div>
     </section>
@@ -1548,6 +1533,7 @@
   <script>
     // Live Countdown Timer to Next Monday (Nov 2, 2026 00:00:00 UTC)
     function updateCountdown() {
+      if (!document.getElementById('cd-days')) return;
       // Target Next Monday
       const now = new Date();
       const target = new Date(Date.UTC(2026, 10, 2, 0, 0, 0)); // Nov 2, 2026
