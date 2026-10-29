@@ -137,26 +137,26 @@
             <span class="gradient-text">A Discord Bot — Done Right.</span>
           </h1>
           <p class="landing-hero-subtitle">
-            Trusted by your favorite servers. Fully customizable, 100% free, and powered by proprietary 0ms Neural AI, real-time gaming server bridges, and modular message components.
+            Fully customizable, completely free, and powered by proprietary 0ms Neural AI, real-time gaming server bridges, and modular message components.
           </p>
 
-          <!-- Sapphire Stats Counter Bar -->
+          <!-- Real Live Stats Counter Bar -->
           <div class="sapphire-stats-row">
             <div class="sapphire-stat-card">
-              <span class="stat-number">1,872,900+</span>
-              <span class="stat-label">Users & Players Reached</span>
+              <span class="stat-number" id="live-member-count">138+</span>
+              <span class="stat-label">Active Community Members</span>
             </div>
             <div class="sapphire-stat-card">
-              <span class="stat-number">390+</span>
-              <span class="stat-label">Connected Servers</span>
+              <span class="stat-number" id="live-guild-count">8</span>
+              <span class="stat-label">Connected Gaming Servers</span>
             </div>
             <div class="sapphire-stat-card">
-              <span class="stat-number">100%</span>
-              <span class="stat-label">Free Forever • No Paywalls</span>
+              <span class="stat-number" id="live-command-count">100</span>
+              <span class="stat-label">Production Slash Commands</span>
             </div>
             <div class="sapphire-stat-card">
-              <span class="stat-number">0ms</span>
-              <span class="stat-label">Neural AI Latency</span>
+              <span class="stat-number" id="live-ping-stat">87ms</span>
+              <span class="stat-label">Live Gateway Latency</span>
             </div>
           </div>
 
@@ -221,13 +221,44 @@
           </div>
         </div>
 
-        <!-- 3. Infinite Scrolling Marquee: Sapphire-Style Trusted Communities -->
+        <!-- 3. Infinite Scrolling Marquee: Real Connected Communities Only -->
         <div class="marquee-container">
-          <div class="marquee-header">TRUSTED BY YOUR FAVORITE SERVERS & POPULAR GAMING NETWORKS</div>
+          <div class="marquee-header">REAL CONNECTED GAMING COMMUNITIES & CREATOR STUDIOS</div>
           
-          <!-- Track 1: Global Gaming Giants -->
+          <!-- Track 1: Real Guilds -->
           <div class="marquee-track track-left" style="margin-bottom: 0.8rem;">
-            <div class="marquee-card"><div class="marquee-card-icon">⛏️</div><div class="marquee-card-info"><h4>MINECRAFT</h4> <p>4,176,780 Members</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">👑</div><div class="marquee-card-info"><h4>PHOENIX DEN A GAMING SERVER</h4> <p>Official Gaming Community</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">⚔️</div><div class="marquee-card-info"><h4>KryloSMP</h4> <p>Official Minecraft SMP</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🚀</div><div class="marquee-card-info"><h4>Krylo's Skybase</h4> <p>Creator Studio & HQ</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">💀</div><div class="marquee-card-info"><h4>The_Half_Lifes</h4> <p>Elite Clan & SMP Network</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🛠️</div><div class="marquee-card-info"><h4>Krims Code Support & Updates</h4> <p>Bot Central & Engineering</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🎮</div><div class="marquee-card-info"><h4>Hyperloom Studios</h4> <p>Connected Gaming Partner</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">⛏️</div><div class="marquee-card-info"><h4>KevinMC</h4> <p>Minecraft Community</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🔥</div><div class="marquee-card-info"><h4>TorchWick Games Official</h4> <p>Gaming Community Discord</p></div></div>
+            <!-- Duplicated for smooth loop -->
+            <div class="marquee-card"><div class="marquee-card-icon">👑</div><div class="marquee-card-info"><h4>PHOENIX DEN A GAMING SERVER</h4> <p>Official Gaming Community</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">⚔️</div><div class="marquee-card-info"><h4>KryloSMP</h4> <p>Official Minecraft SMP</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🚀</div><div class="marquee-card-info"><h4>Krylo's Skybase</h4> <p>Creator Studio & HQ</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">💀</div><div class="marquee-card-info"><h4>The_Half_Lifes</h4> <p>Elite Clan & SMP Network</p></div></div>
+          </div>
+
+          <!-- Track 2: Real Guilds Reverse Track -->
+          <div class="marquee-track track-right">
+            <div class="marquee-card"><div class="marquee-card-icon">🔥</div><div class="marquee-card-info"><h4>TorchWick Games Official</h4> <p>Gaming Community Discord</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">⛏️</div><div class="marquee-card-info"><h4>KevinMC</h4> <p>Minecraft Community</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🎮</div><div class="marquee-card-info"><h4>Hyperloom Studios</h4> <p>Connected Gaming Partner</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🛠️</div><div class="marquee-card-info"><h4>Krims Code Support & Updates</h4> <p>Bot Central & Engineering</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">💀</div><div class="marquee-card-info"><h4>The_Half_Lifes</h4> <p>Elite Clan & SMP Network</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🚀</div><div class="marquee-card-info"><h4>Krylo's Skybase</h4> <p>Creator Studio & HQ</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">⚔️</div><div class="marquee-card-info"><h4>KryloSMP</h4> <p>Official Minecraft SMP</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">👑</div><div class="marquee-card-info"><h4>PHOENIX DEN A GAMING SERVER</h4> <p>Official Gaming Community</p></div></div>
+            <!-- Duplicated for loop -->
+            <div class="marquee-card"><div class="marquee-card-icon">🔥</div><div class="marquee-card-info"><h4>TorchWick Games Official</h4> <p>Gaming Community Discord</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">⛏️</div><div class="marquee-card-info"><h4>KevinMC</h4> <p>Minecraft Community</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🎮</div><div class="marquee-card-info"><h4>Hyperloom Studios</h4> <p>Connected Gaming Partner</p></div></div>
+            <div class="marquee-card"><div class="marquee-card-icon">🛠️</div><div class="marquee-card-info"><h4>Krims Code Support & Updates</h4> <p>Bot Central & Engineering</p></div></div>
+          </div>
+        </div>
             <div class="marquee-card"><div class="marquee-card-icon">🎯</div><div class="marquee-card-info"><h4>VALORANT</h4> <p>2,940,531 Members</p></div></div>
             <div class="marquee-card"><div class="marquee-card-icon">⚡</div><div class="marquee-card-info"><h4>FORTNITE</h4> <p>2,057,982 Members</p></div></div>
             <div class="marquee-card"><div class="marquee-card-icon">🦸</div><div class="marquee-card-info"><h4>MARVEL RIVALS</h4> <p>4,611,087 Members</p></div></div>
@@ -2667,5 +2698,29 @@
     </footer>
   </div>
   <script type="module" src="/src/main.js"></script>
+
+  <!-- Real Live Data Sync from Krims Bot Status API -->
+  <script>
+    (function syncRealLiveStats() {
+      fetch('https://krims-discord-bot-d57m.onrender.com/api/status')
+        .then(r => r.json())
+        .then(data => {
+          if (data && data.masterBot) {
+            const m = data.masterBot;
+            const memberEl = document.getElementById('live-member-count');
+            const guildEl = document.getElementById('live-guild-count');
+            const cmdEl = document.getElementById('live-command-count');
+            const pingEl = document.getElementById('live-ping-stat');
+
+            if (memberEl && m.memberCount) memberEl.textContent = m.memberCount + '+';
+            if (guildEl && m.guildCount) guildEl.textContent = m.guildCount;
+            if (cmdEl && m.commandsCount) cmdEl.textContent = m.commandsCount;
+            if (pingEl && m.ping) pingEl.textContent = m.ping + 'ms';
+          }
+        })
+        .catch(err => console.log('Live stats poller:', err.message));
+    })();
+  </script>
+
 </body>
 </html>
