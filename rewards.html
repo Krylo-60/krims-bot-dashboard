@@ -82,35 +82,39 @@
     }
 
     /* ── 3. TOP NAVIGATION BAR ── */
-    
-    /* ── UNIFIED WINNING PILL-BUTTON NAVBAR (Image 1 Cyber Architecture) ── */
+
+    /* ── UNIFIED ULTRA-RESPONSIVE PILL-BUTTON NAVBAR ── */
     .top-navbar {
       position: sticky;
       top: 0;
       z-index: 1000;
-      height: 68px;
-      background: rgba(7, 10, 18, 0.88);
+      min-height: 64px;
+      background: rgba(7, 10, 18, 0.90);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0 1.75rem;
+      padding: 0.5rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
       color: inherit;
+      flex-shrink: 0;
     }
 
     .brand-logo-stroke {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
       border: 1.5px solid #00f2ff;
       background: rgba(0, 242, 255, 0.08);
       color: #00f2ff;
@@ -124,39 +128,51 @@
 
     .brand-group:hover .brand-logo-stroke {
       background: rgba(0, 242, 255, 0.16);
-      box-shadow: 0 0 25px rgba(0, 242, 255, 0.35);
-      transform: scale(1.05);
+      box-shadow: 0 0 22px rgba(0, 242, 255, 0.4);
+      transform: scale(1.04);
     }
 
     .brand-title {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.1rem;
+      font-size: 1.02rem;
       font-weight: 800;
       letter-spacing: 0.5px;
       background: linear-gradient(135deg, #fff 0%, #00f2ff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      white-space: nowrap;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+      padding: 4px 2px;
     }
 
-    /* Distinct Glass Card Pill Buttons from Image 1 */
+    .nav-links::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    /* Distinct Glass Card Pill Buttons */
     .nav-pill-btn {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      padding: 7px 15px;
+      gap: 6px;
+      padding: 6px 12px;
       background: rgba(255, 255, 255, 0.04);
       color: #cbd5e1;
       border: 1px solid rgba(255, 255, 255, 0.09);
-      border-radius: 9px;
-      font-size: 0.84rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
       font-weight: 600;
       text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
     }
@@ -173,145 +189,60 @@
       background: rgba(0, 242, 255, 0.08);
       border: 1.5px solid #00f2ff;
       color: #00f2ff;
-      box-shadow: 0 0 16px rgba(0, 242, 255, 0.25);
+      box-shadow: 0 0 14px rgba(0, 242, 255, 0.25);
     }
 
-    /* Winning Electric Cyan Gradient Support CTA Button */
+    /* Electric Cyan Gradient Support CTA Button */
     .nav-cta-gradient {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      padding: 8px 18px;
+      gap: 6px;
+      padding: 7px 15px;
       background: linear-gradient(135deg, #00f2fe 0%, #0099ff 100%);
       color: #030712 !important;
       font-weight: 700;
-      border-radius: 9px;
-      font-size: 0.84rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
       text-decoration: none;
       border: none;
-      box-shadow: 0 4px 16px rgba(0, 242, 255, 0.4);
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(0, 242, 255, 0.4);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
     }
 
     .nav-cta-gradient:hover {
-      box-shadow: 0 6px 24px rgba(0, 242, 255, 0.7);
+      box-shadow: 0 6px 20px rgba(0, 242, 255, 0.7);
       transform: translateY(-1px);
       filter: brightness(1.08);
     }
 
-    .top-navbar-old {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(7, 10, 18, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0.85rem 1.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* Media query adjustments for smaller screens */
+    @media (max-width: 900px) {
+      .nav-pill-vote {
+        display: none !important;
+      }
+      .brand-title {
+        font-size: 0.95rem;
+      }
     }
 
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .brand-logo-stroke {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      border: 1.5px solid var(--cyan);
-      background: rgba(0, 242, 255, 0.08);
-      color: var(--cyan);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 15px var(--cyan-glow);
-      transition: all 0.25s ease;
-      flex-shrink: 0;
-    }
-
-    .brand-group:hover .brand-logo-stroke {
-      background: rgba(0, 242, 255, 0.16);
-      box-shadow: 0 0 25px var(--cyan-glow);
-      transform: scale(1.05);
-    }
-
-    .brand-title {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      background: linear-gradient(135deg, #fff 0%, var(--cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .nav-link {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.86rem;
-      font-weight: 600;
-      padding: 7px 14px;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .nav-link:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .nav-link.active {
-      color: var(--cyan);
-      background: rgba(0, 242, 255, 0.1);
-      border: 1px solid rgba(0, 242, 255, 0.3);
-    }
-
-    .nav-badge-pill {
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 2px 6px;
-      background: linear-gradient(135deg, var(--gold), #ea580c);
-      color: #fff;
-      border-radius: 10px;
-      letter-spacing: 0.05em;
-    }
-
-    .nav-btn-discord {
-      background: #5865f2;
-      color: #fff;
-      border: none;
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .nav-btn-discord:hover {
-      background: #4752c4;
-      box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
-      transform: translateY(-1px);
+    @media (max-width: 600px) {
+      .top-navbar {
+        padding: 0.5rem 0.75rem;
+      }
+      .brand-title {
+        display: none;
+      }
+      .nav-pill-btn {
+        padding: 5px 10px;
+        font-size: 0.78rem;
+      }
+      .nav-cta-gradient {
+        padding: 6px 12px;
+        font-size: 0.78rem;
+      }
     }
 
     /* ── 4. HERO SECTION & LAUNCH COUNTDOWN ── */
@@ -1264,7 +1195,7 @@
     /* ── 11. CONSOLIDATED RESPONSIVE BREAKPOINTS ── */
     @media (max-width: 768px) {
       .top-navbar { padding: 0.75rem 1rem; }
-      .nav-links { display: none; }
+      /* .nav-links preserved with mobile scrolling */
       .hero-container { padding: 2.5rem 1rem 1.5rem; }
       .vault-header { flex-direction: column; align-items: flex-start; }
       .vault-lookup-form { max-width: 100%; }
@@ -1277,10 +1208,10 @@
 <body>
 
   <!-- Top Sticky Navigation -->
-    <header class="top-navbar">
+      <header class="top-navbar">
     <a href="/" class="brand-group">
       <div class="brand-logo-stroke">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 3h12l4 6-10 12L2 9z"></path>
           <path d="M11 3 8 9l4 12 4-12-3-6"></path>
           <path d="M2 9h20"></path>
@@ -1295,7 +1226,7 @@
       </a>
       <a href="/rewards" class="nav-pill-btn active">
         <span>💎</span>
-        <span>Krims Rewards</span>
+        <span>Rewards</span>
       </a>
       <a href="/wiki" class="nav-pill-btn ">
         <span>📖</span>
@@ -1305,7 +1236,7 @@
         <span>🤖</span>
         <span>Custom Bot</span>
       </a>
-      <a href="https://top.gg/bot/1523794466740371586/vote" target="_blank" class="nav-pill-btn">
+      <a href="https://top.gg/bot/1523794466740371586/vote" target="_blank" class="nav-pill-btn nav-pill-vote">
         <span>🗳️</span>
         <span>Vote (2x XP)</span>
       </a>
