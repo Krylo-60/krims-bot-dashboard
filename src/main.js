@@ -433,8 +433,6 @@ function startDemoMode() {
   const bottomFooter = document.querySelector('.bottom-footer');
   if (bottomFooter) bottomFooter.style.display = 'none';
   
-  const floatingBar = document.getElementById('landing-floating-bar');
-  if (floatingBar) floatingBar.style.display = 'none';
   
   const quickLinks = document.getElementById('dash-quick-links');
   if (quickLinks) quickLinks.style.display = 'flex';
@@ -486,8 +484,6 @@ function returnToLanding() {
   const bottomFooter = document.querySelector('.bottom-footer');
   if (bottomFooter) bottomFooter.style.display = 'none';
   
-  const floatingBar = document.getElementById('landing-floating-bar');
-  if (floatingBar) floatingBar.style.display = 'block';
   
   const quickLinks = document.getElementById('dash-quick-links');
   if (quickLinks) quickLinks.style.display = 'none';
@@ -565,8 +561,6 @@ async function loadDiscordData(token) {
     const bottomFooter = document.querySelector('.bottom-footer');
     if (bottomFooter) bottomFooter.style.display = 'none';
     
-    const floatingBar = document.getElementById('landing-floating-bar');
-    if (floatingBar) floatingBar.style.display = 'none';
     
     const quickLinks = document.getElementById('dash-quick-links');
     if (quickLinks) quickLinks.style.display = 'flex';
@@ -2250,8 +2244,6 @@ function logout() {
   const bottomFooter = document.querySelector('.bottom-footer');
   if (bottomFooter) bottomFooter.style.display = 'none';
   
-  const floatingBar = document.getElementById('landing-floating-bar');
-  if (floatingBar) floatingBar.style.display = 'block';
   
   const quickLinks = document.getElementById('dash-quick-links');
   if (quickLinks) quickLinks.style.display = 'none';

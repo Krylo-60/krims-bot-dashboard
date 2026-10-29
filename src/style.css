@@ -407,7 +407,6 @@ body::after {
 body.in-dashboard #notifyme-top-links,
 body.in-dashboard #landing-wiki-link,
 body.in-dashboard .wiki-nav-link,
-body.in-dashboard #landing-floating-bar,
 body.in-dashboard .bottom-footer {
   display: none !important;
 }
