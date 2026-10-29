@@ -188,7 +188,14 @@ function initDashboardApp() {
     const errorMsg = document.getElementById('oauth-error-msg');
     if (errorBox && errorMsg) {
       errorBox.style.display = 'block';
-      errorMsg.textContent = `Discord returned "${oauthError}". Please authorize with Discord to access the dashboard.`;
+      if (oauthError === 'access_denied') {
+        errorMsg.textContent = 'Authorization was cancelled. Click below to try again.';
+      } else {
+        errorMsg.textContent = `Discord Notice (${oauthError}). Click below to authorize smoothly.`;
+      }
+      setTimeout(() => {
+        if (errorBox) errorBox.style.display = 'none';
+      }, 7000);
     }
     history.replaceState("", document.title, window.location.pathname);
   }
