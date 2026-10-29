@@ -10,11 +10,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ==========================================================================
+       KRIMS REWARDS CORE STYLESHEET (Clean Modular Architecture)
+       ========================================================================== */
+
+    /* ── 1. DESIGN TOKENS & SYSTEM VARIABLES ── */
     :root {
       --bg: #070a12;
       --card-bg: rgba(13, 18, 32, 0.75);
-      --card-border: rgba(0, 242, 255, 0.2);
-      --card-border-hover: rgba(0, 242, 255, 0.5);
+      --card-border: rgba(0, 242, 255, 0.18);
+      --card-border-hover: rgba(0, 242, 255, 0.45);
       --cyan: #00f2ff;
       --cyan-glow: rgba(0, 242, 255, 0.25);
       --purple: #8b5cf6;
@@ -22,15 +27,22 @@
       --gold: #f59e0b;
       --gold-glow: rgba(245, 158, 11, 0.25);
       --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
-      --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-display: 'Orbitron', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ── 2. GLOBAL BASE & CYBER SCROLLBAR ── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     html, body {
       background: var(--bg);
       color: var(--text);
@@ -41,11 +53,18 @@
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
       scrollbar-width: thin;
-      scrollbar-color: #00f2ff rgba(8, 12, 22, 0.85);
+      scrollbar-color: var(--cyan) rgba(8, 12, 22, 0.85);
     }
 
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: rgba(8, 12, 22, 0.85); }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(8, 12, 22, 0.85);
+    }
+
     ::-webkit-scrollbar-thumb {
       background: linear-gradient(180deg, var(--cyan) 0%, var(--purple) 100%);
       border-radius: 6px;
@@ -62,7 +81,7 @@
       z-index: 0;
     }
 
-    /* Top Navigation */
+    /* ── 3. TOP NAVIGATION BAR ── */
     .top-navbar {
       position: sticky;
       top: 0;
@@ -71,7 +90,7 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0.85rem 1.5rem;
+      padding: 0.85rem 1.75rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -104,21 +123,6 @@
       background: rgba(0, 242, 255, 0.16);
       box-shadow: 0 0 25px var(--cyan-glow);
       transform: scale(1.05);
-    }
-
-    .hero-stroke-badge {
-      width: 64px;
-      height: 64px;
-      border-radius: 18px;
-      border: 2px solid var(--cyan);
-      background: rgba(0, 242, 255, 0.08);
-      color: var(--cyan);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 30px var(--cyan-glow);
-      margin-bottom: 1.25rem;
-      transition: all 0.3s ease;
     }
 
     .brand-title {
@@ -189,9 +193,10 @@
     .nav-btn-discord:hover {
       background: #4752c4;
       box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+      transform: translateY(-1px);
     }
 
-    /* Hero Section */
+    /* ── 4. HERO SECTION & LAUNCH COUNTDOWN ── */
     .hero-container {
       position: relative;
       z-index: 1;
@@ -201,18 +206,38 @@
       text-align: center;
     }
 
+    .hero-stroke-badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      border: 2px solid var(--cyan);
+      background: rgba(0, 242, 255, 0.08);
+      color: var(--cyan);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px var(--cyan-glow);
+      margin-bottom: 1.25rem;
+      transition: all 0.3s ease;
+    }
+
+    .hero-stroke-badge:hover {
+      transform: scale(1.08) rotate(3deg);
+      box-shadow: 0 0 45px var(--cyan-glow);
+    }
+
     .sneakpeek-pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 14px;
+      padding: 6px 16px;
       background: rgba(0, 242, 255, 0.08);
       border: 1px solid var(--cyan);
       border-radius: 50px;
       color: var(--cyan);
       font-family: var(--font-mono);
       font-size: 0.78rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.05em;
       margin-bottom: 1.5rem;
       box-shadow: 0 0 20px var(--cyan-glow);
@@ -262,7 +287,6 @@
       line-height: 1.6;
     }
 
-    /* Countdown Bar */
     .countdown-bar {
       display: inline-flex;
       align-items: center;
@@ -311,7 +335,7 @@
       text-transform: uppercase;
     }
 
-    /* Highlights 3-Card Banner */
+    /* ── 5. CORE VALUE PILLARS (3-CARD SHOWCASE) ── */
     .core-pillars-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -350,8 +374,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      color: var(--cyan);
       margin-bottom: 16px;
+      box-shadow: 0 0 15px var(--cyan-glow);
+    }
+
+    .pillar-icon-box.gold {
+      background: rgba(245, 158, 11, 0.08);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: var(--gold);
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    .pillar-icon-box.purple {
+      background: rgba(139, 92, 246, 0.08);
+      border-color: rgba(139, 92, 246, 0.3);
+      color: var(--purple);
+      box-shadow: 0 0 15px var(--purple-glow);
     }
 
     .pillar-title {
@@ -362,12 +401,12 @@
     }
 
     .pillar-desc {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
       line-height: 1.55;
     }
 
-    /* Live Interactive Vault Box */
+    /* ── 6. INTERACTIVE REWARDS VAULT ── */
     .vault-section {
       max-width: 1100px;
       margin: 0 auto 4rem;
@@ -377,27 +416,23 @@
     }
 
     .vault-card {
-      background: linear-gradient(135deg, rgba(13, 18, 32, 0.9) 0%, rgba(18, 24, 44, 0.9) 100%);
+      background: var(--card-bg);
       border: 1.5px solid var(--card-border);
       border-radius: 20px;
       padding: 32px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      position: relative;
     }
 
-    /* Discord Auth Box Inside Vault */
     .vault-auth-box {
       text-align: center;
-      padding: 3rem 1.5rem;
-      background: rgba(8, 12, 22, 0.6);
-      border: 1px dashed rgba(88, 101, 242, 0.4);
-      border-radius: 16px;
-      margin-bottom: 1.5rem;
+      padding: 2.5rem 1rem;
     }
 
     .vault-auth-icon {
-      width: 68px;
-      height: 68px;
+      width: 64px;
+      height: 64px;
       border-radius: 20px;
       background: rgba(88, 101, 242, 0.15);
       border: 1px solid rgba(88, 101, 242, 0.4);
@@ -662,11 +697,22 @@
 
     .action-btn-alpha:hover {
       background: rgba(139, 92, 246, 0.3);
-      box-shadow: 0 0 15px var(--purple-glow);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
     }
 
-    /* Premium Passes Cards */
-    .section-container {
+    .action-btn-alpha:disabled,
+    .action-btn-alpha.claimed {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: var(--text-dim) !important;
+      cursor: not-allowed !important;
+      box-shadow: none !important;
+      transform: none !important;
+      opacity: 0.6 !important;
+    }
+
+    /* ── 7. SEASON PASSES SECTION ── */
+    .passes-section {
       max-width: 1100px;
       margin: 0 auto 4rem;
       padding: 0 1.5rem;
@@ -679,93 +725,117 @@
       margin-bottom: 2.5rem;
     }
 
-    .section-eyebrow {
+    .section-pill {
       font-family: var(--font-mono);
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--cyan);
+      font-size: 0.72rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 6px;
+      letter-spacing: 0.06em;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(0, 242, 255, 0.1);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      color: var(--cyan);
+      display: inline-block;
+      margin-bottom: 8px;
     }
 
     .section-title {
       font-family: var(--font-display);
       font-size: clamp(1.6rem, 3.5vw, 2.3rem);
-      font-weight: 800;
+      font-weight: 900;
       color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.5;
     }
 
     .passes-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
       gap: 22px;
+      align-items: stretch;
     }
 
     .pass-card {
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 30px;
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(16px);
       display: flex;
       flex-direction: column;
       position: relative;
-      backdrop-filter: blur(12px);
       transition: all 0.25s ease;
+    }
+
+    .pass-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px var(--cyan-glow);
     }
 
     .pass-card.featured {
       border-color: var(--cyan);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 30px var(--cyan-glow);
-      transform: scale(1.02);
+      background: linear-gradient(180deg, rgba(0, 242, 255, 0.06) 0%, rgba(13, 18, 32, 0.85) 100%);
+      box-shadow: 0 10px 30px rgba(0, 242, 255, 0.15);
     }
 
     .pass-card.elite {
       border-color: var(--gold);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 30px var(--gold-glow);
-    }
-
-    .pass-card:hover {
-      transform: translateY(-6px);
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.06) 0%, rgba(13, 18, 32, 0.85) 100%);
+      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
     }
 
     .pass-badge {
       position: absolute;
-      top: 18px;
-      right: 18px;
-      font-size: 0.68rem;
+      top: -12px;
+      right: 24px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
       font-weight: 800;
       text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-
-    .pass-card.featured .pass-badge {
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 12px;
       background: var(--cyan);
       color: #050b14;
-      font-weight: 900;
+      box-shadow: 0 0 15px var(--cyan-glow);
     }
 
-    .pass-card.elite .pass-badge {
+    .pass-badge.gold {
       background: var(--gold);
       color: #050b14;
-      font-weight: 900;
+      box-shadow: 0 0 15px var(--gold-glow);
     }
 
     .pass-name {
+      font-family: var(--font-display);
       font-size: 1.25rem;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
-    .pass-price-wrap {
+    .pass-duration {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .pass-price-row {
       display: flex;
       align-items: baseline;
-      gap: 6px;
-      margin-bottom: 1.5rem;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 16px;
     }
 
     .pass-price {
@@ -775,11 +845,15 @@
       color: #fff;
     }
 
-    .pass-currency {
-      font-size: 0.85rem;
-      font-weight: 700;
+    .pass-price-currency {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 800;
       color: var(--cyan);
-      text-transform: uppercase;
+    }
+
+    .pass-card.elite .pass-price-currency {
+      color: var(--gold);
     }
 
     .pass-features-list {
@@ -787,7 +861,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-bottom: 2rem;
+      margin-bottom: 24px;
       flex-grow: 1;
     }
 
@@ -851,7 +925,7 @@
       box-shadow: 0 0 20px var(--gold-glow);
     }
 
-    /* Earning Methods Grid */
+    /* ── 8. EARNING METHODS GRID ── */
     .earning-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -907,7 +981,7 @@
       line-height: 1.5;
     }
 
-    /* Roadmap & Updates Section */
+    /* ── 9. ROADMAP & UPDATE SUBSCRIPTIONS ── */
     .roadmap-list {
       display: flex;
       flex-direction: column;
@@ -972,7 +1046,6 @@
       line-height: 1.55;
     }
 
-    /* Update Subscription Box */
     .sub-box {
       background: linear-gradient(135deg, rgba(0, 242, 255, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
       border: 1.5px dashed var(--cyan);
@@ -1007,7 +1080,7 @@
       flex-wrap: wrap;
     }
 
-    /* Footer */
+    /* ── 10. FOOTER & TOAST ── */
     footer {
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       background: rgba(7, 10, 18, 0.95);
@@ -1043,7 +1116,6 @@
       font-size: 0.8rem;
     }
 
-    /* Toast Notification */
     #rewards-toast {
       position: fixed;
       bottom: 24px;
@@ -1071,9 +1143,10 @@
       opacity: 1;
     }
 
+    /* ── 11. CONSOLIDATED RESPONSIVE BREAKPOINTS ── */
     @media (max-width: 768px) {
       .top-navbar { padding: 0.75rem 1rem; }
-      .nav-links { display: none; } /* Mobile simplified header */
+      .nav-links { display: none; }
       .hero-container { padding: 2.5rem 1rem 1.5rem; }
       .vault-header { flex-direction: column; align-items: flex-start; }
       .vault-lookup-form { max-width: 100%; }
@@ -1081,7 +1154,7 @@
       .roadmap-date-col { min-width: unset; }
       .sub-form { flex-direction: column; }
     }
-  </style>
+</style>
 </head>
 <body>
 
