@@ -1,181 +1,830 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Linked Roles Verification | Krims Bot & KSMP</title>
+  <title>Linked Roles Verification • Krims Code AI & KSMP</title>
+  <meta name="description" content="Connect your Discord account to verify your player credentials, sync your KR (Krims Rewards) balance, and unlock official KSMP Member and Krims Elite linked roles.">
+  <link rel="icon" type="image/png" href="/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* ── 1. DESIGN TOKENS & SYSTEM VARIABLES ── */
     :root {
-      --bg: #07090e;
-      --card-bg: rgba(13, 17, 23, 0.85);
-      --border: rgba(0, 242, 255, 0.25);
-      --neon-cyan: #00f2ff;
-      --neon-purple: #8b5cf6;
+      --bg: #070a12;
+      --card-bg: rgba(13, 18, 32, 0.8);
+      --card-border: rgba(0, 242, 255, 0.2);
+      --card-border-hover: rgba(0, 242, 255, 0.5);
+      --cyan: #00f2ff;
+      --cyan-glow: rgba(0, 242, 255, 0.25);
+      --purple: #8b5cf6;
+      --purple-glow: rgba(139, 92, 246, 0.25);
       --gold: #f59e0b;
-      --text: #f3f4f6;
+      --gold-glow: rgba(245, 158, 11, 0.25);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
+      --text: #f8fafc;
       --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Orbitron', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', sans-serif;
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--cyan) rgba(8, 12, 22, 0.85);
+    }
+
+    html, body {
       background: var(--bg);
       color: var(--text);
+      font-family: var(--font-main);
       min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    /* Ambient Mesh Glow */
+    .ambient-mesh {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 650px;
+      background: 
+        radial-gradient(circle at 50% -10%, rgba(99, 102, 241, 0.16), transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(0, 242, 255, 0.14), transparent 50%),
+        radial-gradient(circle at 15% 30%, rgba(245, 158, 11, 0.08), transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── UNIFIED WINNING NAVBAR ── */
+    .top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 10, 18, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.85rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-stroke {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1.5px solid var(--cyan);
+      background: rgba(0, 242, 255, 0.08);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px var(--cyan-glow);
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .brand-group:hover .brand-logo-stroke {
+      background: rgba(0, 242, 255, 0.16);
+      box-shadow: 0 0 25px var(--cyan-glow);
+      transform: scale(1.05);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #fff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      background: rgba(0, 242, 255, 0.1);
+      border: 1px solid rgba(0, 242, 255, 0.25);
+      color: var(--cyan);
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-btn-discord {
+      background: #5865f2;
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn-discord:hover {
+      background: #4752c4;
+      box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .page-container {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      position: relative;
-      overflow-x: hidden;
-    }
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 50% 20%, rgba(0, 242, 255, 0.08) 0%, transparent 60%),
-                  radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 36px 32px;
-      max-width: 540px;
-      width: 100%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 242, 255, 0.1);
-      backdrop-filter: blur(12px);
-      text-align: center;
+      padding: 3rem 1.5rem 4rem;
       position: relative;
       z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
     }
-    .logo-badge {
-      width: 80px;
-      height: 80px;
+
+    /* ── MAIN VERIFICATION CARD ── */
+    .verify-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 640px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 35px var(--cyan-glow);
+      backdrop-filter: blur(20px);
+      text-align: center;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .verify-badge-icon {
+      width: 76px;
+      height: 76px;
       margin: 0 auto 20px;
       border-radius: 20px;
-      background: rgba(0, 242, 255, 0.1);
-      border: 2px solid var(--neon-cyan);
+      background: rgba(0, 242, 255, 0.08);
+      border: 2px solid var(--cyan);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+      color: var(--cyan);
+      box-shadow: 0 0 30px var(--cyan-glow);
+      transition: all 0.3s ease;
     }
-    .logo-badge img { width: 56px; height: 56px; border-radius: 12px; }
-    h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.6rem;
-      letter-spacing: 1px;
+
+    .verify-badge-icon:hover {
+      transform: scale(1.08) rotate(4deg);
+      box-shadow: 0 0 45px var(--cyan-glow);
+    }
+
+    .bonus-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 50px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    h1.verify-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      font-weight: 900;
+      letter-spacing: 0.5px;
       margin-bottom: 8px;
-      background: linear-gradient(135deg, #fff 0%, var(--neon-cyan) 100%);
+      background: linear-gradient(135deg, #fff 0%, var(--cyan) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    p.subtitle {
+
+    p.verify-subtitle {
       color: var(--text-muted);
       font-size: 0.95rem;
-      line-height: 1.5;
+      line-height: 1.55;
       margin-bottom: 24px;
     }
+
+    /* ── PERKS & KR INTEGRATION LIST ── */
     .perks-list {
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(8, 12, 22, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 28px;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
       text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
+
     .perk-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
-      padding: 8px 0;
       font-size: 0.9rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.45;
     }
-    .perk-item:last-child { border-bottom: none; }
-    .perk-icon { font-size: 1.2rem; }
+
+    .perk-icon-wrap {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .perk-icon-wrap.cyan {
+      background: rgba(0, 242, 255, 0.1);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+    }
+
+    .perk-icon-wrap.gold {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--gold);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .perk-icon-wrap.emerald {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .perk-icon-wrap.purple {
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--purple);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .perk-text strong {
+      color: #fff;
+    }
+
+    .perk-text span {
+      color: var(--text-muted);
+    }
+
+    /* ── DISCORD PROFILE BADGE LIVE PREVIEW ── */
+    .discord-badge-preview {
+      background: #111214;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 24px;
+      text-align: left;
+      position: relative;
+    }
+
+    .preview-header-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .discord-role-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2b2d31;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #f2f3f5;
+      margin-right: 8px;
+      margin-bottom: 6px;
+    }
+
+    .discord-role-pill svg {
+      width: 14px;
+      height: 14px;
+      color: var(--cyan);
+    }
+
+    .meta-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--cyan);
+      background: rgba(0, 242, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 242, 255, 0.25);
+    }
+
+    .meta-tag.gold {
+      color: var(--gold);
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+
+    /* ── ACTIONS & BUTTONS ── */
     .btn-verify {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
       width: 100%;
-      padding: 14px 24px;
+      padding: 15px 28px;
       background: linear-gradient(135deg, #5865F2, #4752c4);
       color: #fff;
-      font-weight: 700;
-      font-size: 1rem;
+      font-family: var(--font-main);
+      font-weight: 800;
+      font-size: 1.02rem;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       text-decoration: none;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
-      transition: all 0.2s ease;
+      box-shadow: 0 4px 25px rgba(88, 101, 242, 0.45);
+      transition: all 0.25s ease;
     }
+
     .btn-verify:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(88, 101, 242, 0.6);
+      box-shadow: 0 8px 30px rgba(88, 101, 242, 0.7);
+      background: linear-gradient(135deg, #6774f5, #4f5cd6);
     }
+
+    /* ── SUCCESS STATE BOX (Hidden by default, shown when authorized) ── */
+    #verifySuccessState {
+      display: none;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1.5px solid var(--emerald);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.2);
+    }
+
+    .success-user-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .success-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid var(--emerald);
+      object-fit: cover;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .success-username {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .success-kr-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--emerald);
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--emerald);
+      padding: 4px 10px;
+      border-radius: 8px;
+      margin-top: 4px;
+    }
+
+    /* ── ADMIN / SERVER OWNER GUIDE ACCORDION ── */
+    .admin-guide-box {
+      margin-top: 32px;
+      background: rgba(13, 18, 30, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: left;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .admin-guide-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .admin-guide-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-guide-content {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .admin-step {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .step-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: rgba(0, 242, 255, 0.1);
+      border: 1px solid rgba(0, 242, 255, 0.25);
+      color: var(--cyan);
+      padding: 1px 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── FOOTER LINKS ── */
     .footer-links {
-      margin-top: 24px;
+      margin-top: 28px;
       display: flex;
       justify-content: center;
-      gap: 16px;
-      font-size: 0.8rem;
+      gap: 20px;
+      font-size: 0.82rem;
     }
+
     .footer-links a {
       color: var(--text-muted);
       text-decoration: none;
       transition: color 0.2s;
     }
-    .footer-links a:hover { color: var(--neon-cyan); }
+
+    .footer-links a:hover {
+      color: var(--cyan);
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="logo-badge">
-      <img src="/logo.png" alt="Krims Bot Logo">
-    </div>
-    <h1>LINKED ROLES VERIFICATION</h1>
-    <p class="subtitle">
-      Connect your Discord account to verify your player credentials and unlock official <strong>KSMP Member</strong> and <strong>Krims Elite</strong> linked roles.
-    </p>
+  <!-- Ambient Background Mesh -->
+  <div class="ambient-mesh"></div>
 
-    <div class="perks-list">
-      <div class="perk-item">
-        <span class="perk-icon">🛡️</span>
-        <div><strong>KSMP Member Status:</strong> Verified server membership & anti-raid clearance</div>
+  <!-- Top Global Navbar (Unified Winning Style) -->
+  <header class="top-navbar">
+    <a href="/" class="brand-group">
+      <div class="brand-logo-stroke">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12l4 6-10 12L2 9z"></path>
+          <path d="M11 3 8 9l4 12 4-12-3-6"></path>
+          <path d="M2 9h20"></path>
+        </svg>
       </div>
-      <div class="perk-item">
-        <span class="perk-icon">💰</span>
-        <div><strong>KryloCoins Balance:</strong> Synchronized with Discord Economy & Store</div>
-      </div>
-      <div class="perk-item">
-        <span class="perk-icon">⚡</span>
-        <div><strong>Level & Voice XP:</strong> Real-time rank tier synced to Linked Role badge</div>
-      </div>
-      <div class="perk-item">
-        <span class="perk-icon">🤖</span>
-        <div><strong>Krims AI v5 Access:</strong> Instant priority reasoning in all text channels</div>
-      </div>
-    </div>
-
-    <a href="https://discord.com/oauth2/authorize?client_id=1523794466740371586&response_type=token&scope=identify%20role_connections.write" class="btn-verify">
-      <svg width="22" height="22" viewBox="0 0 127.14 96.36" fill="currentColor"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.88-.65,1.72-1.34,2.51-2a75.58,75.58,0,0,0,73,0c.8.71,1.63,1.4,2.51,2a68.43,68.43,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129.07,49.19,122.9,26.43,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/></svg>
-      <span>Verify with Discord</span>
+      <span class="brand-title">KRIMS ROLES</span>
+      <span class="badge-tag">Verification</span>
     </a>
+    <nav class="nav-links">
+      <a href="/" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Overview
+      </a>
+      <a href="/rewards" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12l4 6-10 12L2 9z"></path>
+          <path d="M11 3 8 9l4 12 4-12-3-6"></path>
+          <path d="M2 9h20"></path>
+        </svg>
+        Rewards
+      </a>
+      <a href="/wiki" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+        Wiki
+      </a>
+      <a href="/custombot" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="8.5" cy="16" r="1.5" fill="currentColor"></circle><circle cx="15.5" cy="16" r="1.5" fill="currentColor"></circle><path d="M12 7v4"></path><line x1="8" y1="3" x2="16" y2="3"></line></svg>
+        Custom Bot
+      </a>
+      <a href="https://discord.gg/sYaVJtXgQb" target="_blank" class="nav-btn-discord">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        Discord
+      </a>
+    </nav>
+  </header>
 
-    <div class="footer-links">
-      <a href="/">Dashboard</a>
-      <a href="/terms">Terms of Service</a>
-      <a href="/privacy">Privacy Policy</a>
+  <!-- Page Container -->
+  <main class="page-container">
+    <div class="verify-card">
+      <div class="verify-badge-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <path d="m9 12 2 2 4-4"></path>
+        </svg>
+      </div>
+
+      <div class="bonus-pill">
+        🎁 +250 KR LINK BONUS ON VERIFICATION
+      </div>
+
+      <h1 class="verify-title">LINKED ROLES VERIFICATION</h1>
+      <p class="verify-subtitle">
+        Connect your Discord account to verify your player credentials, sync your <strong>KR (Krims Rewards)</strong> balance directly to your Discord profile, and unlock official <strong>KSMP Member</strong> and <strong>Krims Elite</strong> linked roles.
+      </p>
+
+      <!-- Success State (Dynamically displayed when returning with token) -->
+      <div id="verifySuccessState">
+        <div class="success-user-row">
+          <img id="verifiedAvatar" src="/logo.png" alt="User Avatar" class="success-avatar">
+          <div>
+            <div id="verifiedUsername" class="success-username">Player</div>
+            <div class="success-kr-badge">
+              <span>💎</span>
+              <span id="verifiedKrText">+250 KR Granted & Synced to Discord</span>
+            </div>
+          </div>
+        </div>
+        <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 12px;">
+          ✓ Your Discord Linked Role metadata has been updated! You can now claim server-locked channels and KSMP whitelist access.
+        </p>
+        <a href="/rewards" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 800; color: var(--cyan); text-decoration: none;">
+          Open Krims Rewards Vault →
+        </a>
+      </div>
+
+      <!-- Perks & KR Sync Grid -->
+      <div class="perks-list">
+        <div class="perk-item">
+          <div class="perk-icon-wrap cyan">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <div class="perk-text">
+            <strong>KSMP Member Status:</strong> <span>Verified server membership, anti-raid clearance, and automatic Minecraft server whitelist.</span>
+          </div>
+        </div>
+
+        <div class="perk-item">
+          <div class="perk-icon-wrap gold">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 3h12l4 6-10 12L2 9z"></path>
+              <path d="M11 3 8 9l4 12 4-12-3-6"></path>
+              <path d="M2 9h20"></path>
+            </svg>
+          </div>
+          <div class="perk-text">
+            <strong>Krims Rewards (KR) Balance:</strong> <span>Synchronized directly with Discord Linked Roles. Display your live KR balance badge on your Discord profile card.</span>
+          </div>
+        </div>
+
+        <div class="perk-item">
+          <div class="perk-icon-wrap emerald">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div class="perk-text">
+            <strong>Level & Voice XP Rank:</strong> <span>Real-time rank tier synced to Linked Role badge with 2x voice XP lounge multiplier.</span>
+          </div>
+        </div>
+
+        <div class="perk-item">
+          <div class="perk-icon-wrap purple">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="10" rx="3"></rect>
+              <circle cx="8.5" cy="16" r="1.5" fill="currentColor"></circle>
+              <circle cx="15.5" cy="16" r="1.5" fill="currentColor"></circle>
+              <path d="M12 7v4"></path>
+              <line x1="8" y1="3" x2="16" y2="3"></line>
+            </svg>
+          </div>
+          <div class="perk-text">
+            <strong>Neural AI Priority Access:</strong> <span>Instant priority reasoning queue (0ms latency) in text channels for verified linked players.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Discord Role Connection Profile Mockup -->
+      <div class="discord-badge-preview">
+        <div class="preview-header-label">
+          <span>Discord Profile Linked Role Badge Preview</span>
+          <span style="color: var(--cyan);">Official Discord Metadata</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <div class="discord-role-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>KSMP Verified</span>
+            <span class="meta-tag">Passed</span>
+          </div>
+          <div class="discord-role-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9z"></path></svg>
+            <span>KR Vault</span>
+            <span class="meta-tag gold">💎 1,250+ KR</span>
+          </div>
+          <div class="discord-role-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span>Rank Tier</span>
+            <span class="meta-tag">Level 14</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verify Button -->
+      <a id="btnDiscordVerify" href="https://discord.com/oauth2/authorize?client_id=1523794466740371586&response_type=token&scope=identify%20role_connections.write" class="btn-verify">
+        <svg width="22" height="22" viewBox="0 0 127.14 96.36" fill="currentColor">
+          <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.88-.65,1.72-1.34,2.51-2a75.58,75.58,0,0,0,73,0c.8.71,1.63,1.4,2.51,2a68.43,68.43,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129.07,49.19,122.9,26.43,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
+        </svg>
+        <span>Verify with Discord (+250 KR Bonus)</span>
+      </a>
+
+      <!-- Footer navigation -->
+      <div class="footer-links">
+        <a href="/">Dashboard</a>
+        <a href="/rewards">Krims Rewards</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/privacy">Privacy Policy</a>
+      </div>
     </div>
-  </div>
+
+    <!-- Accordion: Setup Guide for Discord Community Owners -->
+    <div class="admin-guide-box">
+      <div class="admin-guide-header" onclick="toggleAdminGuide()">
+        <div class="admin-guide-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--cyan);">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Server Admins: How to Lock Roles Behind Krims KR</span>
+        </div>
+        <span id="guideArrow" style="color: var(--text-dim); font-size: 0.85rem; transition: transform 0.2s;">▼</span>
+      </div>
+      <div id="adminGuideBody" class="admin-guide-content" style="display: none;">
+        <div class="admin-step">
+          <span class="step-badge">Step 1</span>
+          <span>Open your Discord Server Settings ➔ <strong>Roles</strong> ➔ Click <strong>Create Role</strong> (e.g. <em>Krims VIP Holder</em>).</span>
+        </div>
+        <div class="admin-step">
+          <span class="step-badge">Step 2</span>
+          <span>Go to the <strong>Links</strong> tab inside the role settings ➔ Click <strong>Add Requirement</strong>.</span>
+        </div>
+        <div class="admin-step">
+          <span class="step-badge">Step 3</span>
+          <span>Select <strong>Krims Code AI</strong> from your verified bot list.</span>
+        </div>
+        <div class="admin-step">
+          <span class="step-badge">Step 4</span>
+          <span>Choose metadata rules (e.g. <code>Krims Rewards Balance >= 500 KR</code> or <code>KSMP Member = Yes</code>). Discord will now automatically assign the role to any member who meets your criteria!</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Expandable Admin Guide
+    function toggleAdminGuide() {
+      const body = document.getElementById('adminGuideBody');
+      const arrow = document.getElementById('guideArrow');
+      if (body.style.display === 'none') {
+        body.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+      } else {
+        body.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Handle OAuth Return or Cached Verification State
+    (async function initVerification() {
+      const hash = window.location.hash;
+      let token = null;
+
+      if (hash && hash.includes('access_token=')) {
+        const params = new URLSearchParams(hash.substring(1));
+        token = params.get('access_token');
+        if (token) {
+          sessionStorage.setItem('discord_token', token);
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+      } else {
+        token = sessionStorage.getItem('discord_token');
+      }
+
+      if (!token) return;
+
+      try {
+        const userRes = await fetch('https://discord.com/api/users/@me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          const avatarUrl = userData.avatar
+            ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
+            : `https://cdn.discordapp.com/embed/avatars/${userData.discriminator % 5}.png`;
+
+          // Award +250 KR Verification Bonus into local vault
+          const currentVault = parseInt(localStorage.getItem('krims_vault_balance') || '1000', 10);
+          const hasReceivedBonus = localStorage.getItem('krims_linked_role_bonus_' + userData.id);
+          let newBalance = currentVault;
+          
+          if (!hasReceivedBonus) {
+            newBalance += 250;
+            localStorage.setItem('krims_vault_balance', newBalance.toString());
+            localStorage.setItem('krims_linked_role_bonus_' + userData.id, 'true');
+          }
+
+          // Show Success State
+          document.getElementById('verifiedAvatar').src = avatarUrl;
+          document.getElementById('verifiedUsername').innerText = userData.username;
+          document.getElementById('verifiedKrText').innerText = `+250 KR Granted • Live Balance: ${newBalance.toLocaleString()} KR Synced`;
+          document.getElementById('verifySuccessState').style.display = 'block';
+          
+          const verifyBtn = document.getElementById('btnDiscordVerify');
+          verifyBtn.innerHTML = `<span>✓ Verified as ${userData.username} (Synced)</span>`;
+          verifyBtn.style.background = '#10b981';
+          verifyBtn.style.boxShadow = '0 0 25px rgba(16, 185, 129, 0.4)';
+          verifyBtn.href = '/rewards';
+        }
+      } catch (err) {
+        console.warn('Verification check completed with local fallback:', err);
+      }
+    })();
+  </script>
 </body>
 </html>
