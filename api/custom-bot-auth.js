@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     '1565848105277067414': {
       botId: '1565848105277067414',
       botName: 'ᴍɪɴɪ々X',
-      botAvatar: 'https://cdn.discordapp.com/avatars/1565848105277067414/4e8520915d44490a4d1c30aef6f4904c.png',
+      botAvatar: 'https://cdn.discordapp.com/avatars/1565848105277067414/67baf9a5cba6d12c65eadb599a56c3e1.png',
       customPrefix: '!',
       aiPersona: "You are ᴍɪɴɪ々X, the sharp, stylish, futuristic mecha-clan mascot and gaming tactician for Mini's community! You speak with cybernetic flair, confident gaming slang, cool vibes, and electric energy (⚡, 💠, 🎮). You are powered by Krims Code Neural AI. You love keeping the server lively, helping members with gaming and community questions, celebrating wins, and maintaining clan pride with unstoppable precision!",
       activityName: 'Guarding ᴍɪɴɪ々X HQ ⚡ • Krims Code AI',
