@@ -891,20 +891,6 @@
 
       <div id="auth-alert" class="toast-alert"></div>
 
-      <!-- Quick Bot Selector for Baby PHOENIX -->
-      <div style="background: rgba(255, 107, 0, 0.08); border: 1px solid rgba(255, 107, 0, 0.3); border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 1.4rem;">🔥</span>
-          <div>
-            <div style="font-weight: 800; font-size: 0.92rem; color: #ff9800;">Baby PHOENIX Control Node</div>
-            <div style="font-size: 0.78rem; color: var(--text-muted);">Master Password: <code style="color: #00f2ff; font-weight: 700; background: rgba(0, 242, 255, 0.1); padding: 2px 6px; border-radius: 4px;">phoenix2026</code></div>
-          </div>
-        </div>
-        <button type="button" onclick="autoFillPhoenix()" style="background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35); transition: transform 0.15s;">
-          Auto-Fill &amp; Enter
-        </button>
-      </div>
-
       <form id="bot-auth-form">
         <!-- Application ID Field -->
         <div class="field-group" id="appid-group">
@@ -1247,15 +1233,6 @@
       sessionStorage.removeItem('krims_custom_bot_session');
       window.location.reload();
     });
-
-    function autoFillPhoenix() {
-      document.getElementById('input-appid').value = '1565527301444083722';
-      document.getElementById('input-password').value = 'phoenix2026';
-      loadBotInfo('1565527301444083722');
-      setTimeout(() => {
-        document.getElementById('submit-auth-btn').click();
-      }, 300);
-    }
 
     // Initial Load
     window.addEventListener('DOMContentLoaded', () => {
