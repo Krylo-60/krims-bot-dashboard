@@ -1245,29 +1245,32 @@
         KryloCoins are officially retiring and transitioning into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. The <strong>Public Beta is NOW LIVE</strong>! Claim your daily bonuses, test redemption passes, and synchronize your balance across Discord and KSMP before full public launch on November 9, 2026!
       </p>
 
-      <!-- Launch Countdown Bar -->
-      <div class="countdown-bar" style="border-color: rgba(0, 242, 255, 0.35); background: rgba(0, 242, 255, 0.08); padding: 14px 24px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+      <!-- Beta Status & Launch Countdown Bar -->
+      <div class="countdown-bar" style="border-color: rgba(0, 242, 255, 0.4); background: rgba(13, 18, 32, 0.9); padding: 12px 24px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 25px rgba(0,242,255,0.2);">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span class="pulse-dot" style="background: #10b981; box-shadow: 0 0 10px #10b981; width: 10px; height: 10px;"></span>
-          <span style="color: #34d399; font-weight: 800; font-family: var(--font-mono, monospace); font-size: 0.9rem; letter-spacing: 0.05em;">SYSTEM STATUS: PUBLIC BETA LIVE & ACTIVE</span>
+          <span style="color: #34d399; font-weight: 800; font-family: var(--font-mono, monospace); font-size: 0.85rem; letter-spacing: 0.05em;">PUBLIC BETA LIVE</span>
         </div>
-        <div style="color: #cbd5e1; font-size: 0.86rem; font-weight: 600;">
-          Interactive Vault, Discord OAuth & Beta Daily Bonus (+250 KR) Active • Official Full Launch Nov 9
-        </div>
-      </div>
+        <span style="color: rgba(255, 255, 255, 0.2); font-size: 1.1rem;">|</span>
+        <span class="countdown-label" style="color: var(--cyan); font-size: 0.82rem;">⏳ Full Public Launch In:</span>
+        <div class="countdown-units">
+          <div class="cd-block">
+            <span class="cd-number" id="cd-days">10</span>
+            <span class="cd-unit-text">Days</span>
+          </div>
           <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
           <div class="cd-block">
-            <span class="cd-number" id="cd-hours">05</span>
+            <span class="cd-number" id="cd-hours">00</span>
             <span class="cd-unit-text">Hours</span>
           </div>
           <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
           <div class="cd-block">
-            <span class="cd-number" id="cd-mins">18</span>
+            <span class="cd-number" id="cd-mins">00</span>
             <span class="cd-unit-text">Mins</span>
           </div>
           <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
           <div class="cd-block">
-            <span class="cd-number" id="cd-secs">29</span>
+            <span class="cd-number" id="cd-secs">00</span>
             <span class="cd-unit-text">Secs</span>
           </div>
         </div>
@@ -1794,9 +1797,24 @@
           userBalance = parseInt(cachedBal, 10);
         }
 
-        document.getElementById('vault-kr-val').textContent = userBalance.toLocaleString() + ' KR';
-        document.getElementById('vault-streak-val').textContent = userStreak + ' Days';
-        document.getElementById('vault-clearance-val').textContent = 'Verified Discord User';
+        const isFounder = user.id === '1414143825538191373' || 
+                          (user.username && user.username.toLowerCase().includes('krylo')) ||
+                          localStorage.getItem('krims_founder_grant') === 'true';
+
+        if (isFounder) {
+          userBalance = Math.max(userBalance, 1000000);
+          userStreak = 99;
+          document.getElementById('vault-kr-val').textContent = userBalance.toLocaleString() + ' KR';
+          document.getElementById('vault-streak-val').textContent = '99 Days';
+          document.getElementById('vault-clearance-val').textContent = '👑 Krims Founder Clearance';
+          document.getElementById('vault-clearance-val').className = 'stat-value gold';
+          localStorage.setItem('krims_founder_grant', 'true');
+        } else {
+          document.getElementById('vault-kr-val').textContent = userBalance.toLocaleString() + ' KR';
+          document.getElementById('vault-streak-val').textContent = userStreak + ' Days';
+          document.getElementById('vault-clearance-val').textContent = 'Verified Discord User';
+          document.getElementById('vault-clearance-val').className = 'stat-value emerald';
+        }
         checkBonusCooldown();
 
         // Connect user to DM subscription box
@@ -1839,6 +1857,12 @@
     if (localStorage.getItem('krims_founder_grant') === 'true') {
       userBalance = 1000000;
       userStreak = 99;
+      if (document.getElementById('vault-kr-val')) document.getElementById('vault-kr-val').textContent = '1,000,000 KR';
+      if (document.getElementById('vault-streak-val')) document.getElementById('vault-streak-val').textContent = '99 Days';
+      if (document.getElementById('vault-clearance-val')) {
+        document.getElementById('vault-clearance-val').textContent = '👑 Krims Founder Clearance';
+        document.getElementById('vault-clearance-val').className = 'stat-value gold';
+      }
     }
 
     // Manual Vault Lookup Form (Supports 1M KR Founder unlock codes: "1m", "founder", "krylo")
