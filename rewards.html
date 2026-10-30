@@ -737,7 +737,7 @@
     }
 
     /* ── 7. SEASON PASSES SECTION ── */
-    .passes-section {
+    .passes-section, .section-container {
       max-width: 1100px;
       margin: 0 auto 4rem;
       padding: 0 1.5rem;
@@ -750,19 +750,20 @@
       margin-bottom: 2.5rem;
     }
 
-    .section-pill {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
+    .section-pill, .section-eyebrow {
+      font-family: var(--font-mono, monospace);
+      font-size: 0.74rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 4px 12px;
+      letter-spacing: 0.08em;
+      padding: 5px 14px;
       border-radius: 20px;
       background: rgba(0, 242, 255, 0.1);
-      border: 1px solid rgba(0, 242, 255, 0.3);
-      color: var(--cyan);
+      border: 1px solid rgba(0, 242, 255, 0.35);
+      color: var(--cyan, #00f2ff);
       display: inline-block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
     }
 
     .section-title {
@@ -957,6 +958,12 @@
       gap: 18px;
     }
 
+    @media (min-width: 960px) {
+      .earning-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
     .earning-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -1050,6 +1057,18 @@
       background: rgba(245, 158, 11, 0.15);
       border: 1px solid rgba(245, 158, 11, 0.3);
       color: var(--gold);
+    }
+
+    .roadmap-tag.cyan {
+      background: rgba(0, 242, 255, 0.15);
+      border-color: rgba(0, 242, 255, 0.35);
+      color: var(--cyan);
+    }
+
+    .roadmap-tag.purple {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: rgba(168, 85, 247, 0.35);
+      color: #c084fc;
     }
 
     .roadmap-date {
@@ -1539,6 +1558,17 @@
             Interact with Krims Alpha in the Support Server, submit feedback, and report verified issues to claim bounties.
           </p>
         </div>
+
+        <div class="earning-card">
+          <div class="earning-header">
+            <span class="earning-icon">🌧️</span>
+            <span class="earning-rate-pill">+50 - 500 KR / drop</span>
+          </div>
+          <h3 class="earning-title">/kr-rain Community Drops</h3>
+          <p class="earning-desc">
+            Catch random and member-funded KR rain showers dropped in active chat channels. Fastest typers claim the largest split!
+          </p>
+        </div>
       </div>
     </section>
 
@@ -1565,6 +1595,19 @@
 
         <div class="roadmap-item">
           <div class="roadmap-date-col">
+            <span class="roadmap-tag cyan">Chat Economy</span>
+            <span class="roadmap-date">Mid November 2026</span>
+          </div>
+          <div class="roadmap-content">
+            <h3>🌧️ /kr-rain Community Chat Drops & Tipping</h3>
+            <p>
+              Automated rain events and member-funded reward showers in Discord channels. Active members can initiate rain drops with custom KR amounts, splitting balances instantly among active chatters.
+            </p>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-date-col">
             <span class="roadmap-tag">KSMP Sync</span>
             <span class="roadmap-date">Mid November 2026</span>
           </div>
@@ -1572,6 +1615,19 @@
             <h3>Minecraft KSMP In-Game Reward Store</h3>
             <p>
               Link your Minecraft Java/Bedrock gamertag to trade your KR for custom server particle trails, sound effects, chat suffixes, and survival claim boosters directly in-game.
+            </p>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-date-col">
+            <span class="roadmap-tag purple">Customization</span>
+            <span class="roadmap-date">Late November 2026</span>
+          </div>
+          <div class="roadmap-content">
+            <h3>🎨 Custom Discord Color Roles & Vanity Badges</h3>
+            <p>
+              Redeem 1,000 KR to unlock custom hex-color roles and prestigious server badges. Synchronizes dynamically across all Krims Code bot-enabled Discord servers with instant role assignment.
             </p>
           </div>
         </div>
@@ -1598,6 +1654,19 @@
             <h3>Season 1 Leaderboard & Elite Pass Hall of Fame</h3>
             <p>
               The top Krims Rewards holders on the global leaderboard unlock Enterprise Lifetime Krims Code Premium passes, exclusive KSMP Champion ranks, permanent custom server badges, and massive KR jackpot multipliers!
+            </p>
+          </div>
+        </div>
+
+        <div class="roadmap-item">
+          <div class="roadmap-date-col">
+            <span class="roadmap-tag">Staking Vault</span>
+            <span class="roadmap-date">Early 2027</span>
+          </div>
+          <div class="roadmap-content">
+            <h3>🏦 Krims Staking Vault & Passive Yield Protocol</h3>
+            <p>
+              Lock surplus Krims Rewards into time-tiered smart vaults to earn compounding passive yields, seasonal jackpot lottery entries, and exclusive early access to upcoming bot fleet beta models.
             </p>
           </div>
         </div>
