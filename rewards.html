@@ -1268,7 +1268,7 @@
       <div class="countdown-bar" style="border-color: rgba(0, 242, 255, 0.4); background: rgba(13, 18, 32, 0.9); padding: 12px 24px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 25px rgba(0,242,255,0.2);">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span class="pulse-dot" style="background: #10b981; box-shadow: 0 0 10px #10b981; width: 10px; height: 10px;"></span>
-          <span style="color: #34d399; font-weight: 800; font-family: var(--font-mono, monospace); font-size: 0.85rem; letter-spacing: 0.05em;">PUBLIC BETA LIVE</span>
+          <span style="color: #34d399; font-weight: 800; font-family: var(--font-mono, monospace); font-size: 0.85rem; letter-spacing: 0.05em;">v5.9 STAKING & RC LIVE</span>
         </div>
         <span style="color: rgba(255, 255, 255, 0.2); font-size: 1.1rem;">|</span>
         <span class="countdown-label" style="color: var(--cyan); font-size: 0.82rem;">⏳ Full Public Launch In:</span>
@@ -1731,6 +1731,11 @@
         document.getElementById('cd-hours').textContent = '00';
         document.getElementById('cd-mins').textContent = '00';
         document.getElementById('cd-secs').textContent = '00';
+        const labelEl = document.querySelector('.countdown-label');
+        if (labelEl) {
+          labelEl.innerHTML = '🟢 <strong>FULL GA CONVERGENCE LIVE:</strong> All v6.0 Marketplace Perks Active!';
+          labelEl.style.color = '#10b981';
+        }
         return;
       }
 
