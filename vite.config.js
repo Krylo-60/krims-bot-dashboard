@@ -12,6 +12,7 @@ export default defineConfig({
         wiki: resolve(__dirname, 'wiki.html'),
         custombot: resolve(__dirname, 'custombot.html'),
         rewards: resolve(__dirname, 'rewards.html'),
+        updates: resolve(__dirname, 'updates.html'),
       },
     },
   },

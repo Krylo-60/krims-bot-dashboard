@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ecosystem Updates & Release Countdowns — Krims Bot</title>
+  <meta name="description" content="Live countdowns and comprehensive changelogs for Krims Code AI, Krims Rewards, and the Discord Bot fleet.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #070a12;
+      --bg-card: rgba(13, 18, 30, 0.75);
+      --bg-card-hover: rgba(18, 26, 44, 0.85);
+      --cyan: #00f2ff;
+      --purple: #8a2be2;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-cyan: rgba(0, 242, 255, 0.35);
+      --border-purple: rgba(138, 43, 226, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Orbitron', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Cyber Background */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(0, 242, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(138, 43, 226, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(140px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+    .ambient-cyan { top: -100px; left: -100px; background: var(--cyan); }
+    .ambient-purple { bottom: -150px; right: -150px; background: var(--purple); }
+
+    /* Top Sticky Navbar */
+    .top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 10, 18, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.85rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-stroke {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1.5px solid var(--cyan);
+      background: rgba(0, 242, 255, 0.08);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.25);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #fff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+    .nav-link.active {
+      color: var(--cyan);
+      background: rgba(0, 242, 255, 0.1);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+    }
+
+    .nav-btn-discord {
+      background: #5865F2;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .nav-btn-discord:hover { background: #4752c4; box-shadow: 0 0 16px rgba(88, 101, 242, 0.4); }
+
+    /* Main Container */
+    .main-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem 4rem;
+    }
+
+    /* Hero Section */
+    .hero-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border: 1px solid var(--border-cyan);
+      background: rgba(0, 242, 255, 0.08);
+      color: var(--cyan);
+      box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+      margin-bottom: 1.25rem;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+    .glow-cyan {
+      color: var(--cyan);
+      text-shadow: 0 0 25px rgba(0, 242, 255, 0.5);
+    }
+    .glow-purple {
+      color: var(--purple);
+      text-shadow: 0 0 25px rgba(138, 43, 226, 0.5);
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 720px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* Countdown Master Card */
+    .countdown-card {
+      background: linear-gradient(135deg, rgba(13, 22, 38, 0.9) 0%, rgba(20, 15, 35, 0.9) 100%);
+      border: 1.5px solid var(--border-cyan);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 0 40px rgba(0, 242, 255, 0.15), inset 0 0 25px rgba(0, 242, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 3.5rem;
+    }
+    .countdown-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--cyan));
+      background-size: 200% auto;
+      animation: gradientShift 4s linear infinite;
+    }
+    @keyframes gradientShift { to { background-position: 200% center; } }
+
+    .countdown-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .countdown-tag {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .countdown-date-badge {
+      background: rgba(0, 242, 255, 0.1);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #fff;
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 1.5rem 0 2rem;
+    }
+    .count-box {
+      background: rgba(7, 10, 19, 0.85);
+      border: 1px solid rgba(0, 242, 255, 0.25);
+      border-radius: 14px;
+      padding: 1.25rem 0.5rem;
+      text-align: center;
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .count-box:hover {
+      transform: translateY(-3px);
+      border-color: var(--cyan);
+    }
+    .count-number {
+      font-family: var(--font-display);
+      font-size: 2.75rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .count-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+    }
+
+    .countdown-desc {
+      text-align: center;
+      font-size: 1rem;
+      color: #cbd5e1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-bottom: 2.5rem;
+      padding-bottom: 6px;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-family: var(--font-main);
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .filter-btn:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .filter-btn.active {
+      background: rgba(0, 242, 255, 0.12);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+    }
+
+    /* Timeline & Changelog Cards */
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 24px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--cyan) 0%, var(--purple) 70%, transparent 100%);
+      z-index: 0;
+    }
+
+    .update-card {
+      position: relative;
+      z-index: 1;
+      margin-left: 56px;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.25s ease;
+    }
+    .update-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(0, 242, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .update-card.featured {
+      border: 1.5px solid var(--border-cyan);
+      box-shadow: 0 0 30px rgba(0, 242, 255, 0.12);
+    }
+
+    .timeline-node {
+      position: absolute;
+      left: -44px;
+      top: 2rem;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--bg-dark);
+      border: 3px solid var(--cyan);
+      box-shadow: 0 0 15px var(--cyan);
+      z-index: 2;
+    }
+    .timeline-node.purple {
+      border-color: var(--purple);
+      box-shadow: 0 0 15px var(--purple);
+    }
+    .timeline-node.green {
+      border-color: var(--green);
+      box-shadow: 0 0 15px var(--green);
+    }
+
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .version-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .version-tag {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .status-badge {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-upcoming {
+      background: rgba(0, 242, 255, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+    .badge-live {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--green);
+      color: var(--green);
+    }
+    .badge-deployed {
+      background: rgba(138, 43, 226, 0.15);
+      border: 1px solid var(--purple);
+      color: #c084fc;
+    }
+
+    .update-date {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .update-summary {
+      font-size: 1.05rem;
+      color: #e2e8f0;
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+
+    .features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+    }
+    .feature-bullet {
+      color: var(--cyan);
+      font-size: 1.1rem;
+      line-height: 1;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .feature-item code {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .card-footer-tags {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .category-tag {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* Discord Call to Action Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(88, 101, 242, 0.15) 0%, rgba(13, 18, 30, 0.95) 100%);
+      border: 1px solid rgba(88, 101, 242, 0.35);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .cta-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    .cta-content p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .cta-button {
+      background: #5865F2;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 20px rgba(88, 101, 242, 0.3);
+    }
+    .cta-button:hover {
+      background: #4752c4;
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(88, 101, 242, 0.5);
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .top-navbar { padding: 0.75rem 1rem; }
+      .main-container { padding: 2rem 1rem 3rem; }
+      .hero-title { font-size: 2rem; }
+      .countdown-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .count-number { font-size: 2.2rem; }
+      .timeline::before { left: 16px; }
+      .update-card { margin-left: 40px; padding: 1.5rem; }
+      .timeline-node { left: -32px; width: 18px; height: 18px; }
+      .cta-banner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="ambient-glow ambient-cyan"></div>
+  <div class="ambient-glow ambient-purple"></div>
+
+  <!-- Sticky Top Navbar -->
+  <header class="top-navbar">
+    <a href="/" class="brand-group">
+      <div class="brand-logo-stroke">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+      </div>
+      <span class="brand-title">KRIMS UPDATES</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="/" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Overview
+      </a>
+      <a href="/rewards" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12l4 6-10 12L2 9z"></path>
+          <path d="M11 3 8 9l4 12 4-12-3-6"></path>
+          <path d="M2 9h20"></path>
+        </svg>
+        Rewards
+      </a>
+      <a href="/updates" class="nav-link active">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        Updates
+      </a>
+      <a href="/wiki" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+        Wiki
+      </a>
+      <a href="/custombot" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="3"></rect><circle cx="8.5" cy="16" r="1.5" fill="currentColor"></circle><circle cx="15.5" cy="16" r="1.5" fill="currentColor"></circle><path d="M12 7v4"></path><line x1="8" y1="3" x2="16" y2="3"></line></svg>
+        Custom Bot
+      </a>
+      <a href="https://discord.gg/sYaVJtXgQb" target="_blank" class="nav-btn-discord">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        Discord
+      </a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    
+    <!-- Hero Header -->
+    <div class="hero-header">
+      <div class="hero-pill">
+        <span class="pulse-dot"></span>
+        <span>KRIMS ECOSYSTEM LIVE RELEASE MATRIX</span>
+      </div>
+      <h1 class="hero-title">
+        All Updates & <span class="glow-cyan">Live Countdowns</span>
+      </h1>
+      <p class="hero-subtitle">
+        Monitor real-time deployment countdowns, upcoming convergence features, and verified production changelogs across Discord, CLI, SDK, and Web.
+      </p>
+    </div>
+
+    <!-- Live Automated Release Countdown -->
+    <div class="countdown-card">
+      <div class="countdown-meta">
+        <div class="countdown-tag">
+          ⚡ NEXT MAJOR LAUNCH // AUTOMATED TIME-GATE RELEASE
+        </div>
+        <div class="countdown-date-badge">
+          TARGET: MON, NOV 9, 2026 • 00:00:00 UTC
+        </div>
+      </div>
+
+      <h2 style="font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 0.5rem;">
+        Krims Code <span class="glow-cyan">v6.0.0</span> — The Grand GA Convergence
+      </h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Full General Availability launch of Krims Rewards, the official Krims Voice AI × Krims Code CLI × Krims SDK partnership, and the Universal Welcome & Ticket Hub.
+      </p>
+
+      <div class="countdown-grid" id="countdown-grid">
+        <div class="count-box">
+          <div class="count-number" id="cd-days">--</div>
+          <div class="count-label">Days</div>
+        </div>
+        <div class="count-box">
+          <div class="count-number" id="cd-hours">--</div>
+          <div class="count-label">Hours</div>
+        </div>
+        <div class="count-box">
+          <div class="count-number" id="cd-mins">--</div>
+          <div class="count-label">Minutes</div>
+        </div>
+        <div class="count-box">
+          <div class="count-number" id="cd-secs">--</div>
+          <div class="count-label">Seconds</div>
+        </div>
+      </div>
+
+      <div class="countdown-desc" id="cd-status-desc">
+        ⏱️ Automated time-gate is active. The engine will instantly unlock network-wide redemptions and broadcast the launch when the clock strikes zero.
+      </div>
+    </div>
+
+    <!-- Category Filter Bar -->
+    <div class="filter-bar">
+      <button type="button" class="filter-btn active" data-filter="all">All Updates</button>
+      <button type="button" class="filter-btn" data-filter="upcoming">⏳ Upcoming (v6.0)</button>
+      <button type="button" class="filter-btn" data-filter="bot">🤖 Discord Bot</button>
+      <button type="button" class="filter-btn" data-filter="cli">📦 CLI & SDK</button>
+      <button type="button" class="filter-btn" data-filter="rewards">💎 Rewards & Staking</button>
+      <button type="button" class="filter-btn" data-filter="dashboard">🌐 Web Dashboard</button>
+    </div>
+
+    <!-- Timeline Container -->
+    <div class="timeline">
+
+      <!-- ITEM 1: v6.0.0 (UPCOMING) -->
+      <article class="update-card featured" data-tags="upcoming cli bot rewards dashboard">
+        <div class="timeline-node"></div>
+        <div class="card-header-row">
+          <div class="version-title-group">
+            <span class="version-tag">v6.0.0 GA</span>
+            <span class="status-badge badge-upcoming">⏳ Target: Nov 9, 2026</span>
+          </div>
+          <span class="update-date">Scheduled: Monday, 00:00:00 UTC</span>
+        </div>
+        <h3 class="update-summary">
+          The Grand GA Convergence: Ecosystem Unification, Official Voice Partnership, and Universal Systems
+        </h3>
+        <ul class="features-list">
+          <li class="feature-item">
+            <span class="feature-bullet">🎙️</span>
+            <div>
+              <strong>Krims Voice AI × Krims Code CLI × Krims SDK Partnership:</strong> Real-time neural voice synthesis, voice agent commands, and bidirectional audio streaming integrated directly into the terminal (<code>krims voice</code>) and SDK (<code>krims.voice</code>).
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">👋</span>
+            <div>
+              <strong>Universal Welcome System 2.0:</strong> Server owners can choose an existing channel OR 1-click auto-create <code>#👋・welcome</code>. Choose between lightweight Text Embeds or the high-res Obsidian Cyber Profile Card with Discord avatars and green status indicators.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🎟️</span>
+            <div>
+              <strong>Support Ticket Hub 2.0:</strong> 1-click auto-deploy interactive <code>#🎫・open-a-ticket</code> button panels and dedicated <code>#📋・ticket-logs</code> archive channels.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🛍️</span>
+            <div>
+              <strong>Redemption Marketplace Live (<code>/redeem</code>):</strong> Instant redemptions for Founder Pioneer Badges (5k KR), Priority Compute Queues (15k KR), Custom Discord Name Colors (25k KR), and KryloSMP Particle Auras (50k KR).
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">📦</span>
+            <div>
+              <strong>Production GA Packages:</strong> Verified production GA releases on <strong>NPM</strong> (<code>@krishivpb60/krims-code-cli</code>, <code>@krishivpb60/krims-code-sdk</code>) and <strong>PyPI</strong> (<code>krims</code>, <code>krims-code-cli</code>).
+            </div>
+          </li>
+        </ul>
+        <div class="card-footer-tags">
+          <span class="category-tag">Ecosystem Convergence</span>
+          <span class="category-tag">Voice AI</span>
+          <span class="category-tag">Welcome System 2.0</span>
+          <span class="category-tag">Support Hub</span>
+          <span class="category-tag">Marketplace</span>
+        </div>
+      </article>
+
+      <!-- ITEM 2: v5.9.0 (LIVE NOW) -->
+      <article class="update-card" data-tags="rewards bot cli">
+        <div class="timeline-node green"></div>
+        <div class="card-header-row">
+          <div class="version-title-group">
+            <span class="version-tag">v5.9.0 RC</span>
+            <span class="status-badge badge-live">🟢 LIVE NOW</span>
+          </div>
+          <span class="update-date">Released: November 6, 2026</span>
+        </div>
+        <h3 class="update-summary">
+          Staking Yield Protocol, Dual-CLI Handshake Tokens & Moderation Audit Logger
+        </h3>
+        <ul class="features-list">
+          <li class="feature-item">
+            <span class="feature-bullet">📈</span>
+            <div>
+              <strong>12.5% APY Staking Protocol:</strong> Stake Krims Rewards with continuous daily compounding interest using <code>/stake &lt;amount&gt;</code>, <code>/unstake &lt;amount&gt;</code>, and <code>/yield</code> with zero lockup penalties.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🏆</span>
+            <div>
+              <strong>Global Rich List (<code>/kr-top</code>):</strong> Comprehensive multi-tier wealth leaderboards (🥇 Sovereign, 🥈 Grandmaster, 🥉 Champion) tracking liquid, bank, and staked balances.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🔑</span>
+            <div>
+              <strong>Dual-CLI Handshake Key Infrastructure (<code>/cli-key</code>):</strong> Generates secure AES credentials for seamless terminal access via NPM and Python pip.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🗑️</span>
+            <div>
+              <strong>Custom Bot Audit Deletion Logger:</strong> Added automated <code>messageDelete</code> and <code>messageUpdate</code> logging for fleet bots (Mini X logging to <code>#🛡️・mod-logs</code>).
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">⏳</span>
+            <div>
+              <strong>Automated Time-Gated Release Engine:</strong> Built <code>timeGatedReleaseEngine.mjs</code> to coordinate the synchronized v6.0.0 countdown.
+            </div>
+          </li>
+        </ul>
+        <div class="card-footer-tags">
+          <span class="category-tag">Staking Protocol</span>
+          <span class="category-tag">Dual-CLI Keys</span>
+          <span class="category-tag">Mod Logs</span>
+          <span class="category-tag">Time-Gate</span>
+        </div>
+      </article>
+
+      <!-- ITEM 3: v5.8.0 (LIVE) -->
+      <article class="update-card" data-tags="rewards bot">
+        <div class="timeline-node purple"></div>
+        <div class="card-header-row">
+          <div class="version-title-group">
+            <span class="version-tag">v5.8.0</span>
+            <span class="status-badge badge-deployed">DEPLOYED</span>
+          </div>
+          <span class="update-date">Released: November 6, 2026</span>
+        </div>
+        <h3 class="update-summary">
+          Multi-Bot Fleet Turn-Taking, P2P Transfers & Neon Lakebase Reconnection
+        </h3>
+        <ul class="features-list">
+          <li class="feature-item">
+            <span class="feature-bullet">💸</span>
+            <div>
+              <strong>P2P Krims Rewards Transfers:</strong> Instant peer-to-peer sending via <code>/pay</code>, <code>/tip</code>, and <code>/gift</code> with full audit ledger tracking.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">⚡</span>
+            <div>
+              <strong>Neon Lakebase Serverless Postgres Sync:</strong> Fresh high-speed connection pool with atomic fallback synchronization across SQLite and Postgres.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🪶</span>
+            <div>
+              <strong>The Light Bearers Clan Modernization:</strong> 12-question recruitment modal in <code>#📝・𝖳eam-𝖠pply</code> with automatic staff logs.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🔄</span>
+            <div>
+              <strong>Python SDK Retry Resilience:</strong> Exponential backoff retry handling for high-demand Gemini API surges.
+            </div>
+          </li>
+        </ul>
+        <div class="card-footer-tags">
+          <span class="category-tag">P2P Transfers</span>
+          <span class="category-tag">Neon Lakebase</span>
+          <span class="category-tag">The Light Bearers</span>
+        </div>
+      </article>
+
+      <!-- ITEM 4: v5.7.0 (LIVE) -->
+      <article class="update-card" data-tags="bot">
+        <div class="timeline-node purple"></div>
+        <div class="card-header-row">
+          <div class="version-title-group">
+            <span class="version-tag">v5.7.0</span>
+            <span class="status-badge badge-deployed">DEPLOYED</span>
+          </div>
+          <span class="update-date">Released: November 2, 2026</span>
+        </div>
+        <h3 class="update-summary">
+          1-Mind Multi-Bot Coordinator, Custom Bot Engine 2.0 & Presence Gateway
+        </h3>
+        <ul class="features-list">
+          <li class="feature-item">
+            <span class="feature-bullet">🧠</span>
+            <div>
+              <strong>1-Mind Leveling Coordinator:</strong> Multi-bot turn-taking rotation across co-located custom bots (e.g. Baby Phoenix 🔥 and Mini X ⚡) with zero duplicate level-up spam.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🤖</span>
+            <div>
+              <strong>Custom Bot Engine 2.0:</strong> Co-creator branding (Mini & Krylo), custom prefix options, and procedural bot flairs.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🛡️</span>
+            <div>
+              <strong>Privileged Presence Gateway:</strong> Enabled <code>GatewayIntentBits.GuildPresences</code> for ticket bypass and guild activity tracking.
+            </div>
+          </li>
+        </ul>
+        <div class="card-footer-tags">
+          <span class="category-tag">1-Mind Coordination</span>
+          <span class="category-tag">Custom Bots</span>
+          <span class="category-tag">Presence</span>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Call to Action Banner -->
+    <div class="cta-banner">
+      <div class="cta-content">
+        <h3>🚀 Want Real-Time Deployment Alerts?</h3>
+        <p>Join the official Discord and subscribe to <code>#🚀・𝖡ot-𝖴pdates</code> for live deployment logs and sneak peeks.</p>
+      </div>
+      <a href="https://discord.gg/sYaVJtXgQb" target="_blank" class="cta-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        Join Discord Community
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    // ── Live Countdown Script (Target: Nov 9, 2026 00:00:00 UTC) ──
+    const TARGET_UTC = Date.UTC(2026, 10, 9, 0, 0, 0); // 1794268800000
+
+    const elDays = document.getElementById('cd-days');
+    const elHours = document.getElementById('cd-hours');
+    const elMins = document.getElementById('cd-mins');
+    const elSecs = document.getElementById('cd-secs');
+    const elStatus = document.getElementById('cd-status-desc');
+
+    function updateCountdown() {
+      const now = Date.now();
+      const diff = TARGET_UTC - now;
+
+      if (diff <= 0) {
+        if (elDays) elDays.textContent = '00';
+        if (elHours) elHours.textContent = '00';
+        if (elMins) elMins.textContent = '00';
+        if (elSecs) elSecs.textContent = '00';
+        if (elStatus) {
+          elStatus.innerHTML = '🟢 <strong style="color: #00f2ff;">KRIMS CODE v6.0.0 GENERAL AVAILABILITY IS OFFICIALLY LIVE!</strong> All features, marketplace perks, and voice integrations are active network-wide.';
+        }
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      if (elDays) elDays.textContent = String(days).padStart(2, '0');
+      if (elHours) elHours.textContent = String(hours).padStart(2, '0');
+      if (elMins) elMins.textContent = String(minutes).padStart(2, '0');
+      if (elSecs) elSecs.textContent = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ── Category Filter Logic ──
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const updateCards = document.querySelectorAll('.update-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter');
+        updateCards.forEach(card => {
+          if (filter === 'all') {
+            card.style.display = 'block';
+          } else {
+            const tags = card.getAttribute('data-tags') || '';
+            if (tags.includes(filter)) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
