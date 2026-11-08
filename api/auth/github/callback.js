@@ -9,77 +9,29 @@ export default async function handler(req, res) {
     return res.status(400).send(renderErrorHtml('Missing Authorization Code', 'No authorization code was provided by GitHub.'));
   }
 
-  const clientId = process.env.GITHUB_CLIENT_ID;
-  const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-
-  if (!clientId || !clientSecret) {
-    return res.status(500).send(renderErrorHtml('Server Configuration Missing', 'GITHUB_CLIENT_ID or GITHUB_CLIENT_SECRET is missing from Vercel environment variables.'));
-  }
+  const discordId = state || '';
 
   try {
-    // 1. Exchange code for access token
-    const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+    // Forward code to Render's secure backend exchange bridge
+    const bridgeRes = await fetch('https://krims-discord-bot-d57m.onrender.com/api/auth/github/exchange', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
         code,
+        discord_id: discordId,
         redirect_uri: 'https://krims-bot-dashboard.vercel.app/api/auth/github/callback'
       })
     });
 
-    const tokenData = await tokenRes.json();
-    if (tokenData.error) {
-      return res.status(400).send(renderErrorHtml('GitHub Token Error', tokenData.error_description || tokenData.error));
+    const bridgeData = await bridgeRes.json();
+    if (!bridgeData.ok) {
+      return res.status(400).send(renderErrorHtml('Verification Failed', bridgeData.error || 'Failed to exchange GitHub authorization token.'));
     }
 
-    const accessToken = tokenData.access_token;
+    const ghUser = bridgeData.ghUser;
+    const githubUsername = bridgeData.githubUsername;
 
-    // 2. Fetch authenticated GitHub user profile
-    const userRes = await fetch('https://api.github.com/user', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'User-Agent': 'KrimsCodeBot/6.0 (VercelServerless)'
-      }
-    });
-
-    if (!userRes.ok) {
-      return res.status(userRes.status).send(renderErrorHtml('Failed to Fetch Profile', 'Could not retrieve your GitHub profile details.'));
-    }
-
-    const ghUser = await userRes.json();
-    const githubUsername = ghUser.login;
-    const discordId = state || '';
-
-    // 3. Notify Render bot backend to sync verified record and open dev ticket
-    let syncSuccess = false;
-    try {
-      const renderRes = await fetch('https://krims-discord-bot-d57m.onrender.com/api/internal/verify-github', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          discord_id: discordId,
-          github_username: githubUsername,
-          verification_method: 'GitHub OAuth (1-Click)',
-          gh_profile: {
-            name: ghUser.name,
-            avatar_url: ghUser.avatar_url,
-            public_repos: ghUser.public_repos,
-            followers: ghUser.followers,
-            created_at: ghUser.created_at
-          }
-        })
-      });
-      syncSuccess = renderRes.ok;
-    } catch (renderErr) {
-      console.warn('[Render Sync Warning]:', renderErr.message);
-    }
-
-    // 4. Return cyberpunk success screen
+    // Return cyberpunk success screen
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     return res.status(200).send(`
       <!DOCTYPE html>
@@ -220,8 +172,8 @@ export default async function handler(req, res) {
           <h1>Ownership Confirmed!</h1>
           <div class="handle">@${githubUsername}</div>
           <p>
-            Your GitHub account has been authenticated via official OAuth.
-            ${discordId ? `Your account is permanently locked to your Discord profile.` : ''}
+            Your GitHub identity has been authenticated via official OAuth.
+            ${discordId ? 'Your profile is permanently locked to your Discord account.' : ''}
             Your <strong>Verified Developer Ticket</strong> is ready in the Krims Code server!
           </p>
           <a href="https://discord.com/channels/1561174283294609479" class="btn">
