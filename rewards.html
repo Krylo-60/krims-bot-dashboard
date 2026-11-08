@@ -1734,24 +1734,75 @@
   </div>
 
   <script>
-    // Live Countdown Timer to Next Monday (Nov 2, 2026 00:00:00 UTC)
+    // Live Multi-Stage Countdown Timer
+    const SCHEDULED_RELEASES = [
+      {
+        id: 'stage_1_v6_ga',
+        timestamp: Date.UTC(2026, 10, 9, 0, 0, 0), // Nov 9, 2026
+        version: 'v6.0.0 GA',
+        label: '⏳ Full Public Launch In:'
+      },
+      {
+        id: 'stage_2_diwali_finale',
+        timestamp: Date.UTC(2026, 10, 12, 2, 0, 0), // Nov 12, 2026 02:00:00 UTC
+        version: 'v6.0.5 Event Finale',
+        label: '🎆 Next Drop (v6.0.5 Finale & 1.5x Surge) In:'
+      },
+      {
+        id: 'stage_3_cyber_midmonth',
+        timestamp: Date.UTC(2026, 10, 15, 0, 0, 0),
+        version: 'v6.0.8 Cyber Drop',
+        label: '⚔️ Next Milestone (v6.0.8 Clan Wars) In:'
+      },
+      {
+        id: 'stage_4_harvest_2x',
+        timestamp: Date.UTC(2026, 10, 20, 0, 0, 0),
+        version: 'v6.1.0 Harvest',
+        label: '🍂 Next Drop (v6.1.0 2X Boost) In:'
+      },
+      {
+        id: 'stage_5_black_friday_vault',
+        timestamp: Date.UTC(2026, 10, 27, 0, 0, 0),
+        version: 'v6.1.5 Cyber Vault',
+        label: '💎 Next Mega Sale (v6.1.5 Vault 50% Off) In:'
+      },
+      {
+        id: 'stage_6_winter_wonderland',
+        timestamp: Date.UTC(2026, 11, 1, 0, 0, 0),
+        version: 'v6.2.0 Winter',
+        label: '❄️ Next Season (v6.2.0 Winter) In:'
+      },
+      {
+        id: 'stage_11_new_year_2027',
+        timestamp: Date.UTC(2027, 0, 1, 0, 0, 0),
+        version: 'v7.0.0 Revolution',
+        label: '🚀 Next Gen (v7.0.0 Revolution) In:'
+      }
+    ];
+
     function updateCountdown() {
       if (!document.getElementById('cd-days')) return;
-      // Target Next Monday
-      const now = new Date();
-      const target = new Date(Date.UTC(2026, 10, 9, 0, 0, 0)); // Nov 9, 2026
-      const diff = target - now;
+      const now = Date.now();
+      const currentTarget = SCHEDULED_RELEASES.find(r => r.timestamp > now) || SCHEDULED_RELEASES[SCHEDULED_RELEASES.length - 1];
+      const isPastV6GA = now >= SCHEDULED_RELEASES[0].timestamp;
+      const diff = currentTarget.timestamp - now;
+
+      const labelEl = document.querySelector('.countdown-label');
+      if (labelEl) {
+        if (isPastV6GA) {
+          labelEl.innerHTML = 🟢 <strong>v6.0 GA IS LIVE!</strong> ;
+          labelEl.style.color = '#34d399';
+        } else {
+          labelEl.innerHTML = currentTarget.label;
+          labelEl.style.color = 'var(--cyan)';
+        }
+      }
 
       if (diff <= 0) {
         document.getElementById('cd-days').textContent = '00';
         document.getElementById('cd-hours').textContent = '00';
         document.getElementById('cd-mins').textContent = '00';
         document.getElementById('cd-secs').textContent = '00';
-        const labelEl = document.querySelector('.countdown-label');
-        if (labelEl) {
-          labelEl.innerHTML = '🟢 <strong>FULL GA CONVERGENCE LIVE:</strong> All v6.0 Marketplace Perks Active!';
-          labelEl.style.color = '#10b981';
-        }
         return;
       }
 

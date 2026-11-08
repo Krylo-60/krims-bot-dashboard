@@ -915,18 +915,95 @@
   </main>
 
   <script>
-    // ── Live Countdown Script (Target: Nov 9, 2026 00:00:00 UTC) ──
-    const TARGET_UTC = Date.UTC(2026, 10, 9, 0, 0, 0); // 1794268800000
+    // ── Live Multi-Stage Automated Countdown Matrix ──
+    const SCHEDULED_RELEASES = [
+      {
+        id: 'stage_1_v6_ga',
+        timestamp: Date.UTC(2026, 10, 9, 0, 0, 0), // Nov 9, 2026 00:00:00 UTC
+        version: 'v6.0.0 GA',
+        title: 'Krims Code <span class="glow-cyan">v6.0.0</span> — The Grand GA Convergence',
+        desc: 'Full General Availability launch of Krims Rewards, the official Krims Voice AI × Krims Code CLI × Krims SDK partnership, and the Universal Welcome & Ticket Hub.',
+        badgeDate: 'TARGET: MON, NOV 9, 2026 • 00:00:00 UTC',
+        tag: '⚡ NEXT MAJOR LAUNCH // AUTOMATED TIME-GATE RELEASE'
+      },
+      {
+        id: 'stage_2_diwali_finale',
+        timestamp: Date.UTC(2026, 10, 12, 2, 0, 0), // Nov 12, 2026 02:00:00 UTC (Nov 11, 21:00 EST)
+        version: 'v6.0.5 Event Finale',
+        title: 'Krims Code <span class="glow-cyan">v6.0.5</span> — Diwali Festival Finale & Sacred Memorial',
+        desc: 'Festival conclusion event, final lantern blessing bounties, 1.5x weekend coin surge, and memorial founder badge distribution.',
+        badgeDate: 'TARGET: THU, NOV 12, 2026 • 02:00:00 UTC (WED 9PM EST)',
+        tag: '🎆 NEXT EVENT DROP // DIWALI FINALE & 1.5X SURGE'
+      },
+      {
+        id: 'stage_3_cyber_midmonth',
+        timestamp: Date.UTC(2026, 10, 15, 0, 0, 0), // Nov 15, 2026 00:00:00 UTC
+        version: 'v6.0.8 Cyber Drop',
+        title: 'Krims Code <span class="glow-cyan">v6.0.8</span> — Clan Wars & Mid-Month Bounty Surge',
+        desc: 'Clan Treasury bonus (+15% interest), live faction wars radar, and discord stage events across KryloSMP and Mini servers.',
+        badgeDate: 'TARGET: SUN, NOV 15, 2026 • 00:00:00 UTC',
+        tag: '⚔️ NEXT MILESTONE // CLAN WARS & TREASURY BOOST'
+      },
+      {
+        id: 'stage_4_harvest_2x',
+        timestamp: Date.UTC(2026, 10, 20, 0, 0, 0), // Nov 20, 2026 00:00:00 UTC
+        version: 'v6.1.0 Harvest',
+        title: 'Krims Code <span class="glow-cyan">v6.1.0</span> — The Harvest Feast & 2X Multiplier',
+        desc: 'Network-wide 2X XP and rewards multiplier weekend, !feast and !harvest sharing commands, and festive community bounties.',
+        badgeDate: 'TARGET: FRI, NOV 20, 2026 • 00:00:00 UTC',
+        tag: '🍂 NEXT DROP // HARVEST FEAST & 2X BOOST'
+      },
+      {
+        id: 'stage_5_black_friday_vault',
+        timestamp: Date.UTC(2026, 10, 27, 0, 0, 0), // Nov 27, 2026 00:00:00 UTC
+        version: 'v6.1.5 Cyber Vault',
+        title: 'Krims Code <span class="glow-cyan">v6.1.5</span> — Black Friday & Cyber Vault 50% Sale',
+        desc: 'All Krims Rewards store items discounted by 50%, triple shards in mini games, exclusive Cyber Overlord cosmetic role.',
+        badgeDate: 'TARGET: FRI, NOV 27, 2026 • 00:00:00 UTC',
+        tag: '💎 NEXT MEGA EVENT // CYBER VAULT 50% SALE'
+      },
+      {
+        id: 'stage_6_winter_wonderland',
+        timestamp: Date.UTC(2026, 11, 1, 0, 0, 0), // Dec 1, 2026 00:00:00 UTC
+        version: 'v6.2.0 Winter',
+        title: 'Krims Code <span class="glow-cyan">v6.2.0</span> — Winter Wonderland & Advent Calendar',
+        desc: '25-day daily advent calendar quests, blizzard voice auras, and holiday Discord badges.',
+        badgeDate: 'TARGET: TUE, DEC 1, 2026 • 00:00:00 UTC',
+        tag: '❄️ NEXT SEASON // WINTER WONDERLAND 2026'
+      },
+      {
+        id: 'stage_11_new_year_2027',
+        timestamp: Date.UTC(2027, 0, 1, 0, 0, 0), // Jan 1, 2027 00:00:00 UTC
+        version: 'v7.0.0 Revolution',
+        title: 'Krims Code <span class="glow-cyan">v7.0.0</span> — The 2027 Revolution',
+        desc: 'Next-generation autonomous intelligence architecture, high-frequency multi-guild mesh network, and global AI agents.',
+        badgeDate: 'TARGET: FRI, JAN 1, 2027 • 00:00:00 UTC',
+        tag: '🚀 NEXT GENERATION // 2027 ECOSYSTEM REVOLUTION'
+      }
+    ];
 
     const elDays = document.getElementById('cd-days');
     const elHours = document.getElementById('cd-hours');
     const elMins = document.getElementById('cd-mins');
     const elSecs = document.getElementById('cd-secs');
     const elStatus = document.getElementById('cd-status-desc');
+    const elTag = document.querySelector('.countdown-tag');
+    const elDateBadge = document.querySelector('.countdown-date-badge');
+    const elTitle = document.querySelector('.countdown-card h2');
+    const elDesc = document.querySelector('.countdown-card p');
 
     function updateCountdown() {
       const now = Date.now();
-      const diff = TARGET_UTC - now;
+      const currentTarget = SCHEDULED_RELEASES.find(r => r.timestamp > now) || SCHEDULED_RELEASES[SCHEDULED_RELEASES.length - 1];
+      const isPastV6GA = now >= SCHEDULED_RELEASES[0].timestamp;
+
+      // Dynamically update card titles and meta to target the next active drop
+      if (elTag && currentTarget.tag) elTag.textContent = currentTarget.tag;
+      if (elDateBadge && currentTarget.badgeDate) elDateBadge.textContent = currentTarget.badgeDate;
+      if (elTitle && currentTarget.title) elTitle.innerHTML = currentTarget.title;
+      if (elDesc && currentTarget.desc) elDesc.textContent = currentTarget.desc;
+
+      const diff = currentTarget.timestamp - now;
 
       if (diff <= 0) {
         if (elDays) elDays.textContent = '00';
@@ -934,7 +1011,7 @@
         if (elMins) elMins.textContent = '00';
         if (elSecs) elSecs.textContent = '00';
         if (elStatus) {
-          elStatus.innerHTML = '🟢 <strong style="color: #00f2ff;">KRIMS CODE v6.0.0 GENERAL AVAILABILITY IS OFFICIALLY LIVE!</strong> All features, marketplace perks, and voice integrations are active network-wide.';
+          elStatus.innerHTML = '🟢 <strong style="color: #00f2ff;">DEPLOYMENT CYCLE TRIGGERED!</strong> Synchronizing automated fleet rollouts...';
         }
         return;
       }
@@ -948,6 +1025,14 @@
       if (elHours) elHours.textContent = String(hours).padStart(2, '0');
       if (elMins) elMins.textContent = String(minutes).padStart(2, '0');
       if (elSecs) elSecs.textContent = String(seconds).padStart(2, '0');
+
+      if (elStatus) {
+        if (isPastV6GA) {
+          elStatus.innerHTML = `🟢 <strong>KRIMS CODE v6.0.0 GA IS LIVE NETWORK-WIDE!</strong> Now counting down to <strong>${currentTarget.version}</strong>. Automated release triggers instantly when clock strikes zero.`;
+        } else {
+          elStatus.innerHTML = '⏱️ Automated time-gate is active. The engine will instantly unlock network-wide redemptions and broadcast the launch when the clock strikes zero.';
+        }
+      }
     }
 
     updateCountdown();
