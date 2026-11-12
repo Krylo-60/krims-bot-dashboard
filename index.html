@@ -61,7 +61,7 @@
           <a href="/wiki" class="notifyme-nav-link">Guide</a>
           <a href="/custombot" class="notifyme-nav-link">Custom Bot</a>
           <a href="/updates" class="notifyme-nav-link" style="color: #00f2ff; font-weight: 700;">🚀 Updates</a>
-          <a href="/rewards" class="notifyme-nav-link" style="color: #00f2ff; font-weight: 700; text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);">💎 Rewards (Beta)</a>
+          <a href="/rewards" class="notifyme-nav-link" style="color: #00f2ff; font-weight: 700; text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);">💎 Rewards</a>
           <a href="https://krims-discord-bot-d57m.onrender.com/api/status" target="_blank" class="notifyme-nav-link">Status</a>
           <a href="https://top.gg/bot/1523794466740371586/vote" target="_blank" class="notifyme-nav-link">Vote</a>
           <a href="https://discord.com/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot%20applications.commands" target="_blank" class="notifyme-nav-link">Add Bot</a>
@@ -131,7 +131,7 @@
         <div class="landing-hero">
           <div class="landing-hero-badge">
             <span>⚡</span>
-            <span>ENTERPRISE CLAN, GAMING & OPERATIONS FLEET (v5.9 RC ➔ v6.0 GA)</span>
+            <span>ENTERPRISE CLAN, GAMING & OPERATIONS FLEET (v6.0.0 GA LIVE)</span>
           </div>
           <h1 class="landing-hero-title">
             Supercharge your <span class="gradient-text">Discord Community</span>
@@ -609,7 +609,7 @@
             </button>
             <div class="sidebar-brand-pill">
               <img src="/logo.png" alt="Krims Bot Logo" class="sidebar-footer-logo">
-              <div class="bot-version">KRIMS BOT v5.9 • KRIMS AI NEURAL CORE • ROAD TO v6.0</div>
+              <div class="bot-version">KRIMS BOT v6.0.0 GA • KRIMS AI NEURAL CORE • CONVERGENCE LIVE</div>
             </div>
           </div>
         </aside>
@@ -1447,14 +1447,53 @@
 
                   <!-- Live Canvas Simulation -->
                   <div class="welcome-preview-box">
-                    <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px;">Live Welcome Card Preview</div>
-                    <div id="welcome-canvas-mock" class="welcome-banner-canvas cyber-cyan" style="height: 190px; border-radius: 8px; border: 1px solid var(--border-color-glow); padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; background: linear-gradient(135deg, #0a0f1d, #030712); box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
-                      <div id="welcome-mock-avatar-wrap" style="width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--neon-cyan); box-shadow: 0 0 16px rgba(0,242,255,0.6); overflow: hidden; margin-bottom: 8px; background: #5865F2; display: flex; align-items: center; justify-content: center;">
-                        <img src="https://cdn.discordapp.com/embed/avatars/1.png" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                      <span>Live Welcome Card Preview (HUD Engine)</span>
+                      <span style="color: #34d399; font-size: 0.7rem; font-family: var(--font-mono, monospace);">⚡ 1100×480 High-Res Profile Render</span>
+                    </div>
+                    
+                    <div id="welcome-canvas-mock" class="welcome-banner-canvas hud-real-card cyber-cyan">
+                      <!-- 4 HUD Corner Crosshairs -->
+                      <span class="hud-corner tl"></span>
+                      <span class="hud-corner tr"></span>
+                      <span class="hud-corner bl"></span>
+                      <span class="hud-corner br"></span>
+
+                      <!-- Watermark Reticle on Right -->
+                      <div class="hud-watermark-reticle">
+                        <svg width="180" height="180" viewBox="0 0 100 100" fill="none" opacity="0.12">
+                          <circle cx="50" cy="50" r="45" stroke="#00f2ff" stroke-width="1.5" stroke-dasharray="4 2"/>
+                          <circle cx="50" cy="50" r="32" stroke="#00f2ff" stroke-width="1"/>
+                          <circle cx="50" cy="50" r="18" stroke="#00f2ff" stroke-width="1.5"/>
+                          <line x1="50" y1="2" x2="50" y2="98" stroke="#00f2ff" stroke-width="1"/>
+                          <line x1="2" y1="50" x2="98" y2="50" stroke="#00f2ff" stroke-width="1"/>
+                        </svg>
                       </div>
-                      <div id="welcome-preview-title" style="font-weight: 900; font-size: 1.05rem; letter-spacing: 0.08em; color: #fff; text-shadow: 0 0 10px rgba(0,242,255,0.6);">WELCOME TO KSMP</div>
-                      <div id="welcome-preview-username" style="font-weight: 700; font-size: 0.85rem; color: var(--neon-cyan); margin-top: 2px;">Krylo_plays#0001</div>
-                      <div id="welcome-preview-counter" style="font-size: 0.72rem; color: var(--text-dim); margin-top: 4px; background: rgba(0,0,0,0.4); padding: 2px 8px; border-radius: 10px;">You are our #1,248th Member!</div>
+
+                      <!-- Left: Avatar with Glowing Halo Ring -->
+                      <div class="hud-avatar-col">
+                        <div id="welcome-mock-avatar-wrap" class="hud-avatar-wrapper">
+                          <div class="hud-avatar-halo" id="welcome-avatar-halo"></div>
+                          <img src="https://cdn.discordapp.com/embed/avatars/1.png" alt="Avatar" class="hud-avatar-img" id="welcome-preview-avatar">
+                          <span class="hud-status-dot online"></span>
+                        </div>
+                      </div>
+
+                      <!-- Right: High-Tech Typography & Badges -->
+                      <div class="hud-info-col">
+                        <div class="hud-system-tag" id="welcome-preview-system-tag">[+] SYSTEM GATEWAY // VERIFIED ACCESS</div>
+                        <div class="hud-card-heading" id="welcome-preview-title">WELCOME TO KSMP</div>
+                        <div class="hud-card-username" id="welcome-preview-username">@Krylo_plays</div>
+                        
+                        <div class="hud-divider"></div>
+
+                        <div class="hud-badges-row">
+                          <span class="hud-pill-badge primary" id="welcome-preview-counter">MEMBER #1,248</span>
+                          <span class="hud-pill-badge secondary" id="welcome-preview-verified">VERIFIED OPERATIVE</span>
+                        </div>
+
+                        <div class="hud-footer-tag" id="welcome-preview-footer">POWERED BY KRIMS CODE AI // VERIFIED COMMUNITY ACCESS</div>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -5020,3 +5020,217 @@ h1, h2, h3,
 .stat-number {
   font-family: var(--font-mono);
 }
+
+
+/* =========================================================================
+   AUTHENTIC HIGH-TECH HUD WELCOME CARD DESIGNER (v6.0 PRODUCTION)
+   ========================================================================= */
+.welcome-banner-canvas.hud-real-card {
+  width: 100%;
+  min-height: 230px;
+  background: radial-gradient(circle at 85% 30%, rgba(0, 242, 255, 0.08) 0%, transparent 60%),
+              linear-gradient(135deg, #090e18 0%, #03060c 100%);
+  border: 1px solid rgba(0, 242, 255, 0.35);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 22px 26px;
+  gap: 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), inset 0 0 24px rgba(0, 242, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.welcome-banner-canvas.hud-real-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(0, 242, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 242, 255, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+.hud-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: #00f2ff;
+  border-style: solid;
+  pointer-events: none;
+  z-index: 4;
+}
+.hud-corner.tl { top: 6px; left: 6px; border-width: 3px 0 0 3px; }
+.hud-corner.tr { top: 6px; right: 6px; border-width: 3px 3px 0 0; }
+.hud-corner.bl { bottom: 6px; left: 6px; border-width: 0 0 3px 3px; }
+.hud-corner.br { bottom: 6px; right: 6px; border-width: 0 3px 3px 0; }
+
+.hud-watermark-reticle {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hud-avatar-col {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.hud-avatar-wrapper {
+  position: relative;
+  width: 86px;
+  height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hud-avatar-halo {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid #00f2ff;
+  box-shadow: 0 0 16px rgba(0, 242, 255, 0.6), inset 0 0 10px rgba(0, 242, 255, 0.3);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  animation: halo-pulse 3s infinite ease-in-out;
+}
+
+@keyframes halo-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.04); opacity: 1; filter: drop-shadow(0 0 8px #00f2ff); }
+}
+
+.hud-avatar-img {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: #1e1f22;
+  display: block;
+}
+
+.hud-status-dot.online {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  background: #23a55a;
+  border: 3px solid #080c14;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.hud-info-col {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.hud-system-tag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #00f2ff;
+  text-transform: uppercase;
+}
+
+.hud-card-heading {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 12px rgba(0, 242, 255, 0.5);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.hud-card-username {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #00f2ff;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-top: 1px;
+}
+
+.hud-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0, 242, 255, 0.6), rgba(0, 242, 255, 0.1) 80%, transparent);
+  margin: 6px 0;
+}
+
+.hud-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hud-pill-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.hud-pill-badge.primary {
+  background: rgba(0, 242, 255, 0.12);
+  color: #00f2ff;
+  border: 1px solid rgba(0, 242, 255, 0.4);
+}
+
+.hud-pill-badge.secondary {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.hud-footer-tag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-dim, #71717a);
+  margin-top: 6px;
+}
+
+@media (max-width: 640px) {
+  .welcome-banner-canvas.hud-real-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    gap: 14px;
+  }
+  .hud-info-col {
+    align-items: center;
+  }
+  .hud-divider {
+    background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.5), transparent);
+  }
+}

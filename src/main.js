@@ -2143,6 +2143,8 @@ function syncReactionRolePreview() {
 // ==========================================
 // WELCOME CARD DESIGNER (Live Preview)
 // ==========================================
+// 🖼️ AUTHENTIC HUD WELCOME CARD DESIGNER (v6.0)
+// ==========================================
 function initWelcomeCardDesigner() {
   const themeSelect = document.getElementById('welcome-card-theme');
   const headingInput = document.getElementById('welcome-card-heading');
@@ -2151,13 +2153,57 @@ function initWelcomeCardDesigner() {
   const canvas = document.getElementById('welcome-canvas-mock');
   const previewTitle = document.getElementById('welcome-preview-title');
   const previewCounter = document.getElementById('welcome-preview-counter');
-  const avatarWrap = document.getElementById('welcome-mock-avatar-wrap');
+  const avatarHalo = document.getElementById('welcome-avatar-halo');
+  const systemTag = document.getElementById('welcome-preview-system-tag');
+  const usernameTag = document.getElementById('welcome-preview-username');
+  const corners = document.querySelectorAll('.hud-corner');
 
   const themeStyles = {
-    'cyber-cyan': { bg: 'linear-gradient(135deg, #0a0f1d, #030712)', glow: 'rgba(0,242,255,0.6)', color: 'var(--neon-cyan)' },
-    'ksmp-space': { bg: 'linear-gradient(135deg, #1a0533, #0c0118)', glow: 'rgba(139,92,246,0.6)', color: '#a78bfa' },
-    'matrix-green': { bg: 'linear-gradient(135deg, #0a1f0a, #030a03)', glow: 'rgba(16,185,129,0.6)', color: '#10b981' },
-    'obsidian-dark': { bg: 'linear-gradient(135deg, #111, #050505)', glow: 'rgba(255,255,255,0.2)', color: '#888' }
+    'cyber-cyan': {
+      bg: 'radial-gradient(circle at 85% 30%, rgba(0, 242, 255, 0.12) 0%, transparent 60%), linear-gradient(135deg, #090e18 0%, #03060c 100%)',
+      borderColor: 'rgba(0, 242, 255, 0.45)',
+      accent: '#00f2ff',
+      glow: 'rgba(0, 242, 255, 0.6)',
+      tagColor: '#00f2ff',
+      badgeBg: 'rgba(0, 242, 255, 0.12)',
+      badgeBorder: 'rgba(0, 242, 255, 0.4)'
+    },
+    'ksmp-space': {
+      bg: 'radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.18) 0%, transparent 60%), linear-gradient(135deg, #130a24 0%, #06020c 100%)',
+      borderColor: 'rgba(139, 92, 246, 0.45)',
+      accent: '#c084fc',
+      glow: 'rgba(139, 92, 246, 0.65)',
+      tagColor: '#a855f7',
+      badgeBg: 'rgba(139, 92, 246, 0.15)',
+      badgeBorder: 'rgba(139, 92, 246, 0.4)'
+    },
+    'matrix-green': {
+      bg: 'radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 60%), linear-gradient(135deg, #051810 0%, #020905 100%)',
+      borderColor: 'rgba(16, 185, 129, 0.45)',
+      accent: '#34d399',
+      glow: 'rgba(16, 185, 129, 0.65)',
+      tagColor: '#10b981',
+      badgeBg: 'rgba(16, 185, 129, 0.15)',
+      badgeBorder: 'rgba(16, 185, 129, 0.4)'
+    },
+    'crimson-red': {
+      bg: 'radial-gradient(circle at 85% 30%, rgba(239, 68, 68, 0.18) 0%, transparent 60%), linear-gradient(135deg, #200808 0%, #090202 100%)',
+      borderColor: 'rgba(239, 68, 68, 0.45)',
+      accent: '#f87171',
+      glow: 'rgba(239, 68, 68, 0.65)',
+      tagColor: '#ef4444',
+      badgeBg: 'rgba(239, 68, 68, 0.15)',
+      badgeBorder: 'rgba(239, 68, 68, 0.4)'
+    },
+    'obsidian-dark': {
+      bg: 'radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.1) 0%, transparent 60%), linear-gradient(135deg, #141416 0%, #080809 100%)',
+      borderColor: 'rgba(245, 158, 11, 0.4)',
+      accent: '#fbbf24',
+      glow: 'rgba(245, 158, 11, 0.55)',
+      tagColor: '#f59e0b',
+      badgeBg: 'rgba(245, 158, 11, 0.12)',
+      badgeBorder: 'rgba(245, 158, 11, 0.4)'
+    }
   };
 
   function updateWelcomePreview() {
@@ -2166,19 +2212,46 @@ function initWelcomeCardDesigner() {
 
     if (canvas) {
       canvas.style.background = style.bg;
+      canvas.style.borderColor = style.borderColor;
+      canvas.style.boxShadow = `0 16px 40px rgba(0, 0, 0, 0.7), inset 0 0 24px ${style.badgeBg}`;
     }
+
     if (previewTitle) {
-      previewTitle.textContent = headingInput?.value || 'WELCOME';
-      previewTitle.style.textShadow = `0 0 10px ${style.glow}`;
+      previewTitle.textContent = (headingInput?.value || 'WELCOME TO KSMP').toUpperCase();
+      previewTitle.style.textShadow = `0 0 12px ${style.glow}`;
     }
+
+    if (usernameTag) {
+      usernameTag.style.color = style.accent;
+    }
+
+    if (systemTag) {
+      systemTag.style.color = style.tagColor;
+    }
+
     if (previewCounter) {
-      previewCounter.textContent = subInput?.value.replace('{count}', '1,248') || 'You are our #1,248th Member!';
+      const rawSub = subInput?.value || 'You are our #{count}th Member!';
+      const match = rawSub.match(/#\{count\}/) || rawSub.includes('{count}');
+      if (match) {
+        previewCounter.textContent = rawSub.replace('{count}', '1,248');
+      } else {
+        previewCounter.textContent = rawSub;
+      }
+      previewCounter.style.background = style.badgeBg;
+      previewCounter.style.borderColor = style.badgeBorder;
+      previewCounter.style.color = style.accent;
     }
-    if (avatarWrap) {
+
+    if (avatarHalo) {
       const showGlow = glowCheck?.checked ?? true;
-      avatarWrap.style.borderColor = showGlow ? style.color : 'transparent';
-      avatarWrap.style.boxShadow = showGlow ? `0 0 16px ${style.glow}` : 'none';
+      avatarHalo.style.display = showGlow ? 'block' : 'none';
+      avatarHalo.style.borderColor = style.accent;
+      avatarHalo.style.boxShadow = showGlow ? `0 0 16px ${style.glow}, inset 0 0 10px ${style.badgeBg}` : 'none';
     }
+
+    corners.forEach(c => {
+      c.style.borderColor = style.accent;
+    });
   }
 
   themeSelect?.addEventListener('change', updateWelcomePreview);
