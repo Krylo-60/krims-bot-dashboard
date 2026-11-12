@@ -1272,35 +1272,16 @@
         KryloCoins have officially retired and transitioned into <strong>Krims Rewards (KR)</strong> with an automatic <strong>1:1 balance conversion</strong>. <strong>v6.0.0 Production GA is NOW LIVE!</strong> Claim your daily rewards, stake for 12.5% APY compounding yield, test redemption passes, and synchronize your balance across Discord and KSMP.
       </p>
 
-      <!-- Beta Status & Launch Countdown Bar -->
-      <div class="countdown-bar" style="border-color: rgba(0, 242, 255, 0.4); background: rgba(13, 18, 32, 0.9); padding: 12px 24px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 25px rgba(0,242,255,0.2);">
-        <div style="display: flex; align-items: center; gap: 10px;">
+      <!-- Rewards Live Status Badge -->
+      <div style="display: inline-flex; align-items: center; justify-content: center; gap: 12px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); padding: 10px 22px; border-radius: 999px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.15); flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px;">
           <span class="pulse-dot" style="background: #10b981; box-shadow: 0 0 10px #10b981; width: 10px; height: 10px;"></span>
-          <span style="color: #34d399; font-weight: 800; font-family: var(--font-mono, monospace); font-size: 0.85rem; letter-spacing: 0.05em;">v6.0.0 GA CONVERGENCE LIVE</span>
+          <span style="color: #34d399; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.03em;">REWARDS SYSTEM IS 100% LIVE & ACTIVE</span>
         </div>
-        <span style="color: rgba(255, 255, 255, 0.2); font-size: 1.1rem;">|</span>
-        <span class="countdown-label" style="color: var(--cyan); font-size: 0.82rem;">⏳ Full Public Launch In:</span>
-        <div class="countdown-units">
-          <div class="cd-block">
-            <span class="cd-number" id="cd-days">10</span>
-            <span class="cd-unit-text">Days</span>
-          </div>
-          <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
-          <div class="cd-block">
-            <span class="cd-number" id="cd-hours">00</span>
-            <span class="cd-unit-text">Hours</span>
-          </div>
-          <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
-          <div class="cd-block">
-            <span class="cd-number" id="cd-mins">00</span>
-            <span class="cd-unit-text">Mins</span>
-          </div>
-          <span style="color: var(--text-dim); font-size: 1.2rem;">:</span>
-          <div class="cd-block">
-            <span class="cd-number" id="cd-secs">00</span>
-            <span class="cd-unit-text">Secs</span>
-          </div>
-        </div>
+        <span style="color: rgba(255, 255, 255, 0.25);">|</span>
+        <a href="updates.html" style="color: var(--cyan); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+          View Upcoming Roadmaps on Updates ➔
+        </a>
       </div>
     </section>
 
@@ -1734,91 +1715,6 @@
   </div>
 
   <script>
-    // Live Multi-Stage Countdown Timer
-    const SCHEDULED_RELEASES = [
-      {
-        id: 'stage_1_v6_ga',
-        timestamp: Date.UTC(2026, 10, 9, 0, 0, 0), // Nov 9, 2026
-        version: 'v6.0.0 GA',
-        label: '⏳ Full Public Launch In:'
-      },
-      {
-        id: 'stage_2_diwali_finale',
-        timestamp: Date.UTC(2026, 10, 12, 2, 0, 0), // Nov 12, 2026 02:00:00 UTC
-        version: 'v6.0.5 Event Finale',
-        label: '🎆 Next Drop (v6.0.5 Finale & 1.5x Surge) In:'
-      },
-      {
-        id: 'stage_3_cyber_midmonth',
-        timestamp: Date.UTC(2026, 10, 15, 0, 0, 0),
-        version: 'v6.0.8 Cyber Drop',
-        label: '⚔️ Next Milestone (v6.0.8 Clan Wars) In:'
-      },
-      {
-        id: 'stage_4_harvest_2x',
-        timestamp: Date.UTC(2026, 10, 20, 0, 0, 0),
-        version: 'v6.1.0 Harvest',
-        label: '🍂 Next Drop (v6.1.0 2X Boost) In:'
-      },
-      {
-        id: 'stage_5_black_friday_vault',
-        timestamp: Date.UTC(2026, 10, 27, 0, 0, 0),
-        version: 'v6.1.5 Cyber Vault',
-        label: '💎 Next Mega Sale (v6.1.5 Vault 50% Off) In:'
-      },
-      {
-        id: 'stage_6_winter_wonderland',
-        timestamp: Date.UTC(2026, 11, 1, 0, 0, 0),
-        version: 'v6.2.0 Winter',
-        label: '❄️ Next Season (v6.2.0 Winter) In:'
-      },
-      {
-        id: 'stage_11_new_year_2027',
-        timestamp: Date.UTC(2027, 0, 1, 0, 0, 0),
-        version: 'v7.0.0 Revolution',
-        label: '🚀 Next Gen (v7.0.0 Revolution) In:'
-      }
-    ];
-
-    function updateCountdown() {
-      if (!document.getElementById('cd-days')) return;
-      const now = Date.now();
-      const currentTarget = SCHEDULED_RELEASES.find(r => r.timestamp > now) || SCHEDULED_RELEASES[SCHEDULED_RELEASES.length - 1];
-      const isPastV6GA = now >= SCHEDULED_RELEASES[0].timestamp;
-      const diff = currentTarget.timestamp - now;
-
-      const labelEl = document.querySelector('.countdown-label');
-      if (labelEl) {
-        if (isPastV6GA) {
-          labelEl.innerHTML = '🟢 <strong>v6.0 GA IS LIVE!</strong>';
-          labelEl.style.color = '#34d399';
-        } else {
-          labelEl.innerHTML = currentTarget.label;
-          labelEl.style.color = 'var(--cyan)';
-        }
-      }
-
-      if (diff <= 0) {
-        document.getElementById('cd-days').textContent = '00';
-        document.getElementById('cd-hours').textContent = '00';
-        document.getElementById('cd-mins').textContent = '00';
-        document.getElementById('cd-secs').textContent = '00';
-        return;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const mins = Math.floor((diff / (1000 * 60)) % 60);
-      const secs = Math.floor((diff / 1000) % 60);
-
-      document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
-      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
-      document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
-      document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
-    }
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-
     // Toast Notice Helper
     function showToast(message, icon = '✨') {
       const toast = document.getElementById('rewards-toast');
