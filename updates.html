@@ -696,6 +696,7 @@
     <div class="filter-bar">
       <button type="button" class="filter-btn active" data-filter="all">All Updates</button>
       <button type="button" class="filter-btn" data-filter="released">🌟 Released (v6.0)</button>
+      <button type="button" class="filter-btn" data-filter="upcoming">⏳ Upcoming (v6.0.5)</button>
       <button type="button" class="filter-btn" data-filter="bot">🤖 Discord Bot</button>
       <button type="button" class="filter-btn" data-filter="cli">📦 CLI & SDK</button>
       <button type="button" class="filter-btn" data-filter="rewards">💎 Rewards & Staking</button>
@@ -705,13 +706,53 @@
     <!-- Timeline Container -->
     <div class="timeline">
 
-      <!-- ITEM 1: v6.0.0 (UPCOMING) -->
+      <!-- ITEM 0: v6.0.5 (UPCOMING EVENT FINALE) -->
+      <article class="update-card" data-tags="upcoming rewards bot" style="border: 1px dashed rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.04);">
+        <div class="timeline-node" style="background: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);"></div>
+        <div class="card-header-row">
+          <div class="version-title-group">
+            <span class="version-tag" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.4);">v6.0.5 Event Finale</span>
+            <span class="status-badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.5);">⏳ TONIGHT 9:00 PM EST</span>
+          </div>
+          <span class="update-date">Scheduled: Wednesday, Nov 11, 2026 • 21:00 EST (02:00 UTC)</span>
+        </div>
+        <h3 class="update-summary">
+          Diwali Festival Finale, Sacred Memorial &amp; 1.5x Weekend Coin Surge
+        </h3>
+        <ul class="features-list">
+          <li class="feature-item">
+            <span class="feature-bullet">🪔</span>
+            <div>
+              <strong>Festival Concluded:</strong> Final community statistics snapshot celebrating 1,850+ diyas lit and 620+ mithai boxes gifted.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🎁</span>
+            <div>
+              <strong>Memorial Founder Badge:</strong> Special commemorative profile badge distributed to all active participants.
+            </div>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">🪙</span>
+            <div>
+              <strong>1.5x Economy Boost:</strong> All coin bounties and staking yields boosted by 50% for the closing ceremonies.
+            </div>
+          </li>
+        </ul>
+        <div class="card-footer-tags">
+          <span class="category-tag">Diwali Finale</span>
+          <span class="category-tag">Memorial Badge</span>
+          <span class="category-tag">1.5x Boost</span>
+        </div>
+      </article>
+
+      <!-- ITEM 1: v6.0.0 (CURRENT PRODUCTION GA) -->
       <article class="update-card featured" data-tags="released cli bot rewards dashboard">
-        <div class="timeline-node"></div>
+        <div class="timeline-node green" style="background: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);"></div>
         <div class="card-header-row">
           <div class="version-title-group">
             <span class="version-tag">v6.0.0 GA</span>
-            <span class="status-badge badge-released" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3);">🌟 GA PRODUCTION LIVE</span>
+            <span class="status-badge badge-live">🟢 CURRENT PRODUCTION GA • LIVE NOW</span>
           </div>
           <span class="update-date">Released: Monday, November 9, 2026</span>
         </div>
@@ -759,13 +800,13 @@
         </div>
       </article>
 
-      <!-- ITEM 2: v5.9.0 (LIVE NOW) -->
+      <!-- ITEM 2: v5.9.0 (DEPLOYED) -->
       <article class="update-card" data-tags="rewards bot cli">
-        <div class="timeline-node green"></div>
+        <div class="timeline-node purple"></div>
         <div class="card-header-row">
           <div class="version-title-group">
             <span class="version-tag">v5.9.0 RC</span>
-            <span class="status-badge badge-live">🟢 LIVE NOW</span>
+            <span class="status-badge badge-deployed">DEPLOYED</span>
           </div>
           <span class="update-date">Released: November 6, 2026</span>
         </div>
