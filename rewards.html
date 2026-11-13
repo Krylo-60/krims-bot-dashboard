@@ -251,6 +251,7 @@
       box-shadow: 0 0 45px var(--cyan-glow);
     }
 
+    .global-pill,
     .sneakpeek-pill {
       display: inline-flex;
       align-items: center;
@@ -705,6 +706,7 @@
       opacity: 0.6 !important;
     }
 
+    .action-btn-global,
     .action-btn-alpha {
       background: rgba(139, 92, 246, 0.15);
       border: 1px solid var(--purple);
@@ -1645,9 +1647,9 @@
           <path d="M2 9h20"></path>
         </svg>
       </div>
-      <div class="sneakpeek-pill" style="border-color: rgba(0, 242, 255, 0.45); background: rgba(0, 242, 255, 0.12); color: #00f2ff; box-shadow: 0 0 20px rgba(0, 242, 255, 0.25);">
+      <div class="global-pill" style="border-color: rgba(0, 242, 255, 0.45); background: rgba(0, 242, 255, 0.12); color: #00f2ff; box-shadow: 0 0 20px rgba(0, 242, 255, 0.25);">
         <span class="pulse-dot" style="background: #00f2ff; box-shadow: 0 0 10px #00f2ff;"></span>
-        <span>🌟 KRIMS REWARDS v6.0.0 PRODUCTION GA IS LIVE</span>
+        <span>🌐 KRIMS REWARDS GLOBAL GA IS LIVE WORLDWIDE</span>
       </div>
       <h1 class="hero-title">
         The Evolution to <span class="glow-cyan">Krims Rewards</span>.<br>
@@ -1697,13 +1699,13 @@
       </div>
     </section>
 
-    <!-- Interactive Vault Balance Simulator -->
+    <!-- Official Global Rewards Vault -->
     <section class="vault-section">
       <div class="vault-card">
         <div class="vault-header">
           <div class="vault-header-title">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--cyan);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-            <h2>Interactive Rewards Vault & Simulator</h2>
+            <h2>Official Global Rewards Vault</h2>
           </div>
           <form class="vault-lookup-form" id="vault-form" style="display: none;">
             <input type="text" id="vault-user-input" class="vault-input" placeholder="Manual Discord User ID...">
@@ -1748,16 +1750,16 @@
             </div>
             <div class="stat-tile">
               <span class="stat-label">Clearance Tier</span>
-              <span class="stat-value emerald" id="vault-clearance-val">Alpha Cleared</span>
+              <span class="stat-value emerald" id="vault-clearance-val">Global Verified</span>
             </div>
           </div>
 
           <div class="vault-actions-row">
             <button class="action-btn-bonus" id="btn-claim-bonus">
-              <span>🎁 Claim Web Alpha Bonus (+250 KR)</span>
+              <span>🎁 Claim Daily Global Bonus (+250 KR)</span>
             </button>
-            <button class="action-btn-alpha" id="btn-test-eligibility">
-              <span>👑 Test Pass Eligibility</span>
+            <button class="action-btn-global" id="btn-test-eligibility">
+              <span>👑 Check Pass Eligibility</span>
             </button>
             <span style="font-size: 0.78rem; color: var(--text-dim); margin-left: auto;">
               ⚡ Connected via Discord OAuth • Synchronized with Krims Database
@@ -1943,9 +1945,9 @@
             <span class="earning-icon">🔬</span>
             <span class="earning-rate-pill">+500 - 5,000 KR</span>
           </div>
-          <h3 class="earning-title">Alpha Testing & Bounties</h3>
+          <h3 class="earning-title">Developer &amp; Security Bounties</h3>
           <p class="earning-desc">
-            Interact with Krims Alpha in the Support Server, submit feedback, and report verified issues to claim bounties.
+            Test new ecosystem features, submit community feedback in the Support Server, and report verified security issues to claim rewards bounties.
           </p>
         </div>
 
@@ -2056,7 +2058,7 @@
           <div class="roadmap-content">
             <h3>🏦 Krims Staking Vault &amp; Passive Yield Protocol</h3>
             <p>
-              Lock surplus Krims Rewards into time-tiered smart vaults to earn compounding passive yields, seasonal jackpot lottery entries, and exclusive early access to upcoming bot fleet beta models.
+              Lock surplus Krims Rewards into time-tiered smart vaults to earn compounding passive yields, seasonal jackpot lottery entries, and exclusive early access to upcoming bot fleet neural models.
             </p>
           </div>
         </div>
@@ -2174,7 +2176,7 @@
     let activeModalPassName = '';
 
     function getBonusUserKey() {
-      return currentUser && currentUser.id ? currentUser.id : 'guest_alpha';
+      return currentUser && currentUser.id ? currentUser.id : 'guest_global';
     }
 
     function getKeysStorageKey() {
@@ -2657,11 +2659,11 @@
       showToast(`Loaded vault for Discord User ID: ${val.slice(0, 8)}...`, '💎');
     });
 
-    // Anti-Spam Alpha Bonus Cooldown System (24-Hour Timer)
+    // Anti-Spam Daily Global Bonus Cooldown System (24-Hour Timer)
     const BONUS_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
 
     function getBonusUserKey() {
-      return currentUser && currentUser.id ? currentUser.id : 'guest_alpha';
+      return currentUser && currentUser.id ? currentUser.id : 'guest_global';
     }
 
     function checkBonusCooldown() {
@@ -2684,7 +2686,7 @@
       } else {
         btn.disabled = false;
         btn.classList.remove('claimed');
-        btn.innerHTML = `<span>🎁 Claim Web Alpha Bonus (+250 KR)</span>`;
+        btn.innerHTML = `<span>🎁 Claim Daily Global Bonus (+250 KR)</span>`;
         return true;
       }
     }
@@ -2693,11 +2695,11 @@
     checkBonusCooldown();
     setInterval(checkBonusCooldown, 30000);
 
-    // Claim Alpha Bonus Button with strict anti-spam cooldown
+    // Claim Global Bonus Button with strict anti-spam cooldown
     document.getElementById('btn-claim-bonus')?.addEventListener('click', () => {
       const isEligible = checkBonusCooldown();
       if (!isEligible) {
-        showToast('⚠️ Daily Alpha Bonus already claimed! You can only claim once every 24 hours.', '⏳');
+        showToast('⚠️ Daily Global Bonus already claimed! You can only claim once every 24 hours.', '⏳');
         return;
       }
 
@@ -2709,7 +2711,7 @@
 
       document.getElementById('vault-kr-val').textContent = userBalance.toLocaleString() + ' KR';
       checkBonusCooldown();
-      showToast(`+250 KR Alpha Bonus Claimed! New Balance: ${userBalance.toLocaleString()} KR`, '🎁');
+      showToast(`+250 KR Global Bonus Claimed! New Balance: ${userBalance.toLocaleString()} KR`, '🎁');
     });
 
     // Test Pass Eligibility Button

@@ -122,13 +122,13 @@ export default async function handler(req, res) {
       legacyCurrency: 'KryloCoins (KC)',
       newCurrency: 'Krims Rewards (KR)',
       conversionRatio: '1:1',
-      launchDate: '2026-11-02T00:00:00Z',
-      status: 'Classified Sneak Peek',
-      revealSchedule: 'Next Monday (Nov 2)'
+      launchDate: '2026-11-09T00:00:00Z',
+      status: 'Official Global Production GA',
+      revealSchedule: 'Live Worldwide'
     },
     exclusiveUtility: {
       headline: 'The Only Key to Krims Code Premium',
-      description: 'Starting Next Monday, spending Krims Rewards is the ONLY way to access Krims Code Premium passes, unlock priority neural reasoning, and deploy customized bot instances.'
+      description: 'Spending Krims Rewards is the ONLY way to access Krims Code Premium passes, unlock priority neural reasoning, and deploy customized bot instances.'
     },
     passes: [
       {
@@ -197,9 +197,9 @@ export default async function handler(req, res) {
       },
       {
         icon: '🔬',
-        title: 'Alpha Testing & Bug Bounties',
+        title: 'Developer & Security Bounties',
         rate: '+500 - 5,000 KR',
-        description: 'Test bleeding-edge prototypes in Krims Alpha and report verified system vulnerabilities.'
+        description: 'Test new ecosystem features, submit community feedback in the Support Server, and report verified security issues to claim rewards bounties.'
       }
     ],
     roadmapUpdates: [
@@ -243,7 +243,7 @@ export default async function handler(req, res) {
         date: 'Early 2027',
         tag: 'Staking Vault',
         title: '🏦 Krims Staking Vault & Passive Yield Protocol',
-        summary: 'Lock surplus Krims Rewards into time-tiered smart vaults to earn compounding passive yields, seasonal jackpot lottery entries, and exclusive early access to upcoming bot fleet beta models.'
+        summary: 'Lock surplus Krims Rewards into time-tiered smart vaults to earn compounding passive yields, seasonal jackpot lottery entries, and exclusive early access to upcoming bot fleet neural models.'
       }
     ],
     userVault
