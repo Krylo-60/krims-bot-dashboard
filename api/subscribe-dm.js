@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  const { userId } = req.body || {};
+  const { userId, licenseKey, passName } = req.body || {};
   if (!userId || typeof userId !== 'string' || userId.trim().length === 0) {
     return res.status(400).json({ ok: false, error: 'Please log in with Discord or provide your Discord User ID.' });
   }
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ 
       ok: true, 
       simulated: true,
-      message: `🔔 Subscribed! You will receive Discord DM alerts at User ID ${userId}.` 
+      message: `🔔 Key stored! You will receive Discord DM alerts at User ID ${userId}.` 
     });
   }
 
@@ -47,7 +47,53 @@ export default async function handler(req, res) {
 
     const dmChannel = await dmRes.json();
 
-    // 2. Dispatch high-tech confirmation embed to their Discord DMs
+    // 2. Dispatch high-tech confirmation or license key embed to their Discord DMs
+    const isKeyDelivery = !!licenseKey;
+    const contentText = isKeyDelivery 
+      ? `🔑 <@${userId}> **Your Krims Code Premium License Key has been issued!**`
+      : `✨ <@${userId}> **You are officially subscribed to Krims Rewards Drop Alerts!**`;
+
+    const embedData = isKeyDelivery ? {
+      title: `🔑 License Key: ${passName || 'Krims Code Premium Pass'}`,
+      description: 
+        `Congratulations! Your premium pass has been successfully unlocked from your Krims Rewards vault.\n\n` +
+        `• **Official Cryptographic License Key:**\n` +
+        `\`\`\`${licenseKey}\`\`\`\n` +
+        `### ⚡ How to Activate:\n` +
+        `1️⃣ Open Discord and go to your server.\n` +
+        `2️⃣ Run \`/premium activate key:${licenseKey}\`\n` +
+        `3️⃣ Enjoy 3.0x Server XP, Dedicated Neural Compute, and Custom Bot Spawner slots!\n\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `View your full key inventory in your [Rewards Vault](https://krims-bot-dashboard.vercel.app/rewards).`,
+      color: licenseKey.includes('LIFE') ? 0xF59E0B : 0x00F2FF,
+      thumbnail: {
+        url: 'https://krims-bot-dashboard.vercel.app/logo.png'
+      },
+      footer: {
+        text: 'Krims Code AI • Krims Rewards Protocol • Secured by Neon Cloud'
+      },
+      timestamp: new Date().toISOString()
+    } : {
+      title: '💎 Krims Rewards • Drop Alerts Activated',
+      description: 
+        'Greetings Operative!\n\n' +
+        'Your Discord account has been enrolled to receive **Direct Message Drop Alerts**!\n\n' +
+        '### 📬 What You Will Receive Here:\n' +
+        '• 🚀 **Next Monday (Nov 2):** Instant notification when the **Krims Code Premium Pass Redemption** officially unlocks.\n' +
+        '• ⛏️ **Mid November:** Notice when the **Minecraft KSMP In-Game Cosmetic Store** goes live.\n' +
+        '• 🎁 **Bonus Multipliers:** Spontaneous 2x KR bonus events, voice lounge streak boosts, and Alpha bounties.\n\n' +
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
+        'Visit your dashboard rewards vault anytime: [krims-bot-dashboard.vercel.app/rewards](https://krims-bot-dashboard.vercel.app/rewards)',
+      color: 0x00F2FF,
+      thumbnail: {
+        url: 'https://cdn.discordapp.com/avatars/1523794466740371586/a_906dd0ce7ccf09e15e48c6a5bda79fa6.gif?size=256'
+      },
+      footer: {
+        text: 'Krims Code AI • Krims Rewards Protocol • "Dream higher, build higher."'
+      },
+      timestamp: new Date().toISOString()
+    };
+
     const sendRes = await fetch(`https://discord.com/api/v10/channels/${dmChannel.id}/messages`, {
       method: 'POST',
       headers: {
@@ -55,29 +101,8 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        content: `✨ <@${userId}> **You are officially subscribed to Krims Rewards Drop Alerts!**`,
-        embeds: [
-          {
-            title: '💎 Krims Rewards • Drop Alerts Activated',
-            description: 
-              'Greetings Operative!\n\n' +
-              'Your Discord account has been enrolled to receive **Direct Message Drop Alerts**!\n\n' +
-              '### 📬 What You Will Receive Here:\n' +
-              '• 🚀 **Next Monday (Nov 2):** Instant notification when the **Krims Code Premium Pass Redemption** officially unlocks.\n' +
-              '• ⛏️ **Mid November:** Notice when the **Minecraft KSMP In-Game Cosmetic Store** goes live.\n' +
-              '• 🎁 **Bonus Multipliers:** Spontaneous 2x KR bonus events, voice lounge streak boosts, and Alpha bounties.\n\n' +
-              '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
-              'Visit your dashboard rewards vault anytime: [krims-bot-dashboard.vercel.app/rewards](https://krims-bot-dashboard.vercel.app/rewards)',
-            color: 0x00F2FF,
-            thumbnail: {
-              url: 'https://cdn.discordapp.com/avatars/1523794466740371586/a_906dd0ce7ccf09e15e48c6a5bda79fa6.gif?size=256'
-            },
-            footer: {
-              text: 'Krims Code AI • Krims Rewards Protocol • "Dream higher, build higher."'
-            },
-            timestamp: new Date().toISOString()
-          }
-        ],
+        content: contentText,
+        embeds: [embedData],
         components: [
           {
             type: 1,

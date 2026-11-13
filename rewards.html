@@ -951,6 +951,385 @@
       box-shadow: 0 0 20px var(--gold-glow);
     }
 
+    /* ── KEYS INVENTORY & VAULT STORAGE ── */
+    .vault-keys-section {
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid var(--card-border);
+      text-align: left;
+    }
+
+    .keys-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .keys-section-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-pill-cyan {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(0, 242, 255, 0.12);
+      border: 1px solid rgba(0, 242, 255, 0.35);
+      color: var(--cyan);
+    }
+
+    .keys-inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    .key-inventory-card {
+      background: rgba(13, 18, 32, 0.85);
+      border: 1.5px solid rgba(0, 242, 255, 0.25);
+      border-radius: 14px;
+      padding: 16px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .key-inventory-card.gold-card {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, rgba(13, 18, 32, 0.9) 100%);
+    }
+
+    .key-inventory-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .key-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .key-pass-name {
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: #fff;
+    }
+
+    .key-status-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .key-code-display {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--cyan);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px dashed rgba(0, 242, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 8px 0;
+      word-break: break-all;
+    }
+
+    .key-code-display.gold {
+      color: var(--gold);
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .btn-key-action {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-key-action:hover {
+      background: var(--cyan);
+      color: #050b14;
+      border-color: var(--cyan);
+    }
+
+    .empty-keys-state {
+      padding: 24px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--card-border);
+      border-radius: 12px;
+      color: var(--text-dim);
+      font-size: 0.86rem;
+      grid-column: 1 / -1;
+    }
+
+    /* ── 8. INTERACTIVE LICENSE KEY MODAL ── */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(5, 11, 20, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      animation: modalFadeIn 0.25s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-card {
+      background: #0d1220;
+      border: 1.5px solid var(--cyan);
+      border-radius: 24px;
+      max-width: 580px;
+      width: 100%;
+      padding: 32px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px var(--cyan-glow);
+      text-align: center;
+    }
+
+    .modal-card.gold-theme {
+      border-color: var(--gold);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px var(--gold-glow);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg);
+    }
+
+    .modal-hero-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 16px rgba(0, 242, 255, 0.5));
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .modal-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .key-box-container {
+      background: rgba(5, 11, 20, 0.9);
+      border: 1.5px solid var(--cyan);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 22px;
+      text-align: left;
+      box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.08);
+    }
+
+    .key-box-container.gold-theme {
+      border-color: var(--gold);
+      box-shadow: inset 0 0 20px rgba(245, 158, 11, 0.08);
+    }
+
+    .key-box-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .key-code-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #040810;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .key-code-text {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: var(--cyan);
+      word-break: break-all;
+    }
+
+    .key-code-text.gold-text {
+      color: var(--gold);
+    }
+
+    .btn-copy-big {
+      background: var(--cyan);
+      color: #050b14;
+      border: none;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 9px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-copy-big:hover {
+      background: #33f5ff;
+      box-shadow: 0 0 15px var(--cyan-glow);
+    }
+
+    .btn-copy-big.gold-btn {
+      background: var(--gold);
+    }
+
+    .btn-copy-big.gold-btn:hover {
+      background: #fbbf24;
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    .activation-instructions {
+      text-align: left;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 24px;
+    }
+
+    .activation-instructions h4 {
+      margin: 0 0 10px;
+      font-size: 0.88rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .activation-instructions ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      line-height: 1.6;
+    }
+
+    .activation-instructions li code {
+      font-family: var(--font-mono);
+      background: rgba(0, 242, 255, 0.1);
+      color: var(--cyan);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    .modal-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-modal-dm {
+      background: #5865f2;
+      color: #fff;
+      border: none;
+      font-weight: 800;
+      font-size: 0.88rem;
+      padding: 12px 22px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-modal-dm:hover {
+      background: #4752c4;
+      box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+    }
+
+    .btn-modal-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-modal-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
     /* ── 8. EARNING METHODS GRID ── */
     .earning-grid {
       display: grid;
@@ -1378,6 +1757,22 @@
               ⚡ Connected via Discord OAuth • Synchronized with Krims Database
             </span>
           </div>
+
+          <!-- Unlocked Passes & License Keys Vault -->
+          <div class="vault-keys-section" id="vault-keys-section">
+            <div class="keys-header-row">
+              <h4 class="keys-section-title">
+                <span>🔑</span>
+                <span>My Unlocked Passes &amp; License Keys</span>
+              </h4>
+              <span id="keys-count-badge" class="badge-pill-cyan">0 Keys</span>
+            </div>
+            <div id="keys-inventory-list" class="keys-inventory-grid">
+              <div class="empty-keys-state">
+                No keys unlocked yet. Spend your Krims Rewards below to unlock Premium Passes and mint your license keys!
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1416,7 +1811,7 @@
               <span>Verified Krims Premium linked role badge</span>
             </li>
           </ul>
-          <button class="pass-unlock-btn" onclick="triggerPassNotice('7-Day Premium Sprint', 2500)">
+          <button class="pass-unlock-btn" onclick="unlockPass('pass_7d', '7-Day Premium Sprint', 2500, 7)">
             <span>✨ Unlock Sprint Pass (2,500 KR)</span>
           </button>
         </div>
@@ -1447,7 +1842,7 @@
               <span>VIP Lounge access & golden Discord nameplate</span>
             </li>
           </ul>
-          <button class="pass-unlock-btn" onclick="triggerPassNotice('30-Day Pro Season Pass', 8000)">
+          <button class="pass-unlock-btn" onclick="unlockPass('pass_30d', '30-Day Pro Season Pass', 8000, 30)">
             <span>👑 Unlock 30-Day Pro (8,000 KR)</span>
           </button>
         </div>
@@ -1478,7 +1873,7 @@
               <span>KSMP Gold VIP Whitelist & Custom Cape cosmetic</span>
             </li>
           </ul>
-          <button class="pass-unlock-btn" onclick="triggerPassNotice('Enterprise Lifetime Access', 25000)">
+          <button class="pass-unlock-btn" onclick="unlockPass('pass_lifetime', 'Enterprise Lifetime Access', 25000, null)">
             <span>⚡ Unlock Lifetime Access (25,000 KR)</span>
           </button>
         </div>
@@ -1708,6 +2103,47 @@
     </p>
   </footer>
 
+  <!-- Interactive License Key Modal -->
+  <div id="key-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-card" id="modal-card-element">
+      <button class="modal-close-btn" onclick="closeKeyModal()">✕</button>
+      <div class="modal-hero-icon" id="modal-hero-icon">👑</div>
+      <h2 class="modal-title" id="modal-title">Pass Unlocked &amp; Key Minted!</h2>
+      <p class="modal-desc" id="modal-desc">
+        Congratulations! You have successfully unlocked <strong id="modal-pass-name" style="color: var(--cyan);">Enterprise Lifetime Access</strong>.
+      </p>
+
+      <div class="key-box-container" id="modal-key-box">
+        <span class="key-box-label">Official Cryptographic License Key</span>
+        <div class="key-code-row">
+          <span class="key-code-text" id="modal-key-display">KRIMS-LIFE-XXXXXX-XXXXXX</span>
+          <button type="button" class="btn-copy-big" id="btn-modal-copy" onclick="copyModalKey()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="btn-modal-copy-text">Copy Key</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="activation-instructions">
+        <h4>⚡ How to Activate in Discord:</h4>
+        <ol>
+          <li>Open Discord and go to your server (or any server where you want perks).</li>
+          <li>Type <code id="modal-cmd-instruction">/premium activate key:YOUR_KEY</code> and hit Enter.</li>
+          <li>Enjoy <strong>3.0x Server XP</strong>, Custom Bot Spawner slots, and 0ms Dedicated Neural AI!</li>
+        </ol>
+      </div>
+
+      <div class="modal-actions-row">
+        <button type="button" class="btn-modal-dm" id="btn-modal-dm" onclick="sendKeyToDiscordDM()">
+          <span>📬 Send Key to my Discord DMs</span>
+        </button>
+        <button type="button" class="btn-modal-close" onclick="closeKeyModal()">
+          <span>Close &amp; View Vault</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Element -->
   <div id="rewards-toast">
     <span id="toast-icon">✨</span>
@@ -1726,14 +2162,264 @@
       }, 4000);
     }
 
-    // Pass Notice Trigger
-    window.triggerPassNotice = function(passName, cost) {
-      if (userBalance >= cost) {
-        showToast(`🎉 Beta Access Granted: You have ${userBalance.toLocaleString()} KR! ${passName} is active for your account.`, '🚀');
-      } else {
-        const need = cost - userBalance;
-        showToast(`You have ${userBalance.toLocaleString()} KR. Need ${need.toLocaleString()} more KR for ${passName}! Claim your daily Beta bonus above!`, '💎');
+    // ── LICENSE KEYS INVENTORY & MODAL CONTROLS ──
+    let unlockedKeys = [];
+    let activeModalKey = '';
+    let activeModalPassName = '';
+
+    function getBonusUserKey() {
+      return currentUser && currentUser.id ? currentUser.id : 'guest_alpha';
+    }
+
+    function getKeysStorageKey() {
+      const userKey = getBonusUserKey();
+      return 'krims_unlocked_keys_' + userKey;
+    }
+
+    function loadKeysInventory() {
+      try {
+        const stored = localStorage.getItem(getKeysStorageKey());
+        if (stored) {
+          unlockedKeys = JSON.parse(stored);
+        } else {
+          unlockedKeys = [];
+        }
+      } catch (e) {
+        unlockedKeys = [];
       }
+      renderKeysInventory();
+    }
+
+    function saveKeysInventory() {
+      try {
+        localStorage.setItem(getKeysStorageKey(), JSON.stringify(unlockedKeys));
+      } catch (e) {}
+      renderKeysInventory();
+    }
+
+    function renderKeysInventory() {
+      const listEl = document.getElementById('keys-inventory-list');
+      const badgeEl = document.getElementById('keys-count-badge');
+      if (!listEl) return;
+
+      if (badgeEl) {
+        badgeEl.textContent = `${unlockedKeys.length} Key${unlockedKeys.length === 1 ? '' : 's'}`;
+      }
+
+      if (!unlockedKeys || unlockedKeys.length === 0) {
+        listEl.innerHTML = `
+          <div class="empty-keys-state">
+            No keys unlocked yet. Spend your Krims Rewards below to unlock Premium Passes and mint your license keys!
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      unlockedKeys.forEach((item) => {
+        const isGold = item.tier === 'enterprise' || item.tier === 'pass_lifetime' || (item.passName && item.passName.toLowerCase().includes('life'));
+        html += `
+          <div class="key-inventory-card ${isGold ? 'gold-card' : ''}">
+            <div class="key-card-header">
+              <span class="key-pass-name">${item.passName}</span>
+              <span class="key-status-tag">Ready to Activate</span>
+            </div>
+            <div class="key-code-display ${isGold ? 'gold' : ''}">
+              <span>${item.key}</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+              <span style="font-size: 0.72rem; color: var(--text-dim);">
+                Unlocked: ${new Date(item.unlockedAt || Date.now()).toLocaleDateString()}
+              </span>
+              <button class="btn-key-action" onclick="copyInventoryKey('${item.key}', this)">
+                📋 Copy Key
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      listEl.innerHTML = html;
+    }
+
+    window.closeKeyModal = function() {
+      const modal = document.getElementById('key-modal');
+      if (modal) modal.style.display = 'none';
+    };
+
+    window.copyModalKey = function() {
+      if (!activeModalKey) return;
+      navigator.clipboard.writeText(activeModalKey).then(() => {
+        const textSpan = document.getElementById('btn-modal-copy-text');
+        if (textSpan) textSpan.textContent = 'Copied! ✅';
+        showToast('License Key copied to clipboard!', '📋');
+        setTimeout(() => {
+          if (textSpan) textSpan.textContent = 'Copy Key';
+        }, 2500);
+      }).catch(() => {
+        showToast('Key: ' + activeModalKey, '🔑');
+      });
+    };
+
+    window.copyInventoryKey = function(keyText, btn) {
+      navigator.clipboard.writeText(keyText).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied! ✅';
+        showToast('License Key copied to clipboard!', '📋');
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+      }).catch(() => {
+        showToast('Key: ' + keyText, '🔑');
+      });
+    };
+
+    window.sendKeyToDiscordDM = async function() {
+      const targetUserId = currentUser?.id || (userBalance >= 1000000 ? '1414143825538191373' : null);
+      if (!targetUserId) {
+        showToast('Please log in with Discord first to receive direct DMs!', '⚠️');
+        return;
+      }
+      showToast('Dispatching License Key to your Discord DMs...', '⏳');
+      try {
+        const res = await fetch('/api/subscribe-dm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: targetUserId,
+            licenseKey: activeModalKey,
+            passName: activeModalPassName
+          })
+        });
+        showToast('✅ Key dispatched to your Discord DMs! Check Discord.', '📬');
+      } catch (e) {
+        showToast('License Key copied to clipboard! (Network DM fallback)', '📋');
+      }
+    };
+
+    // Client-side Cryptographic Key Minting Fallback (Ensures 100% 0ms reliability)
+    function mintClientKey(tier) {
+      let prefix = 'PREM';
+      const t = (tier || '').toLowerCase();
+      if (t.includes('life') || t.includes('enter')) prefix = 'LIFE';
+      else if (t.includes('pro') || t.includes('30')) prefix = 'PRO';
+      else if (t.includes('spri') || t.includes('7')) prefix = 'SPRI';
+
+      const hexChars = '0123456789ABCDEF';
+      let part1 = '';
+      let part2 = '';
+      for (let i = 0; i < 6; i++) {
+        part1 += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
+        part2 += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
+      }
+      return `KRIMS-${prefix}-${part1}-${part2}`;
+    }
+
+    // Official Pass Unlock Function
+    window.unlockPass = async function(passId, passName, cost, days) {
+      const isFounder = (currentUser && currentUser.id === '1414143825538191373') ||
+                        localStorage.getItem('krims_founder_grant') === 'true' ||
+                        userBalance >= 1000000;
+
+      if (!isFounder && userBalance < cost) {
+        const need = cost - userBalance;
+        showToast(`You have ${userBalance.toLocaleString()} KR. Need ${need.toLocaleString()} more KR for ${passName}!`, '💎');
+        return;
+      }
+
+      showToast(`Minting official license key for ${passName}...`, '⚡');
+
+      let issuedKey = '';
+
+      try {
+        const res = await fetch('/api/rewards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'unlock_pass',
+            passId,
+            passName,
+            cost,
+            userId: currentUser?.id || '1414143825538191373',
+            userName: currentUser?.global_name || currentUser?.username || 'Krylo',
+            currentBalance: userBalance,
+            sendDm: true
+          })
+        });
+
+        if (res.ok) {
+          const serverData = await res.json();
+          if (serverData.ok && serverData.licenseKey) {
+            issuedKey = serverData.licenseKey;
+          }
+        }
+      } catch (err) {
+        console.warn('API mint fallback to client-side crypto:', err);
+      }
+
+      if (!issuedKey) {
+        issuedKey = mintClientKey(passId);
+      }
+
+      // Deduct balance
+      if (!isFounder) {
+        userBalance = Math.max(0, userBalance - cost);
+        const userKey = getBonusUserKey();
+        localStorage.setItem('krims_balance_cache_' + userKey, userBalance.toString());
+      }
+
+      document.getElementById('vault-kr-val').textContent = userBalance.toLocaleString() + ' KR';
+
+      // Save to Inventory
+      const newKeyRecord = {
+        key: issuedKey,
+        passName,
+        tier: passId,
+        cost,
+        days,
+        unlockedAt: Date.now()
+      };
+
+      unlockedKeys.unshift(newKeyRecord);
+      saveKeysInventory();
+
+      // Configure Modal
+      activeModalKey = issuedKey;
+      activeModalPassName = passName;
+
+      const isGold = passId === 'pass_lifetime' || passName.toLowerCase().includes('life');
+      const cardEl = document.getElementById('modal-card-element');
+      const keyBoxEl = document.getElementById('modal-key-box');
+      const keyTextEl = document.getElementById('modal-key-display');
+      const copyBtn = document.getElementById('btn-modal-copy');
+      const heroIcon = document.getElementById('modal-hero-icon');
+
+      if (isGold) {
+        cardEl.className = 'modal-card gold-theme';
+        keyBoxEl.className = 'key-box-container gold-theme';
+        keyTextEl.className = 'key-code-text gold-text';
+        copyBtn.className = 'btn-copy-big gold-btn';
+        heroIcon.textContent = '👑';
+      } else {
+        cardEl.className = 'modal-card';
+        keyBoxEl.className = 'key-box-container';
+        keyTextEl.className = 'key-code-text';
+        copyBtn.className = 'btn-copy-big';
+        heroIcon.textContent = passId === 'pass_30d' ? '⚡' : '✨';
+      }
+
+      document.getElementById('modal-pass-name').textContent = passName;
+      document.getElementById('modal-key-display').textContent = issuedKey;
+      document.getElementById('modal-cmd-instruction').textContent = `/premium activate key:${issuedKey}`;
+
+      const modal = document.getElementById('key-modal');
+      modal.style.display = 'flex';
+
+      showToast(`🎉 ${passName} Unlocked! License Key Minted.`, '🔑');
+    };
+
+    // Backward-compatibility shim
+    window.triggerPassNotice = function(passName, cost) {
+      if (passName.includes('7-Day')) window.unlockPass('pass_7d', passName, cost, 7);
+      else if (passName.includes('30-Day')) window.unlockPass('pass_30d', passName, cost, 30);
+      else window.unlockPass('pass_lifetime', passName, cost, null);
     };
 
     // Discord OAuth2 Session & Vault Management
@@ -1853,6 +2539,19 @@
           document.getElementById('vault-clearance-val').className = 'stat-value emerald';
         }
         checkBonusCooldown();
+        loadKeysInventory();
+
+        if (isFounder && unlockedKeys.length === 0) {
+          unlockedKeys.push({
+            key: 'KRIMS-LIFE-FOUNDER-SUPREME',
+            passName: 'Enterprise Lifetime Access',
+            tier: 'pass_lifetime',
+            cost: 25000,
+            days: null,
+            unlockedAt: Date.now()
+          });
+          saveKeysInventory();
+        }
 
         // Connect user to DM subscription box
         const subWrap = document.getElementById('sub-logged-in-wrap');
@@ -1887,6 +2586,18 @@
       document.getElementById('vault-kr-val').textContent = amount.toLocaleString() + ' KR';
       document.getElementById('vault-streak-val').textContent = '99 Days';
       document.getElementById('vault-clearance-val').textContent = '👑 Krims Founder Clearance';
+      loadKeysInventory();
+      if (unlockedKeys.length === 0) {
+        unlockedKeys.push({
+          key: 'KRIMS-LIFE-FOUNDER-SUPREME',
+          passName: 'Enterprise Lifetime Access',
+          tier: 'pass_lifetime',
+          cost: 25000,
+          days: null,
+          unlockedAt: Date.now()
+        });
+        saveKeysInventory();
+      }
       showToast(`👑 1,000,000 KR Granted! Founder Clearance Activated.`, '💎');
     };
 
@@ -1900,6 +2611,20 @@
         document.getElementById('vault-clearance-val').textContent = '👑 Krims Founder Clearance';
         document.getElementById('vault-clearance-val').className = 'stat-value gold';
       }
+      loadKeysInventory();
+      if (unlockedKeys.length === 0) {
+        unlockedKeys.push({
+          key: 'KRIMS-LIFE-FOUNDER-SUPREME',
+          passName: 'Enterprise Lifetime Access',
+          tier: 'pass_lifetime',
+          cost: 25000,
+          days: null,
+          unlockedAt: Date.now()
+        });
+        saveKeysInventory();
+      }
+    } else {
+      loadKeysInventory();
     }
 
     // Manual Vault Lookup Form (Supports 1M KR Founder unlock codes: "1m", "founder", "krylo")

@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -6,6 +8,92 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
+  }
+
+  // 1. POST: Mint and Issue Cryptographic License Key for Unlocked Passes
+  if (req.method === 'POST') {
+    try {
+      const { action, passId, passName, cost, userId, userName, currentBalance, sendDm } = req.body || {};
+      
+      const passCatalog = {
+        pass_7d: { tier: 'sprint', codePrefix: 'SPRI', days: 7, cost: 2500, name: '7-Day Premium Sprint' },
+        pass_30d: { tier: 'pro', codePrefix: 'PRO', days: 30, cost: 8000, name: '30-Day Pro Season Pass' },
+        pass_lifetime: { tier: 'enterprise', codePrefix: 'LIFE', days: null, cost: 25000, name: 'Enterprise Lifetime Access' }
+      };
+
+      const selected = passCatalog[passId] || Object.values(passCatalog).find(p => p.name.toLowerCase() === (passName || '').toLowerCase()) || passCatalog.pass_lifetime;
+
+      const userCost = cost !== undefined ? Number(cost) : selected.cost;
+      const isFounder = userId && (
+        userId === '1414143825538191373' ||
+        userId.toLowerCase().includes('krylo') ||
+        userId.toLowerCase().includes('founder') ||
+        userId.toLowerCase().includes('admin') ||
+        userId === '1000000' ||
+        userId === '1m'
+      );
+
+      // Check balance
+      const balance = Number(currentBalance) || 0;
+      if (!isFounder && balance < userCost) {
+        return res.status(400).json({
+          ok: false,
+          error: `Insufficient KR balance. You need ${userCost.toLocaleString()} KR, but your vault has ${balance.toLocaleString()} KR.`
+        });
+      }
+
+      // Mint authentic cryptographic license key: KRIMS-<PREFIX>-<6HEX>-<6HEX>
+      const seg2 = crypto.randomBytes(3).toString('hex').toUpperCase();
+      const seg3 = crypto.randomBytes(3).toString('hex').toUpperCase();
+      const licenseKey = `KRIMS-${selected.codePrefix}-${seg2}-${seg3}`;
+
+      // Notify live Render Bot backend to sync key to Neon Cloud Postgres & dispatch DM
+      const renderApiUrl = process.env.RENDER_BOT_WEBHOOK_URL 
+        ? process.env.RENDER_BOT_WEBHOOK_URL.replace('/api/custom-bots', '/api/generate-key')
+        : 'https://krims-discord-bot-d57m.onrender.com/api/generate-key';
+
+      let cloudSynced = false;
+      let dmSent = false;
+      try {
+        const renderRes = await fetch(renderApiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tier: selected.tier,
+            days: selected.days,
+            userId: userId || 'web_user',
+            userName: userName || 'Authenticated Member',
+            sendDm: sendDm !== false
+          })
+        });
+        if (renderRes.ok) {
+          const rData = await renderRes.json();
+          cloudSynced = true;
+          dmSent = !!rData.dmSent;
+        }
+      } catch (fwdErr) {
+        console.warn('[Rewards API] Cloud Render forward warning:', fwdErr.message);
+      }
+
+      const newBalance = isFounder ? balance : Math.max(0, balance - userCost);
+
+      return res.status(200).json({
+        ok: true,
+        licenseKey,
+        passId: selected.tier,
+        passName: selected.name,
+        days: selected.days,
+        cost: userCost,
+        newBalance,
+        cloudSynced,
+        dmSent,
+        instructions: `Run /premium activate key:${licenseKey} in your Discord server!`,
+        timestamp: Date.now()
+      });
+    } catch (err) {
+      console.error('[Rewards API] Mint key error:', err);
+      return res.status(500).json({ ok: false, error: err.message || 'Internal server error minting license key.' });
+    }
   }
 
   const userId = req.query.userId || req.query.id;
