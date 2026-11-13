@@ -165,7 +165,7 @@ export default async function handler(req, res) {
           'Permanent Lifetime Krims Code Premium',
           'Unlimited Custom Bot Fleet slots',
           'Direct Access to #👑・executive-lounge',
-          'Official KSMP Whitelist & Gold Linked Role',
+          'Exclusive Executive VIP Role & Golden Server Badges',
           'Founder-grade Support Priority'
         ]
       }
@@ -190,10 +190,10 @@ export default async function handler(req, res) {
         description: 'Support Krims Code by voting every 12 hours on bot listing platforms.'
       },
       {
-        icon: '⚔️',
-        title: 'KSMP Tournaments & Events',
+        icon: '🎉',
+        title: 'Events & Community Tournaments',
         rate: '+2,000 - 10,000 KR',
-        description: 'Compete in weekly Minecraft KSMP PvP clashes, faction events, and boss battles to earn huge KR bonus rewards and trophy kits.'
+        description: 'Compete in weekly Discord server trivia, counting milestones, and community showdowns to claim massive Krims Rewards (KR) prize pools.'
       },
       {
         icon: '🔬',
@@ -204,16 +204,28 @@ export default async function handler(req, res) {
     ],
     roadmapUpdates: [
       {
-        date: 'Next Monday • Nov 2, 2026',
-        tag: 'Official Launch',
-        title: 'Public Reveal & Premium Pass Unlocking',
-        summary: 'Official public transition from KryloCoins to Krims Rewards. The Premium Pass redemption system opens globally.'
+        date: 'November 2026 • v6.1 GA',
+        tag: 'Live Now',
+        title: 'v6.1 Multi-Bot Ecosystem & Pass Redemption Live',
+        summary: 'Official transition from legacy tokens to Krims Rewards across the entire bot fleet. Instant 1:1 balance conversion, cryptographic premium pass minting, and dynamic Join-to-Create voice hubs.'
       },
       {
         date: 'Mid November 2026',
-        tag: 'KSMP Integration',
-        title: 'Minecraft KSMP In-Game Reward Store',
-        summary: 'Link your Minecraft gamer tag to buy cosmetic trails, kill effects, and server titles with KR.'
+        tag: 'Chat Economy',
+        title: '🌧️ /kr-rain Community Chat Drops & Tipping',
+        summary: 'Automated rain events and member-funded reward showers in Discord channels. Active members can initiate rain drops with custom KR amounts, splitting balances instantly among active chatters.'
+      },
+      {
+        date: 'Mid November 2026',
+        tag: 'Custom Bots',
+        title: '🤖 White-Label Custom Bot Forge & Fleet Slots',
+        summary: 'Deploy and host branded Discord bots powered by Krims Neural AI directly from the web dashboard. Includes custom avatar branding, custom command prefixes, and 24/7 dedicated cloud hosting.'
+      },
+      {
+        date: 'Late November 2026',
+        tag: 'Customization',
+        title: '🎨 Custom Discord Color Roles & Vanity Badges',
+        summary: 'Redeem 1,000 KR to unlock custom hex-color roles and prestigious server badges. Synchronizes dynamically across all Krims Code bot-enabled Discord servers with instant role assignment.'
       },
       {
         date: 'Late November 2026',
@@ -225,7 +237,13 @@ export default async function handler(req, res) {
         date: 'December 2026',
         tag: 'Global Season 1',
         title: 'Season 1 Leaderboard & Elite Pass Hall of Fame',
-        summary: 'Top Krims Rewards holders on the global leaderboard unlock Enterprise Lifetime passes, exclusive KSMP champion titles, and massive KR jackpot multipliers.'
+        summary: 'Top Krims Rewards holders on the global leaderboard unlock Enterprise Lifetime passes, prestigious Champion roles, permanent custom server badges, and massive KR jackpot multipliers.'
+      },
+      {
+        date: 'Early 2027',
+        tag: 'Staking Vault',
+        title: '🏦 Krims Staking Vault & Passive Yield Protocol',
+        summary: 'Lock surplus Krims Rewards into time-tiered smart vaults to earn compounding passive yields, seasonal jackpot lottery entries, and exclusive early access to upcoming bot fleet beta models.'
       }
     ],
     userVault
