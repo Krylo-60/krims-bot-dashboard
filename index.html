@@ -65,6 +65,10 @@
           <a href="https://krims-discord-bot-d57m.onrender.com/api/status" target="_blank" class="notifyme-nav-link">Status</a>
           <a href="https://top.gg/bot/1523794466740371586/vote" target="_blank" class="notifyme-nav-link">Vote</a>
           <a href="https://discord.com/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot%20applications.commands" target="_blank" class="notifyme-nav-link">Add Bot</a>
+          <button type="button" class="priority-compute-nav-btn" id="top-priority-nav-btn" onclick="window.openPriorityApiModal()" title="Support with API Key to get #1 Top Priority">
+            <span class="priority-pulse-dot" id="top-priority-dot"></span>
+            <span id="top-priority-btn-text">⚡ Support with API (Get Priority)</span>
+          </button>
           <button type="button" class="btn-nav-login" id="top-nav-login-btn" onclick="window.loginWithDiscord ? window.loginWithDiscord() : location.reload()" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 13px; background: #5865F2; border: none; border-radius: 6px; color: #fff; font-weight: 600; font-size: 0.82rem; cursor: pointer; text-decoration: none; transition: opacity 0.2s;">
             <svg class="custom-btn-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="8" cy="15" r="5"></circle>
@@ -596,6 +600,47 @@
               <span class="nav-badge" style="background: rgba(139, 92, 246, 0.25); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.4); animation: pulseGlow 2s infinite;">SOON</span>
             </button>
           </nav>
+
+          <!-- Anti-Ad Community Compute Box: Support With API & Get Top Priority -->
+          <div class="sidebar-api-support-card" id="sidebar-api-support-card">
+            <div class="api-support-header">
+              <div class="api-badge-row">
+                <span class="no-ads-badge">🚫 ZERO ADS</span>
+                <span class="priority-pill" id="sidebar-priority-pill">TOP PRIORITY</span>
+              </div>
+              <div class="api-support-title">⚡ Support with API Key</div>
+              <p class="api-support-sub" id="sidebar-api-support-desc">
+                We never show ads! Add an API key to support the community pool & get <strong>Top Priority</strong>: your bot questions get answered first before everyone else!
+              </p>
+            </div>
+
+            <!-- State A: Unconnected / Prompt to add -->
+            <div class="api-support-body" id="api-support-unconnected">
+              <button type="button" class="btn-api-support-action" onclick="window.openPriorityApiModal()">
+                <span>🔑</span>
+                <span>Add Key & Get #1 Priority</span>
+              </button>
+            </div>
+
+            <!-- State B: Connected / Top Priority Active -->
+            <div class="api-support-active" id="api-support-connected" style="display: none;">
+              <div class="active-priority-badge">
+                <span class="pulse-dot-gold"></span>
+                <span>👑 TOP PRIORITY ACTIVE</span>
+              </div>
+              <div class="priority-metrics-row">
+                <span class="priority-metric-label">Queue Position:</span>
+                <span class="priority-metric-val">#1 (0ms Queue)</span>
+              </div>
+              <div class="priority-metrics-row">
+                <span class="priority-metric-label">Engine:</span>
+                <span class="priority-metric-val" id="sidebar-provider-display">Gemini API</span>
+              </div>
+              <button type="button" class="btn-api-manage" onclick="window.openPriorityApiModal()">
+                Manage Priority Key ⚙️
+              </button>
+            </div>
+          </div>
 
           <!-- Sidebar Footer Links -->
           <div class="sidebar-footer">
@@ -2200,6 +2245,123 @@
                 </div>
               </div>
 
+              <!-- Community Compute Pooling & Top Priority Queue Card -->
+              <div class="card module-box priority-compute-card" id="priority-compute-main-card">
+                <div class="card-header">
+                  <div class="card-title-group">
+                    <span class="card-icon">⚡</span>
+                    <div>
+                      <h3>Community Compute Pooling & Top Priority Fast-Track</h3>
+                      <p>Support the community pool with an API key instead of ads — your queries get answered first before anyone else!</p>
+                    </div>
+                  </div>
+                  <span class="priority-status-pill-badge" id="ai-tab-priority-badge">
+                    <span class="pulse-dot-cyan"></span>
+                    <span id="ai-tab-priority-text">STANDARD QUEUE</span>
+                  </span>
+                </div>
+
+                <!-- Explanation Banner: Why no ads? -->
+                <div class="compute-explainer-banner">
+                  <div class="explainer-icon-col">💡</div>
+                  <div class="explainer-text-col">
+                    <strong>Zero-Ad Community Architecture:</strong> Most Discord bot dashboards force annoying third-party banner ads. Krims Code refuses to show ads. Instead, community members can contribute a free API key (like Google Gemini). When you contribute a key:
+                    <ul class="explainer-bullet-list">
+                      <li><strong>It gets pooled & utilized:</strong> The neural load balancer routes queries through your key to help serve the community.</li>
+                      <li><strong>You get #1 Top Priority:</strong> Whenever YOU ask a question in Discord or the dashboard, your request jumps to the very front of the queue and is answered first with 0ms delay!</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="priority-config-grid">
+                  <div class="config-col-left">
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <label class="setting-title" for="priority-provider-select">Select API Provider</label>
+                        <p class="setting-desc">Choose which AI provider key you want to connect.</p>
+                      </div>
+                      <div class="setting-input-wrap">
+                        <select id="priority-provider-select" class="form-select">
+                          <option value="gemini" selected>Google Gemini (Free @ aistudio.google.com) ⭐</option>
+                          <option value="openai">OpenAI (GPT-4o / GPT-4o-mini)</option>
+                          <option value="groq">Groq (Ultra-Fast Llama 3.3)</option>
+                          <option value="openrouter">OpenRouter / Custom</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <label class="setting-title" for="priority-api-key-input">API Key</label>
+                        <p class="setting-desc">Your key is stored securely in your browser session & routed to the fast-track dispatcher.</p>
+                      </div>
+                      <div class="setting-input-wrap" style="display: flex; gap: 8px;">
+                        <input type="password" id="priority-api-key-input" class="form-input" placeholder="e.g. AIzaSy..." style="font-family: var(--font-mono); font-size: 0.85rem;">
+                        <button type="button" class="btn-toggle-eye" id="toggle-key-visibility-btn" title="Toggle visibility" style="padding: 0 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff; cursor: pointer;">👁️</button>
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-meta">
+                        <label class="setting-title" for="priority-discord-user-input">Discord User Tag / ID (Optional)</label>
+                        <p class="setting-desc">Link your Discord account so bot commands in servers also get instant #1 Top Priority.</p>
+                      </div>
+                      <div class="setting-input-wrap">
+                        <input type="text" id="priority-discord-user-input" class="form-input" placeholder="e.g. krylo_plays or 1414143825538191373">
+                      </div>
+                    </div>
+
+                    <div class="priority-actions-row">
+                      <button type="button" class="btn-activate-priority" id="btn-activate-priority-tab" onclick="window.saveAndActivatePriorityKey()">
+                        <span>⚡</span>
+                        <span>Verify Key & Activate Top Priority</span>
+                      </button>
+                      <button type="button" class="btn-disconnect-priority" id="btn-disconnect-priority-tab" onclick="window.disconnectPriorityKey()" style="display: none;">
+                        <span>🗑️</span>
+                        <span>Remove Key</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="config-col-right">
+                    <div class="priority-telemetry-box">
+                      <div class="telemetry-header">
+                        <span>LIVE ROUTING TELEMETRY</span>
+                        <span class="telemetry-live-dot"></span>
+                      </div>
+                      <div class="telemetry-item">
+                        <span class="t-label">Your Queue Status:</span>
+                        <span class="t-val" id="t-queue-status">Standard Shared Queue (Pos #842)</span>
+                      </div>
+                      <div class="telemetry-item">
+                        <span class="t-label">Priority Tier:</span>
+                        <span class="t-val" id="t-priority-tier">Free Community</span>
+                      </div>
+                      <div class="telemetry-item">
+                        <span class="t-label">Dispatch Latency:</span>
+                        <span class="t-val" id="t-dispatch-latency">~1,450ms (Standard Queue)</span>
+                      </div>
+                      <div class="telemetry-item">
+                        <span class="t-label">Precedence Level:</span>
+                        <span class="t-val" id="t-precedence">Normal</span>
+                      </div>
+
+                      <div class="telemetry-divider"></div>
+
+                      <!-- Priority Fast-Path Test Interactive -->
+                      <div class="fastpath-test-area">
+                        <label style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; margin-bottom: 6px; display: block;">TEST FAST-TRACK RESPONSE</label>
+                        <div style="display: flex; gap: 6px;">
+                          <input type="text" id="fastpath-test-input" class="form-input" placeholder="Ask anything to test priority speed..." value="What are the rules of The Light Bearers clan?" style="font-size: 0.8rem;">
+                          <button type="button" class="btn-fastpath-test" onclick="window.runPriorityTestQuery()" style="padding: 6px 12px; background: var(--cyan); color: #000; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; white-space: nowrap; font-size: 0.78rem;">Test ⚡</button>
+                        </div>
+                        <div id="fastpath-test-result" style="margin-top: 8px; font-size: 0.78rem; padding: 8px; border-radius: 6px; background: rgba(0, 0, 0, 0.4); display: none; line-height: 1.4;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- Premium Tier: Custom Allocation & Personality Studio Card -->
               <div class="card module-box premium-allocation-card">
                 <div class="card-header">
@@ -2716,6 +2878,77 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add API to Support & Unlock Top Priority Modal Popup -->
+    <div class="modal-overlay" id="priority-api-modal" style="display: none;">
+      <div class="modal-card" style="max-width: 580px;">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.5rem;">⚡</span>
+            <div>
+              <h3 id="priority-modal-title" style="margin: 0; font-size: 1.15rem;">Support With API & Get Top Priority</h3>
+              <span style="font-size: 0.75rem; color: #10B981; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                <span>🚫</span> 100% Ad-Free Community Architecture
+              </span>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" onclick="window.closePriorityApiModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="priority-modal-intro" style="background: rgba(0, 242, 255, 0.06); border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.82rem; color: #cbd5e1; line-height: 1.45;">
+            <p style="margin-bottom: 6px;"><strong style="color: #fff;">Why no ads?</strong> We believe developer and gaming dashboards shouldn't be polluted with spammy ads. Instead, you can contribute a free API key to help power our community compute pool.</p>
+            <p style="margin: 0;"><strong style="color: #fbbf24;">👑 Your Benefit:</strong> When you contribute a key, our neural dispatcher activates it and flags your user ID as <strong>Top Priority #1</strong>. Your questions always get answered first before everyone else with 0ms queue delay!</p>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px; display: block;">1. Select API Provider</label>
+            <select id="modal-priority-provider" class="form-select" style="width: 100%; padding: 8px 12px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff;">
+              <option value="gemini" selected>Google Gemini (Free & High Rate Limits) ⭐ Recommended</option>
+              <option value="openai">OpenAI (GPT-4o / GPT-4o-mini)</option>
+              <option value="groq">Groq (Ultra-Fast Llama 3.3)</option>
+              <option value="openrouter">OpenRouter / Any Model</option>
+            </select>
+            <small style="display: block; margin-top: 4px; font-size: 0.74rem; color: #94a3b8;">
+              Don't have a key? <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--cyan); text-decoration: underline;">Get a free Google Gemini API key in 30 seconds ↗</a>
+            </small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px; display: block;">2. Enter API Key</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="password" id="modal-priority-key" class="form-input" placeholder="Paste your API key here (e.g. AIzaSy...)" style="flex: 1; font-family: var(--font-mono); font-size: 0.84rem;">
+              <button type="button" class="btn-toggle-eye" onclick="window.toggleModalKeyVisibility()" style="padding: 0 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff; cursor: pointer;">👁️</button>
+            </div>
+            <small style="display: block; margin-top: 4px; font-size: 0.72rem; color: #64748b;">
+              🔒 Keys are stored securely in your browser and used to fast-track your requests to the front of the queue.
+            </small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px; display: block;">3. Discord Username / User ID (Optional)</label>
+            <input type="text" id="modal-priority-discord" class="form-input" placeholder="e.g. krylo_plays or 1414143825538191373" style="width: 100%;">
+            <small style="display: block; margin-top: 4px; font-size: 0.72rem; color: #64748b;">
+              Links your Top Priority status directly to your Discord account so bot slash commands in servers also get fast-tracked!
+            </small>
+          </div>
+
+          <div id="modal-priority-status-alert" style="display: none; padding: 10px; border-radius: 6px; margin-bottom: 14px; font-size: 0.8rem;"></div>
+
+          <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center;">
+            <button type="button" id="modal-priority-disconnect-btn" onclick="window.disconnectPriorityKey()" style="display: none; padding: 8px 14px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; color: #f87171; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+              Disconnect Key
+            </button>
+            <button type="button" onclick="window.closePriorityApiModal()" style="padding: 8px 14px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #cbd5e1; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+              Cancel
+            </button>
+            <button type="button" id="modal-priority-save-btn" onclick="window.saveAndActivatePriorityKeyFromModal()" style="padding: 8px 18px; background: linear-gradient(135deg, #00f2ff, #7000ff); border: none; border-radius: 6px; color: #fff; font-weight: 800; font-size: 0.84rem; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 15px rgba(0, 242, 255, 0.35);">
+              <span>⚡</span>
+              <span>Verify & Activate Priority</span>
+            </button>
           </div>
         </div>
       </div>

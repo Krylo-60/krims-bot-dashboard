@@ -1,6 +1,7 @@
 import './style.css';
 import { inject } from '@vercel/analytics';
 import { KRYLO_CHANNELS } from './channelsData.js';
+import { initPriorityComputeSystem } from './priorityComputeManager.js';
 
 // Initialize Vercel Analytics (page view tracking)
 inject();
@@ -151,6 +152,8 @@ function initDashboardApp() {
   try { initWelcomeCardDesigner(); } catch (e) { console.warn("Welcome card init:", e); }
   try { initEconomySystem(); } catch (e) { console.warn("Economy init:", e); }
   try { initUnsavedChangesWatchers(); } catch (e) { console.warn("Watchers init:", e); }
+  try { initPriorityComputeSystem(); } catch (e) { console.warn("Priority compute init:", e); }
+  window.showToast = showToast;
 
   const saveBtn = document.getElementById('save-settings-btn');
   if (saveBtn) {

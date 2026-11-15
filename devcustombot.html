@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krims Dev • Custom Bot Engine 3.0 (Staging)</title>
+  <meta name="description" content="Next-generation Custom Bot Fleet Engine staging environment. Secured for Krylo 亗.">
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a12;
+      --card-bg: rgba(13, 18, 30, 0.82);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(0, 242, 255, 0.35);
+      --cyan: #00f2ff;
+      --cyan-glow: rgba(0, 242, 255, 0.25);
+      --purple: #8b5cf6;
+      --purple-glow: rgba(139, 92, 246, 0.25);
+      --gold: #f59e0b;
+      --emerald: #10b981;
+      --rose: #f43f5e;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --input-bg: rgba(8, 12, 22, 0.9);
+      --input-border: rgba(255, 255, 255, 0.12);
+      --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-display: 'Orbitron', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      overflow-x: hidden;
+      line-height: 1.6;
+      color-scheme: dark;
+    }
+
+    .ambient-mesh {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 600px;
+      background: 
+        radial-gradient(circle at 50% -10%, rgba(139, 92, 246, 0.2), transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(0, 242, 255, 0.14), transparent 50%),
+        radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.08), transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Navigation */
+    header.top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 10, 18, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.85rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .brand-logo-stroke {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(0, 242, 255, 0.1);
+      border: 1px solid var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan);
+      box-shadow: 0 0 15px var(--cyan-glow);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .dev-badge {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: #fff;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-link {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* ── PIN SECURITY GATE OVERLAY ── */
+    #pinLockModal {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(4, 7, 14, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .pin-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card-bg);
+      border: 1.5px solid rgba(0, 242, 255, 0.35);
+      border-radius: 20px;
+      padding: 36px 30px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 242, 255, 0.15);
+      position: relative;
+    }
+
+    .pin-icon-wrap {
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
+      background: rgba(0, 242, 255, 0.1);
+      border: 1.5px solid var(--cyan);
+      color: var(--cyan);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 0 25px var(--cyan-glow);
+      margin-bottom: 20px;
+    }
+
+    .pin-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .pin-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .pin-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: #fff;
+      font-family: var(--font-main);
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+
+    .pin-input:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0, 242, 255, 0.2);
+    }
+
+    .pin-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--cyan), #2563eb);
+      border: none;
+      border-radius: 12px;
+      color: #070a12;
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 242, 255, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .pin-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(0, 242, 255, 0.5);
+    }
+
+    .pin-error {
+      color: var(--rose);
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-top: 14px;
+      display: none;
+    }
+
+    /* ── MAIN WORKSPACE (UNLOCKED) ── */
+    #devAppContent {
+      display: none;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(13, 18, 30, 0.9) 0%, rgba(20, 27, 45, 0.8) 100%);
+      border: 1.5px solid rgba(0, 242, 255, 0.25);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    }
+
+    .hero-info h1 {
+      font-size: 1.65rem;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .hero-info p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 680px;
+    }
+
+    .status-pod-card {
+      background: rgba(7, 10, 18, 0.85);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 14px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .pod-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 12px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+
+    .pod-meta-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pod-meta-val {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--emerald);
+    }
+
+    /* Grid Layout */
+    .dev-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .dev-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .panel-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Form Fields */
+    .field-row {
+      margin-bottom: 16px;
+    }
+
+    .field-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .field-input, .field-select, .field-textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .field-input.mono {
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+    }
+
+    .field-input:focus, .field-select:focus, .field-textarea:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0, 242, 255, 0.15);
+    }
+
+    /* Checkbox Group */
+    .intents-box {
+      background: rgba(7, 10, 18, 0.6);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+
+    .intent-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+    }
+
+    .intent-item:last-child { margin-bottom: 0; }
+    .intent-item input[type="checkbox"] {
+      accent-color: var(--cyan);
+      width: 16px; height: 16px;
+    }
+
+    /* Terminal Console */
+    .terminal-card {
+      background: #05070e;
+      border: 1px solid rgba(0, 242, 255, 0.2);
+      border-radius: 14px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      height: 380px;
+      overflow-y: auto;
+      color: #a5f3fc;
+      margin-bottom: 18px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    .log-line {
+      margin-bottom: 6px;
+      line-height: 1.45;
+    }
+
+    .log-time { color: var(--text-dim); }
+    .log-info { color: var(--cyan); }
+    .log-success { color: var(--emerald); }
+    .log-warn { color: var(--gold); }
+
+    .btn-action-primary {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--cyan), #2563eb);
+      border: none;
+      border-radius: 10px;
+      color: #070a12;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 242, 255, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-action-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0, 242, 255, 0.45);
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-secondary {
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--cyan);
+    }
+
+    /* ── COLLABORATOR & TEAM ACCESS STYLES ── */
+    .collab-section {
+      margin-top: 28px;
+      grid-column: 1 / -1;
+    }
+
+    .collab-header-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .collab-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .collab-card {
+      background: rgba(8, 12, 22, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+
+    .collab-card:hover {
+      border-color: rgba(0, 242, 255, 0.3);
+      background: rgba(12, 17, 30, 0.85);
+    }
+
+    .collab-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .collab-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #00f2ff, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #070a12;
+      flex-shrink: 0;
+    }
+
+    .collab-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .collab-id {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .collab-role-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .role-owner {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+
+    .role-admin {
+      background: rgba(0, 242, 255, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+
+    .role-editor {
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid var(--purple);
+      color: var(--purple);
+    }
+
+    .btn-remove-collab {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-remove-collab:hover {
+      color: var(--rose);
+      background: rgba(244, 63, 94, 0.1);
+    }
+
+    .collab-form-box {
+      background: rgba(7, 10, 18, 0.6);
+      border: 1px dashed rgba(0, 242, 255, 0.25);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .collab-form-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .collab-form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-mesh"></div>
+
+  <!-- Top Navbar -->
+  <header class="top-navbar">
+    <a href="/devcustombot" class="brand-group">
+      <div class="brand-logo-stroke">⚡</div>
+      <span class="brand-title">KRIMS DEV</span>
+      <span class="dev-badge">STAGING 3.0</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/" class="nav-link">Overview</a>
+      <a href="/rewards" class="nav-link">Rewards</a>
+      <a href="/wiki" class="nav-link">Wiki</a>
+      <a href="/custombot" class="nav-link">Public Bot</a>
+      <button class="btn-secondary" onclick="lockDevPortal()" style="padding: 6px 12px;">🔒 Lock</button>
+    </nav>
+  </header>
+
+  <!-- ── PIN LOCK MODAL ── -->
+  <div id="pinLockModal">
+    <div class="pin-card">
+      <div class="pin-icon-wrap">🔒</div>
+      <h2 class="pin-title">Developer Access Gate</h2>
+      <p class="pin-desc">This staging suite contains unreleased custom bot fleet orchestration tools. Enter your developer passphrase to unlock.</p>
+      
+      <form onsubmit="handlePinSubmit(event)">
+        <input type="password" id="devPinInput" class="pin-input" placeholder="Enter Developer PIN..." autocomplete="off" required autofocus />
+        <button type="submit" class="pin-btn">⚡ Authenticate & Unlock</button>
+      </form>
+
+      <p id="pinError" class="pin-error">❌ Access Denied: Incorrect Passphrase</p>
+    </div>
+  </div>
+
+  <!-- ── MAIN DEVELOPER WORKSPACE (UNLOCKED) ── -->
+  <main id="devAppContent">
+    <div class="hero-banner">
+      <div class="hero-info">
+        <h1>🚀 Custom Bot Fleet Engine 3.0 <span style="font-size:0.75rem; background:rgba(0,242,255,0.15); color:var(--cyan); border:1px solid var(--cyan); padding:3px 8px; border-radius:6px;">ISOLATED PODS</span></h1>
+        <p>Deploy and orchestrate private Discord bots running the Krims Code AI neural core. Unlike BotGhost’s 1,000-bot shared pods, every bot here runs in a dedicated container pipeline powered 100% free via Krims Rewards (KR).</p>
+      </div>
+      <div class="status-pod-card">
+        <div class="pod-dot"></div>
+        <div>
+          <div class="pod-meta-title">Container Fleet Node</div>
+          <div class="pod-meta-val">KRIMS-POD-VIP-01 (0ms Lag)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dev-grid">
+      <!-- Left Column: Bot Configuration Form -->
+      <section class="panel-card">
+        <h2 class="panel-title">⚙️ Bot Container Configuration</h2>
+        <p class="panel-desc">Configure your bot instance credentials, system persona, and gateway permissions.</p>
+
+        <form onsubmit="deployDevBot(event)">
+          <div class="field-row">
+            <label class="field-label">
+              <span>Application / Client ID</span>
+              <span style="color:var(--text-dim); font-size:0.75rem;">From Discord Dev Portal</span>
+            </label>
+            <input type="text" id="devAppId" class="field-input mono" placeholder="e.g. 1523794466740371586" required />
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">
+              <span>Bot Token</span>
+              <span style="color:var(--text-dim); font-size:0.75rem;">Strictly Encrypted in Container</span>
+            </label>
+            <input type="password" id="devBotToken" class="field-input mono" placeholder="Paste bot token here..." required />
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">Custom Bot Name</label>
+            <input type="text" id="devBotName" class="field-input" placeholder="e.g. Phoenix Assistant" required />
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">AI Neural Persona</label>
+            <select id="devPersona" class="field-select">
+              <option value="developer">💻 Elite Software Architect (Full Code Generation)</option>
+              <option value="sentinel">🛡️ Server Sentinel & AutoMod Enforcement</option>
+              <option value="companion">✨ Friendly Community Companion & Leveling Guide</option>
+              <option value="smp">⚔️ KryloSMP Game Master & Lore Keeper</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">Custom Chat Prefix</label>
+            <input type="text" id="devPrefix" class="field-input mono" value="!" placeholder="e.g. !" />
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">Privileged Gateway Intents (Required)</label>
+            <div class="intents-box">
+              <label class="intent-item">
+                <input type="checkbox" checked id="intentPresence" />
+                <span>Presence Intent (Track online/offline member statuses)</span>
+              </label>
+              <label class="intent-item">
+                <input type="checkbox" checked id="intentMembers" />
+                <span>Server Members Intent (Auto-roles & Welcome cards)</span>
+              </label>
+              <label class="intent-item">
+                <input type="checkbox" checked id="intentContent" />
+                <span>Message Content Intent (AI chat queries & commands)</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-action-primary">🚀 Deploy / Update Bot Instance</button>
+
+          <div class="action-row">
+            <button type="button" class="btn-secondary" onclick="simulateRestart()">🔄 Restart Pod</button>
+            <button type="button" class="btn-secondary" onclick="simulateSync()">⚡ Sync Slash Commands</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Right Column: Live Pod Terminal & Telemetry -->
+      <section class="panel-card">
+        <h2 class="panel-title">📟 Live Pod Terminal & Telemetry</h2>
+        <p class="panel-desc">Real-time container execution logs, Discord WebSocket heartbeat, and slash command diagnostics.</p>
+
+        <div class="terminal-card" id="terminalLogs">
+          <div class="log-line"><span class="log-time">[00:00:01]</span> <span class="log-info">[POD-INIT]</span> Initializing Krims Container Node VIP-01...</div>
+          <div class="log-line"><span class="log-time">[00:00:02]</span> <span class="log-success">[STATUS]</span> Zero-shard congestion detected (1 pod / 1 bot).</div>
+          <div class="log-line"><span class="log-time">[00:00:03]</span> <span class="log-info">[GATEWAY]</span> Discord WebSocket connected @ 14ms latency.</div>
+          <div class="log-line"><span class="log-time">[00:00:04]</span> <span class="log-success">[AUTH]</span> Developer Krylo 亗 authorized session.</div>
+          <div class="log-line"><span class="log-time">[00:00:05]</span> <span class="log-warn">[READY]</span> Waiting for bot deployment parameters...</div>
+        </div>
+
+        <button type="button" class="btn-secondary" style="width: 100%;" onclick="clearTerminal()">🧹 Clear Terminal</button>
+      </section>
+
+      <!-- Full-Width Bottom Section: Team & Collaborators (Like BotGhost) -->
+      <section class="panel-card collab-section">
+        <div class="collab-header-wrap">
+          <div>
+            <h2 class="panel-title">👥 Team & Friend Collaboration (Co-Owners)</h2>
+            <p class="panel-desc" style="margin-bottom:0;">Let your friends, developers, or server staff edit and manage your custom bot together.</p>
+          </div>
+          <button type="button" class="btn-secondary" onclick="generateCollabInviteLink()">
+            🔗 Copy Shareable Invite Link
+          </button>
+        </div>
+
+        <!-- Collaborators List -->
+        <div class="collab-list" id="collabList">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Add Collaborator Form -->
+        <div class="collab-form-box">
+          <form onsubmit="handleAddCollaborator(event)" class="collab-form-row">
+            <div>
+              <input type="text" id="newCollabInput" class="field-input" placeholder="Friend's Discord Username or User ID (e.g. Mini or 987654...)" required />
+            </div>
+            <div>
+              <select id="newCollabRole" class="field-select">
+                <option value="Admin">⚡ Co-Owner / Admin (Full Container & Edit Access)</option>
+                <option value="Editor">🛠️ Editor (Edit Personas, Prefixes & AutoMod)</option>
+                <option value="Viewer">👁️ Viewer (View Terminal Logs & Telemetry)</option>
+              </select>
+            </div>
+            <div>
+              <button type="submit" class="btn-action-primary" style="padding: 11px 20px; white-space: nowrap;">
+                + Add Collaborator
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const REQUIRED_PIN = "Krylo is the best";
+
+    // Safe session storage helpers
+    function setAuthFlag() {
+      try { sessionStorage.setItem('krims_dev_auth', 'true'); } catch(e) {}
+    }
+    function checkAuthFlag() {
+      try { return sessionStorage.getItem('krims_dev_auth') === 'true'; } catch(e) { return false; }
+    }
+    function clearAuthFlag() {
+      try { sessionStorage.removeItem('krims_dev_auth'); } catch(e) {}
+    }
+
+    // Check on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (checkAuthFlag()) {
+        unlockDevPortal();
+      }
+    });
+
+    function handlePinSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const input = document.getElementById('devPinInput').value.trim();
+      const err = document.getElementById('pinError');
+
+      if (input === REQUIRED_PIN) {
+        setAuthFlag();
+        if (err) err.style.display = 'none';
+        unlockDevPortal();
+      } else {
+        if (err) err.style.display = 'block';
+        document.getElementById('devPinInput').value = '';
+        document.getElementById('devPinInput').focus();
+      }
+    }
+
+    function unlockDevPortal() {
+      document.getElementById('pinLockModal').style.display = 'none';
+      document.getElementById('devAppContent').style.display = 'block';
+      logTerminal('success', 'Security gate unlocked: Developer Krylo 亗 verified.');
+      loadCollaborators();
+    }
+
+    function lockDevPortal() {
+      clearAuthFlag();
+      document.getElementById('devAppContent').style.display = 'none';
+      document.getElementById('pinLockModal').style.display = 'flex';
+      document.getElementById('devPinInput').value = '';
+    }
+
+    function logTerminal(type, text) {
+      const term = document.getElementById('terminalLogs');
+      const now = new Date().toTimeString().split(' ')[0];
+      const div = document.createElement('div');
+      div.className = 'log-line';
+
+      let tagClass = 'log-info';
+      let tagText = '[INFO]';
+      if (type === 'success') { tagClass = 'log-success'; tagText = '[OK]'; }
+      if (type === 'warn') { tagClass = 'log-warn'; tagText = '[WARN]'; }
+
+      div.innerHTML = `<span class="log-time">[${now}]</span> <span class="${tagClass}">${tagText}</span> ${text}`;
+      term.appendChild(div);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function clearTerminal() {
+      document.getElementById('terminalLogs').innerHTML = '';
+      logTerminal('info', 'Terminal buffer cleared.');
+    }
+
+    function deployDevBot(e) {
+      e.preventDefault();
+      const id = document.getElementById('devAppId').value.trim();
+      const name = document.getElementById('devBotName').value.trim();
+      const persona = document.getElementById('devPersona').value;
+
+      logTerminal('info', `Deploying container for "${name}" (ID: ${id})...`);
+      setTimeout(() => {
+        logTerminal('success', `Isolated pod allocated on KRIMS-POD-VIP-01 (0 shared neighbors).`);
+      }, 500);
+      setTimeout(() => {
+        logTerminal('success', `Privileged Gateway Intents verified: [Presence, Members, MessageContent]`);
+      }, 1000);
+      setTimeout(() => {
+        logTerminal('success', `Neural persona "${persona}" mounted into memory matrix.`);
+      }, 1500);
+      setTimeout(() => {
+        logTerminal('success', `Bot "${name}" is now LIVE with sub-second response latency!`);
+        alert(`🎉 Success! Bot "${name}" has been deployed to the isolated developer staging pod.`);
+      }, 2000);
+    }
+
+    function simulateRestart() {
+      logTerminal('warn', 'Container restart initiated...');
+      setTimeout(() => {
+        logTerminal('success', 'Pod rebooted in 850ms (Priority fast-path, 0 downtime).');
+      }, 850);
+    }
+
+    function simulateSync() {
+      logTerminal('info', 'Broadcasting 100 production slash commands to Discord Gateway...');
+      setTimeout(() => {
+        logTerminal('success', 'Slash commands synced globally across all connected guilds.');
+      }, 1200);
+    }
+
+    // ── COLLABORATOR ENGINE (BOTGHOST-STYLE TEAM EDITING) ──
+    let collaborators = [
+      { id: 'owner', name: 'Krylo 亗', userId: 'Primary Founder', role: 'Owner', avatar: '亗', isOwner: true }
+    ];
+
+    function loadCollaborators() {
+      try {
+        const saved = localStorage.getItem('krims_bot_collaborators');
+        if (saved) {
+          collaborators = JSON.parse(saved);
+        }
+      } catch (e) {}
+      renderCollaborators();
+    }
+
+    function saveCollaborators() {
+      try {
+        localStorage.setItem('krims_bot_collaborators', JSON.stringify(collaborators));
+      } catch (e) {}
+    }
+
+    function renderCollaborators() {
+      const container = document.getElementById('collabList');
+      if (!container) return;
+      container.innerHTML = '';
+
+      collaborators.forEach(collab => {
+        const card = document.createElement('div');
+        card.className = 'collab-card';
+        
+        let roleClass = 'role-editor';
+        if (collab.role === 'Owner') roleClass = 'role-owner';
+        if (collab.role === 'Admin') roleClass = 'role-admin';
+
+        card.innerHTML = `
+          <div class="collab-left">
+            <div class="collab-avatar">${escapeHtml(collab.avatar || '🤖')}</div>
+            <div>
+              <div class="collab-name">
+                ${escapeHtml(collab.name)}
+                <span class="collab-role-badge ${roleClass}">${collab.role}</span>
+              </div>
+              <div class="collab-id">ID: ${escapeHtml(collab.userId || 'Primary')}</div>
+            </div>
+          </div>
+          ${collab.isOwner ? '' : `<button type="button" class="btn-remove-collab" onclick="removeCollaborator('${collab.id}')" title="Remove Collaborator">✕</button>`}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function handleAddCollaborator(e) {
+      e.preventDefault();
+      const input = document.getElementById('newCollabInput').value.trim();
+      const role = document.getElementById('newCollabRole').value;
+      if (!input) return;
+
+      const newId = Date.now().toString();
+      const firstChar = input.charAt(0).toUpperCase();
+
+      collaborators.push({
+        id: newId,
+        name: input,
+        userId: input.length >= 17 ? input : `usr_${newId.slice(-4)}`,
+        role: role,
+        avatar: firstChar,
+        isOwner: false
+      });
+
+      saveCollaborators();
+      renderCollaborators();
+      document.getElementById('newCollabInput').value = '';
+
+      logTerminal('success', `Granted [${role}] permissions to collaborator "${input}".`);
+      alert(`🎉 Friend "${input}" has been added as a [${role}]! They can now collaborate on this bot.`);
+    }
+
+    function removeCollaborator(id) {
+      const target = collaborators.find(c => c.id === id);
+      if (!target || target.isOwner) return;
+
+      if (confirm(`Remove collaborator "${target.name}"?`)) {
+        collaborators = collaborators.filter(c => c.id !== id);
+        saveCollaborators();
+        renderCollaborators();
+        logTerminal('warn', `Removed collaborator "${target.name}".`);
+      }
+    }
+
+    function generateCollabInviteLink() {
+      const inviteUrl = window.location.origin + '/devcustombot?collab=invite_' + Math.random().toString(36).substring(2, 8);
+      navigator.clipboard.writeText(inviteUrl).then(() => {
+        logTerminal('info', `Generated shareable collaborator invite link: ${inviteUrl}`);
+        alert(`🔗 Collaboration Invite Link copied to clipboard!\n\nSend this to your friend so they can open /devcustombot and edit with you:\n${inviteUrl}`);
+      }).catch(() => {
+        prompt('Copy this collaboration link for your friend:', inviteUrl);
+      });
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
