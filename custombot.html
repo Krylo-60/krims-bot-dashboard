@@ -468,7 +468,7 @@
       padding: 2px 6px;
       border-radius: 9999px;
     }
-    .badge-free { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .badge-core { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
     .badge-kr { background: rgba(245, 158, 11, 0.18); color: var(--gold); }
     .badge-live { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
 
@@ -838,16 +838,11 @@
         <p>Manage your custom Discord bot, customize AI personas, inspect tenant-isolated logs, and unlock advanced modules with Krims Rewards (Kr).</p>
       </div>
 
-      <!-- Quick Fast Auth -->
-      <div class="demo-pickers-row">
-        <div class="demo-pickers-label">⚡ Fast Access (Official Community Bots):</div>
-        <div class="demo-btns-wrap">
-          <button type="button" class="btn-demo-pill" onclick="quickFillBot('1565527301444083722', 'phoenix2026')">
-            🔥 Baby PHOENIX
-          </button>
-          <button type="button" class="btn-demo-pill" onclick="quickFillBot('1565848105277067414', 'minix2026')">
-            ⚡ Mini X (mini_x)
-          </button>
+      <!-- Private Instance Notice -->
+      <div style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 10px; padding: 12px 14px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.25rem;">🔒</span>
+        <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.45;">
+          <strong>Private Custom Bot Instance:</strong> Custom bots are private dedicated bot shards licensed with Kr (Krims Rewards). Enter your bot's Application ID and master password to access your control room.
         </div>
       </div>
 
@@ -927,11 +922,11 @@
             </button>
             <button type="button" class="sidebar-nav-btn" onclick="switchPane('pane-core')">
               <span class="sidebar-nav-left"><span>⚙️</span> Identity &amp; Prefix</span>
-              <span class="nav-badge-pill badge-free">FREE</span>
+              <span class="nav-badge-pill badge-core">CORE</span>
             </button>
             <button type="button" class="sidebar-nav-btn" onclick="switchPane('pane-persona')">
               <span class="sidebar-nav-left"><span>🧠</span> AI Persona Studio</span>
-              <span class="nav-badge-pill badge-free">FREE</span>
+              <span class="nav-badge-pill badge-core">CORE</span>
             </button>
 
             <div class="sidebar-category-title">MODULES &amp; UPGRADES</div>
@@ -951,11 +946,11 @@
             </button>
             <button type="button" class="sidebar-nav-btn" onclick="switchPane('pane-observer')">
               <span class="sidebar-nav-left"><span>🤖</span> AI Inspector</span>
-              <span class="nav-badge-pill badge-free">FREE</span>
+              <span class="nav-badge-pill badge-core">CORE</span>
             </button>
             <button type="button" class="sidebar-nav-btn" onclick="switchPane('pane-sandbox')">
               <span class="sidebar-nav-left"><span>🧪</span> AI Test Sandbox</span>
-              <span class="nav-badge-pill badge-free">FREE</span>
+              <span class="nav-badge-pill badge-core">CORE</span>
             </button>
           </nav>
         </div>
@@ -1010,7 +1005,7 @@
           <div class="kr-trading-banner">
             <div class="trading-banner-text">
               <h3>💎 Krims Rewards (Kr) &amp; Trading Protocol</h3>
-              <p>Custom bots start with essential free tools. Advanced enterprise modules require Kr to unlock. <strong>Peer-to-peer Kr trading</strong> between Discord server owners and bot creators is launching in the next release!</p>
+              <p>Custom bots are dedicated private instances powered by Kr. Essential core features are included with your bot license, while advanced enterprise modules require Kr to unlock. <strong>Peer-to-peer Kr trading</strong> between Discord server owners and bot creators is launching in the next release!</p>
             </div>
             <button type="button" class="btn-trade-soon" onclick="alert('💎 Kr Trading Protocol is currently under development. Peer-to-peer module transfers and bot leasing will be live soon!')">
               <span>🤝 Trade Kr (Coming Soon)</span>
@@ -1070,7 +1065,7 @@
         <div id="pane-core" class="tab-pane">
           <div class="glass-card" style="padding: 1.75rem;">
             <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; color: #fff;">⚙️ Core Bot Identity &amp; Command Prefix</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Configure how your custom bot identifies itself in server channels and chat commands. Included completely free with every custom bot.</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Configure how your custom bot identifies itself in server channels and chat commands. Included with your custom bot instance license.</p>
 
             <form id="core-cfg-form" onsubmit="saveBotConfig(event)">
               <div class="field-group">
@@ -1130,17 +1125,17 @@
         <!-- 4. PANE: ADVANCED MODULES DECK (LOCKED WITH KR) -->
         <div id="pane-modules" class="tab-pane">
           <div style="margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 4px;">🧩 Modules Deck (Free vs Advanced Kr Tiers)</h2>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 4px;">🧩 Modules Deck (Base vs Advanced Kr Tiers)</h2>
             <p style="font-size: 0.85rem; color: var(--text-muted);">Custom bots are kept streamlined so you only pay Kr for what your server needs. Unlock advanced modules using your Krims Rewards balance.</p>
           </div>
 
           <div class="modules-deck-grid">
-            <!-- Free Module 1 -->
+            <!-- Core Module 1 -->
             <div class="module-card">
               <div>
                 <div class="module-card-top">
                   <div class="module-icon-wrap">💬</div>
-                  <span class="btn-active-badge">Free / Included</span>
+                  <span class="btn-active-badge">Core / Included</span>
                 </div>
                 <div class="module-card-title">Standard AI Chat &amp; Mentions</div>
                 <div class="module-card-desc">Allows server members to ping or reply to your bot in any channel to receive contextual responses powered by your custom persona.</div>
@@ -1151,12 +1146,12 @@
               </div>
             </div>
 
-            <!-- Free Module 2 -->
+            <!-- Core Module 2 -->
             <div class="module-card">
               <div>
                 <div class="module-card-top">
                   <div class="module-icon-wrap">⭐</div>
-                  <span class="btn-active-badge">Free / Included</span>
+                  <span class="btn-active-badge">Core / Included</span>
                 </div>
                 <div class="module-card-title">1-Mind Leveling &amp; XP Announcements</div>
                 <div class="module-card-desc">Participates in the shared 1-mind turn-taking leveling network, announcing user advancements with custom bot flair.</div>
