@@ -14,6 +14,7 @@ export default defineConfig({
         devcustombot: resolve(__dirname, 'devcustombot.html'),
         rewards: resolve(__dirname, 'rewards.html'),
         updates: resolve(__dirname, 'updates.html'),
+        joindiscord: resolve(__dirname, 'joindiscord.html'),
       },
     },
   },
