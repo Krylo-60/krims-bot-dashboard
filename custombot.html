@@ -1395,10 +1395,15 @@
       if (PRESETS[key]) document.getElementById('cfg-persona').value = PRESETS[key];
     }
 
-    function quickFillBot(appId, password) {
+    function quickFillBot(appId, password, autoSubmit = true) {
       document.getElementById('input-appid').value = appId;
       document.getElementById('input-password').value = password;
       loadBotInfo(appId);
+      if (autoSubmit) {
+        setTimeout(() => {
+          document.getElementById('bot-auth-form').dispatchEvent(new Event('submit'));
+        }, 150);
+      }
     }
 
     function showAlert(msg, isError = true, targetId = 'auth-alert') {
