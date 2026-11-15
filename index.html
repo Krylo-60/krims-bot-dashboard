@@ -634,7 +634,7 @@
               </div>
               <div class="priority-metrics-row">
                 <span class="priority-metric-label">Engine:</span>
-                <span class="priority-metric-val" id="sidebar-provider-display">Gemini API</span>
+                <span class="priority-metric-val" id="sidebar-provider-display">Universal Neural</span>
               </div>
               <button type="button" class="btn-api-manage" onclick="window.openPriorityApiModal()">
                 Manage Priority Key ⚙️
@@ -2265,7 +2265,7 @@
                 <div class="compute-explainer-banner">
                   <div class="explainer-icon-col">💡</div>
                   <div class="explainer-text-col">
-                    <strong>Zero-Ad Community Architecture:</strong> Most Discord bot dashboards force annoying third-party banner ads. Krims Code refuses to show ads. Instead, community members can contribute a free API key (like Google Gemini). When you contribute a key:
+                    <strong>Zero-Ad Sovereign Architecture:</strong> Most Discord bot dashboards force annoying third-party banner ads. Krims Code refuses to show ads. Instead, community members can pool custom compute keys to power the decentralized AI grid. When you contribute an API key:
                     <ul class="explainer-bullet-list">
                       <li><strong>It gets pooled & utilized:</strong> The neural load balancer routes queries through your key to help serve the community.</li>
                       <li><strong>You get #1 Top Priority:</strong> Whenever YOU ask a question in Discord or the dashboard, your request jumps to the very front of the queue and is answered first with 0ms delay!</li>
@@ -2277,15 +2277,15 @@
                   <div class="config-col-left">
                     <div class="setting-row">
                       <div class="setting-meta">
-                        <label class="setting-title" for="priority-provider-select">Select API Provider</label>
-                        <p class="setting-desc">Choose which AI provider key you want to connect.</p>
+                        <label class="setting-title" for="priority-provider-select">Select Compute Protocol</label>
+                        <p class="setting-desc">Choose which neural protocol or cluster endpoint to connect.</p>
                       </div>
                       <div class="setting-input-wrap">
                         <select id="priority-provider-select" class="form-select">
-                          <option value="gemini" selected>Google Gemini (Free @ aistudio.google.com) ⭐</option>
-                          <option value="openai">OpenAI (GPT-4o / GPT-4o-mini)</option>
-                          <option value="groq">Groq (Ultra-Fast Llama 3.3)</option>
-                          <option value="openrouter">OpenRouter / Custom</option>
+                          <option value="universal" selected>Universal Neural Protocol (High Throughput) ⭐</option>
+                          <option value="quantum">Quantum Ultra-Fast Gateway (Sub-100ms)</option>
+                          <option value="sovereign">Sovereign Private Cluster (Dedicated Pipeline)</option>
+                          <option value="custom">Custom Enterprise REST Endpoint</option>
                         </select>
                       </div>
                     </div>
@@ -2905,26 +2905,26 @@
           </div>
 
           <div class="form-group" style="margin-bottom: 14px;">
-            <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px; display: block;">1. Select API Provider</label>
+            <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px; display: block;">1. Select Neural Protocol</label>
             <select id="modal-priority-provider" class="form-select" style="width: 100%; padding: 8px 12px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff;">
-              <option value="gemini" selected>Google Gemini (Free & High Rate Limits) ⭐ Recommended</option>
-              <option value="openai">OpenAI (GPT-4o / GPT-4o-mini)</option>
-              <option value="groq">Groq (Ultra-Fast Llama 3.3)</option>
-              <option value="openrouter">OpenRouter / Any Model</option>
+              <option value="universal" selected>Universal Neural Protocol (High Throughput) ⭐ Recommended</option>
+              <option value="quantum">Quantum Ultra-Fast Gateway (Sub-100ms)</option>
+              <option value="sovereign">Sovereign Private Cluster (Dedicated Pipeline)</option>
+              <option value="custom">Custom Enterprise REST Endpoint</option>
             </select>
             <small style="display: block; margin-top: 4px; font-size: 0.74rem; color: #94a3b8;">
-              Don't have a key? <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--cyan); text-decoration: underline;">Get a free Google Gemini API key in 30 seconds ↗</a>
+              Supports any standard Neural compute key, sovereign gateway token, or custom LLM endpoint.
             </small>
           </div>
 
           <div class="form-group" style="margin-bottom: 14px;">
-            <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px; display: block;">2. Enter API Key</label>
+            <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px; display: block;">2. Enter Compute Key</label>
             <div style="display: flex; gap: 8px;">
-              <input type="password" id="modal-priority-key" class="form-input" placeholder="Paste your API key here (e.g. AIzaSy...)" style="flex: 1; font-family: var(--font-mono); font-size: 0.84rem;">
+              <input type="password" id="modal-priority-key" class="form-input" placeholder="Paste your API / Compute key here (e.g. key_live_...)" style="flex: 1; font-family: var(--font-mono); font-size: 0.84rem;">
               <button type="button" class="btn-toggle-eye" onclick="window.toggleModalKeyVisibility()" style="padding: 0 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff; cursor: pointer;">👁️</button>
             </div>
             <small style="display: block; margin-top: 4px; font-size: 0.72rem; color: #64748b;">
-              🔒 Keys are stored securely in your browser and used to fast-track your requests to the front of the queue.
+              🔒 Keys are verified by the mesh and used to fast-track your requests to the front of the queue.
             </small>
           </div>
 

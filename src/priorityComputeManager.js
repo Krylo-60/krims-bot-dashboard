@@ -15,7 +15,7 @@ export const STORAGE_KEY_PRIORITY_TIER = 'krims_priority_tier';
 export function getPriorityState() {
   try {
     const key = localStorage.getItem(STORAGE_KEY_CONTRIBUTED_KEY) || '';
-    const provider = localStorage.getItem(STORAGE_KEY_PROVIDER) || 'gemini';
+    const provider = localStorage.getItem(STORAGE_KEY_PROVIDER) || 'universal';
     const discordId = localStorage.getItem(STORAGE_KEY_DISCORD_ID) || '';
     const isPriority = Boolean(key && key.length >= 8);
     return {
@@ -26,11 +26,11 @@ export function getPriorityState() {
       tier: isPriority ? 'Level 1: Top Priority Contributor' : 'Standard Community Free'
     };
   } catch (e) {
-    return { isPriority: false, key: '', provider: 'gemini', discordId: '', tier: 'Standard Community Free' };
+    return { isPriority: false, key: '', provider: 'universal', discordId: '', tier: 'Standard Community Free' };
   }
 }
 
-export function savePriorityState(key, provider = 'gemini', discordId = '') {
+export function savePriorityState(key, provider = 'universal', discordId = '') {
   try {
     localStorage.setItem(STORAGE_KEY_CONTRIBUTED_KEY, key.trim());
     localStorage.setItem(STORAGE_KEY_PROVIDER, provider);
@@ -73,8 +73,8 @@ export function updatePriorityUI() {
       sidebarDesc.innerHTML = '⚡ <strong>Priority Fast-Track Active!</strong> Your questions are routed directly to compute nodes and answered first.';
     }
     if (sidebarProvider) {
-      const pNames = { gemini: 'Google Gemini', openai: 'OpenAI GPT-4o', groq: 'Groq Llama 3', openrouter: 'OpenRouter' };
-      sidebarProvider.textContent = pNames[state.provider] || state.provider;
+      const pNames = { universal: 'Universal Neural Protocol', quantum: 'Quantum High-Throughput', sovereign: 'Sovereign Cluster', custom: 'Custom Enterprise Node' };
+      sidebarProvider.textContent = pNames[state.provider] || 'Universal Neural Protocol';
     }
   } else {
     if (sidebarUnconnected) sidebarUnconnected.style.display = 'block';
@@ -255,7 +255,7 @@ export function initPriorityComputeSystem() {
 
   window.saveAndActivatePriorityKeyFromModal = async () => {
     const key = document.getElementById('modal-priority-key')?.value || '';
-    const provider = document.getElementById('modal-priority-provider')?.value || 'gemini';
+    const provider = document.getElementById('modal-priority-provider')?.value || 'universal';
     const discordId = document.getElementById('modal-priority-discord')?.value || '';
     const alertEl = document.getElementById('modal-priority-status-alert');
 
@@ -269,7 +269,7 @@ export function initPriorityComputeSystem() {
 
   window.saveAndActivatePriorityKey = async () => {
     const key = document.getElementById('priority-api-key-input')?.value || '';
-    const provider = document.getElementById('priority-provider-select')?.value || 'gemini';
+    const provider = document.getElementById('priority-provider-select')?.value || 'universal';
     const discordId = document.getElementById('priority-discord-user-input')?.value || '';
     await verifyAndActivateKey(key, provider, discordId);
   };
@@ -321,10 +321,11 @@ export function initPriorityComputeSystem() {
     await new Promise(r => setTimeout(r, latency));
 
     if (state.isPriority) {
+      const pNames = { universal: 'Universal Neural Protocol', quantum: 'Quantum High-Throughput', sovereign: 'Sovereign Cluster', custom: 'Custom Enterprise Node' };
       resBox.innerHTML = `
         <div style="color: #fbbf24; font-weight: 700; margin-bottom: 4px;">👑 TOP PRIORITY FAST-PATH (Answered in ${latency}ms)</div>
         <div style="color: #cbd5e1;">✅ <strong>Query:</strong> "${testInput}"</div>
-        <div style="color: #34d399; margin-top: 4px;">⚡ <strong>Fast-Track Telemetry:</strong> Skipped 14,280 requests in free queue. Directly dispatched via your connected ${state.provider.toUpperCase()} key. Answers received first!</div>
+        <div style="color: #34d399; margin-top: 4px;">⚡ <strong>Fast-Track Telemetry:</strong> Skipped 14,280 requests in free queue. Directly dispatched via your connected ${pNames[state.provider] || 'Priority Neural'} key. Answers received first!</div>
       `;
     } else {
       resBox.innerHTML = `
