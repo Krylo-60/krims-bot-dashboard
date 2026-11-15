@@ -1745,7 +1745,8 @@
         sendBtn.textContent = 'Send';
 
         if (res.ok && data.ok) {
-          chatBox.innerHTML += `<div class="sandbox-bubble bubble-bot">${escapeHtml(data.reply)}</div>`;
+          const replyText = data.reply || data.response || data.message || data.text || '👋 Hello! My AI persona is online and ready.';
+          chatBox.innerHTML += `<div class="sandbox-bubble bubble-bot">${escapeHtml(replyText)}</div>`;
           chatBox.scrollTop = chatBox.scrollHeight;
           fetchLiveLogs();
         } else {

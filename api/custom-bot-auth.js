@@ -102,7 +102,7 @@ export default async function handler(req, res) {
     }
 
     // 3. AUTH / PASSWORD SETUP / SIGN IN
-    if (action === 'login' || action === 'setup_password' || req.method === 'POST') {
+    if (action === 'login' || action === 'setup_password' || (!action && req.method === 'POST')) {
       const { appid, password } = req.body || {};
       const cleanId = (appid || '').trim();
       const cleanPass = (password || '').trim().toLowerCase();
