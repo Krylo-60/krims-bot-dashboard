@@ -451,9 +451,11 @@ function startDemoMode() {
   const avatarEl = document.getElementById('header-avatar');
   const usernameEl = document.getElementById('header-username');
   const profileEl = document.getElementById('header-profile');
+  const topLoginBtn = document.getElementById('top-nav-login-btn');
   if (avatarEl) avatarEl.src = mockUser.avatar;
   if (usernameEl) usernameEl.innerText = mockUser.username;
   if (profileEl) profileEl.style.display = 'flex';
+  if (topLoginBtn) topLoginBtn.style.display = 'none';
   
   guilds = [...mockGuilds];
   renderGuilds();
@@ -490,6 +492,8 @@ function returnToLanding() {
   
   const headerProfile = document.getElementById('header-profile');
   if (headerProfile) headerProfile.style.display = 'none';
+  const topLoginBtn = document.getElementById('top-nav-login-btn');
+  if (topLoginBtn) topLoginBtn.style.display = 'inline-flex';
   
   const bottomFooter = document.querySelector('.bottom-footer');
   if (bottomFooter) bottomFooter.style.display = 'none';
@@ -565,6 +569,8 @@ async function loadDiscordData(token) {
     document.getElementById('header-avatar').src = avatarUrl;
     document.getElementById('header-username').innerText = userData.username;
     document.getElementById('header-profile').style.display = 'flex';
+    const topLoginBtn = document.getElementById('top-nav-login-btn');
+    if (topLoginBtn) topLoginBtn.style.display = 'none';
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard-screen').style.display = 'grid';
     
@@ -2320,6 +2326,8 @@ function logout() {
   document.body.classList.remove('sidebar-drawer-open');
 
   document.getElementById('header-profile').style.display = 'none';
+  const topLoginBtn = document.getElementById('top-nav-login-btn');
+  if (topLoginBtn) topLoginBtn.style.display = 'inline-flex';
   document.getElementById('dashboard-screen').style.display = 'none';
   document.getElementById('header-server-pill').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
