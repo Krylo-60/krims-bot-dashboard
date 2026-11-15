@@ -1438,9 +1438,19 @@
       return (params.get('appid') || params.get('id') || '').trim();
     }
 
-    // Kr Balance Management
-    function initKrBalance() {
-      const isFounder = localStorage.getItem('krims_founder_grant') === 'true';
+    // Kr Balance Management (Live 2-Way Sync Engine)
+    function syncKrFromStorage() {
+      const savedSession = sessionStorage.getItem('krims_custom_bot_session');
+      let sessionAppId = '';
+      if (savedSession) {
+        try { sessionAppId = JSON.parse(savedSession).appId; } catch (_) {}
+      }
+      const isKnownFounderBot = sessionAppId === '1565848105277067414' || sessionAppId === '1565527301444083722';
+      const isFounder = localStorage.getItem('krims_founder_grant') === 'true' || isKnownFounderBot;
+
+      if (isFounder) {
+        localStorage.setItem('krims_founder_grant', 'true');
+      }
 
       let bestBalance = 0;
       const savedVault = localStorage.getItem('krims_vault_balance');
@@ -1449,7 +1459,7 @@
       }
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
-        if (k && k.startsWith('krims_balance_cache_')) {
+        if (k && (k.startsWith('krims_balance_cache_') || k === 'krims_vault_balance')) {
           const val = parseInt(localStorage.getItem(k), 10);
           if (!isNaN(val)) bestBalance = Math.max(bestBalance, val);
         }
@@ -1464,7 +1474,51 @@
       }
 
       localStorage.setItem('krims_vault_balance', userKrBalance.toString());
+      localStorage.setItem('krims_balance_cache_1414143825538191373', userKrBalance.toString());
       updateKrDisplay();
+    }
+
+    async function initKrBalance() {
+      syncKrFromStorage();
+
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'krims_vault_balance' || (e.key && e.key.startsWith('krims_balance_cache_'))) {
+          syncKrFromStorage();
+        }
+      });
+      window.addEventListener('krims_kr_sync', (e) => {
+        if (e.detail && typeof e.detail.balance === 'number') {
+          userKrBalance = e.detail.balance;
+          updateKrDisplay();
+        }
+      });
+
+      const discordToken = localStorage.getItem('discord_access_token');
+      if (discordToken) {
+        try {
+          const uRes = await fetch('https://discord.com/api/users/@me', {
+            headers: { 'Authorization': `Bearer ${discordToken}` }
+          });
+          if (uRes.ok) {
+            const user = await uRes.json();
+            const isFounder = user.id === '1414143825538191373' || (user.username && user.username.toLowerCase().includes('krylo'));
+            if (isFounder) {
+              localStorage.setItem('krims_founder_grant', 'true');
+            }
+            const rRes = await fetch(`/api/rewards?userId=${user.id}`);
+            if (rRes.ok) {
+              const rData = await rRes.json();
+              if (rData.userVault && rData.userVault.krimsRewards) {
+                let apiBal = rData.userVault.krimsRewards;
+                userKrBalance = Math.max(userKrBalance, apiBal);
+                localStorage.setItem('krims_vault_balance', userKrBalance.toString());
+                localStorage.setItem('krims_balance_cache_' + user.id, userKrBalance.toString());
+                updateKrDisplay();
+              }
+            }
+          }
+        } catch (_) {}
+      }
     }
 
     function updateKrDisplay() {
@@ -1646,6 +1700,20 @@
       if (bot.botAvatar) {
         document.getElementById('sb-bot-avatar').src = bot.botAvatar;
       }
+
+      // Live Synchronize Owner Kr Balance and Founder Clearance
+      if (bot.ownerKrBalance) {
+        userKrBalance = Math.max(userKrBalance, bot.ownerKrBalance);
+        localStorage.setItem('krims_vault_balance', userKrBalance.toString());
+        if (bot.ownerId) {
+          localStorage.setItem('krims_balance_cache_' + bot.ownerId, userKrBalance.toString());
+        }
+        localStorage.setItem('krims_balance_cache_1414143825538191373', userKrBalance.toString());
+      }
+      if (bot.isFounder) {
+        localStorage.setItem('krims_founder_grant', 'true');
+      }
+      updateKrDisplay();
 
       const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${encodeURIComponent(bot.botId)}&permissions=8&scope=bot%20applications.commands`;
       document.getElementById('btn-invite-bot').href = inviteUrl;

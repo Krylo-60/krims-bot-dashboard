@@ -2371,6 +2371,8 @@
         userBalance = Math.max(0, userBalance - cost);
         const userKey = getBonusUserKey();
         localStorage.setItem('krims_balance_cache_' + userKey, userBalance.toString());
+        localStorage.setItem('krims_vault_balance', userBalance.toString());
+        window.dispatchEvent(new CustomEvent('krims_kr_sync', { detail: { balance: userBalance } }));
       }
 
       document.getElementById('vault-kr-val').textContent = userBalance.toLocaleString() + ' KR';
@@ -2546,6 +2548,12 @@
           document.getElementById('vault-clearance-val').textContent = 'Verified Discord User';
           document.getElementById('vault-clearance-val').className = 'stat-value emerald';
         }
+
+        // Live 2-way Cross-Dashboard Kr Sync
+        localStorage.setItem('krims_vault_balance', userBalance.toString());
+        localStorage.setItem('krims_balance_cache_' + userKey, userBalance.toString());
+        window.dispatchEvent(new CustomEvent('krims_kr_sync', { detail: { balance: userBalance } }));
+
         checkBonusCooldown();
         loadKeysInventory();
 
@@ -2708,6 +2716,8 @@
 
       userBalance += 250;
       localStorage.setItem('krims_balance_cache_' + userKey, userBalance.toString());
+      localStorage.setItem('krims_vault_balance', userBalance.toString());
+      window.dispatchEvent(new CustomEvent('krims_kr_sync', { detail: { balance: userBalance } }));
 
       document.getElementById('vault-kr-val').textContent = userBalance.toLocaleString() + ' KR';
       checkBonusCooldown();
@@ -2764,6 +2774,25 @@
       e.preventDefault();
       const val = document.getElementById('sub-user-input').value.trim();
       handleDMSubscription(val);
+    });
+
+    // Cross-tab real-time Kr sync with Custom Bot Workspace
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'krims_vault_balance' || (e.key && e.key.startsWith('krims_balance_cache_'))) {
+        const val = parseInt(e.newValue, 10);
+        if (!isNaN(val)) {
+          userBalance = val;
+          const el = document.getElementById('vault-kr-val');
+          if (el) el.textContent = val.toLocaleString() + ' KR';
+        }
+      }
+    });
+    window.addEventListener('krims_kr_sync', (e) => {
+      if (e.detail && typeof e.detail.balance === 'number') {
+        userBalance = e.detail.balance;
+        const el = document.getElementById('vault-kr-val');
+        if (el) el.textContent = userBalance.toLocaleString() + ' KR';
+      }
     });
   </script>
 </body>

@@ -100,6 +100,7 @@ export default async function handler(req, res) {
 
   // Real-time lookup or default vault calculation
   const isFounder = userId && (
+    userId === '1414143825538191373' ||
     userId.toLowerCase().includes('krylo') ||
     userId.toLowerCase().includes('founder') ||
     userId.toLowerCase().includes('admin') ||

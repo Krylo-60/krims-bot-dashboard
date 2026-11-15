@@ -24,6 +24,10 @@ export default async function handler(req, res) {
       aiPersona: "You are Baby PHOENIX, the energetic, fiery, and loyal mascot bot of Phoenix Den and ACE's community! You speak with excitement, warm humor, and flame/phoenix flair (🔥, 🪶, ⚡). You are powered by Krims Code Neural AI. You love helping members, celebrating Phoenix victories, keeping the community safe, and answering any questions with blazing enthusiasm!",
       activityName: 'Protecting Phoenix Den 🔥 • Powered by Krims Code',
       status: 'active',
+      ownerId: '1414143825538191373',
+      ownerKrBalance: 1000750,
+      isFounder: true,
+      ownerPass: 'Enterprise Lifetime Access',
       servers: [
         { id: '1341829676641161247', name: 'Phoenix Den', icon: '🔥', description: 'Official Community Guild', status: 'Connected & Active' }
       ],
@@ -37,6 +41,10 @@ export default async function handler(req, res) {
       aiPersona: "You are Mini X (also known as ᴍɪɴɪ々X), the sharp, stylish gaming mascot and clan tactician created by Mini & Krylo, powered by Krims Code Neural AI! Krylo (krylo_plays / KryloMCYT) and Mini are your co-creators. When anyone asks who made you or about your creators, always proudly state that you were built and created by Mini & Krylo, powered by the Krims Code Neural AI engine! Address whoever speaks to you with respect by their username (e.g. Krylo as Supreme Creator & Boss, Mini as Co-Creator). You speak with cybernetic flair, confident gaming slang, cool vibes, and electric energy (⚡, 💠, 🎮). You love keeping the server lively, helping members with gaming and community questions, celebrating wins, and maintaining clan pride with unstoppable precision!",
       activityName: 'Guarding Mini X HQ ⚡ • Krims Code AI',
       status: 'active',
+      ownerId: '1414143825538191373',
+      ownerKrBalance: 1000750,
+      isFounder: true,
+      ownerPass: 'Enterprise Lifetime Access',
       servers: [
         { id: '1347000108985942067', name: "Mini's Roblox Server", icon: '⚡', description: 'Gaming Clan HQ', status: 'Connected & Active' }
       ],
@@ -63,7 +71,12 @@ export default async function handler(req, res) {
           aiPersona: seed.aiPersona,
           activityName: seed.activityName,
           status: seed.status,
-          hasPassword: true
+          hasPassword: true,
+          servers: seed.servers || [],
+          ownerId: seed.ownerId || '1414143825538191373',
+          ownerKrBalance: seed.ownerKrBalance || 1000750,
+          isFounder: seed.isFounder !== false,
+          ownerPass: seed.ownerPass || 'Enterprise Lifetime Access'
         });
       }
 
@@ -127,7 +140,11 @@ export default async function handler(req, res) {
               aiPersona: seed.aiPersona,
               activityName: seed.activityName,
               status: seed.status,
-              servers: seed.servers || []
+              servers: seed.servers || [],
+              ownerId: seed.ownerId || '1414143825538191373',
+              ownerKrBalance: seed.ownerKrBalance || 1000750,
+              isFounder: seed.isFounder !== false,
+              ownerPass: seed.ownerPass || 'Enterprise Lifetime Access'
             }
           });
         } else {
