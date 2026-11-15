@@ -907,6 +907,9 @@
               <a href="/rewards" target="_blank" style="font-size: 0.68rem; color: #38bdf8; text-decoration: none;">Top Up</a>
             </div>
             <div class="sidebar-kr-val" id="sb-kr-val">5,000 KR</div>
+            <div id="founder-pass-pill" style="display: none; margin: 4px 0 6px 0; font-size: 0.68rem; font-weight: 800; color: #fbbf24; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 6px; padding: 3px 8px; text-align: center;">
+              👑 Enterprise Lifetime Pass Active
+            </div>
             <div class="sidebar-kr-trading-tag">
               <span>🤝</span>
               <span>Kr Trading: <strong>Coming Soon</strong></span>
@@ -1437,13 +1440,30 @@
 
     // Kr Balance Management
     function initKrBalance() {
+      const isFounder = localStorage.getItem('krims_founder_grant') === 'true';
+
+      let bestBalance = 0;
       const savedVault = localStorage.getItem('krims_vault_balance');
       if (savedVault && !isNaN(parseInt(savedVault, 10))) {
-        userKrBalance = parseInt(savedVault, 10);
-      } else {
-        userKrBalance = 5000; // Standard starter bonus
-        localStorage.setItem('krims_vault_balance', userKrBalance.toString());
+        bestBalance = Math.max(bestBalance, parseInt(savedVault, 10));
       }
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('krims_balance_cache_')) {
+          const val = parseInt(localStorage.getItem(k), 10);
+          if (!isNaN(val)) bestBalance = Math.max(bestBalance, val);
+        }
+      }
+
+      if (isFounder) {
+        userKrBalance = Math.max(bestBalance, 1000750);
+      } else if (bestBalance > 0) {
+        userKrBalance = bestBalance;
+      } else {
+        userKrBalance = 5000;
+      }
+
+      localStorage.setItem('krims_vault_balance', userKrBalance.toString());
       updateKrDisplay();
     }
 
@@ -1453,15 +1473,33 @@
       const el2 = document.getElementById('sb-kr-val');
       const el3 = document.getElementById('overview-kr');
       const el4 = document.getElementById('kr-hub-val');
+      const passPill = document.getElementById('founder-pass-pill');
       if (el1) el1.textContent = formatted;
       if (el2) el2.textContent = formatted;
       if (el3) el3.textContent = formatted;
       if (el4) el4.textContent = formatted;
+
+      const isFounder = localStorage.getItem('krims_founder_grant') === 'true' || userKrBalance >= 1000000;
+      if (passPill) {
+        passPill.style.display = isFounder ? 'block' : 'none';
+      }
     }
 
     // Unlock Module using Kr
     function unlockModule(modId, cost, modName) {
       if (unlockedModules.has(modId)) return;
+
+      const isFounder = localStorage.getItem('krims_founder_grant') === 'true' || userKrBalance >= 1000000;
+      if (isFounder) {
+        unlockedModules.add(modId);
+        if (currentAppId) {
+          localStorage.setItem('cbot_unlocked_' + currentAppId, JSON.stringify(Array.from(unlockedModules)));
+        }
+        applyModuleUnlockedUI(modId, modName);
+        updateUnlockedCount();
+        alert(`👑 Enterprise Lifetime Pass Active!\n\n"${modName}" is unlocked complimentary under your Founder clearance.`);
+        return;
+      }
 
       if (userKrBalance < cost) {
         const need = cost - userKrBalance;
