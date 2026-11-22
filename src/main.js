@@ -64,13 +64,13 @@ const TIER_CONFIG = {
     summary: 'Basic milestone rewards (Up to 2 roles). Switch to Pro for 10 slots + stacking, or Premium for unlimited + XP boosters!'
   },
   pro: {
-    name: 'Pro Tier (Coming Soon)',
+    name: 'Krims Code Pro (Enterprise)',
     badgeClass: 'tier-pro',
-    maxMilestones: 10,
+    maxMilestones: 25,
     canStack: true,
-    canBoostXP: false,
-    canDMNotify: false,
-    summary: '⏳ In active development: Dedicated white-label cloud clusters, custom subdomains, and private compute nodes.'
+    canBoostXP: true,
+    canDMNotify: true,
+    summary: '⚡ Krims Code Pro Bot (Client ID: 1572758718091890818): High-throughput enterprise instance with 3.0x XP multiplier, 25 milestone slots, and dedicated neural compute nodes.'
   },
   premium: {
     name: 'Premium Tier (Out & Free Right Now!)',
