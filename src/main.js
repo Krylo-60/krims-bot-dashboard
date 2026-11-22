@@ -115,11 +115,15 @@ function updateFounderSlotUI(claimed) {
   const remaining = Math.max(0, 100 - claimedCount);
   
   const claimedEl = document.getElementById('founder-claimed-slots');
+  const ladderClaimedEl = document.getElementById('founder-claimed-count-ladder');
   const progressBar = document.getElementById('founder-progress-bar');
   const badgeEl = document.getElementById('founder-remaining-badge');
   
   if (claimedEl) {
     claimedEl.textContent = claimedCount.toString();
+  }
+  if (ladderClaimedEl) {
+    ladderClaimedEl.textContent = claimedCount.toString();
   }
   if (progressBar) {
     progressBar.style.width = `${claimedCount}%`;

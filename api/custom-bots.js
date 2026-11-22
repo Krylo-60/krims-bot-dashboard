@@ -23,55 +23,52 @@ export default async function handler(req, res) {
       remainingSlots: Math.max(0, 100 - liveClaimedSlots),
       tiers: [
         {
-          name: 'Founder 100',
-          price: '$0 / forever',
-          badge: '100% FREE',
+          name: 'Starter Founder',
+          price: '$0 / Forever',
+          badge: '100% FREE FOREVER',
           customBots: 1,
+          description: '1 Free Custom Bot for every Discord community. Zero credit card required.',
           features: [
-            '1 Custom-Branded Bot',
-            'Full Krims Proprietary Neural Brain',
-            'MEE6-Grade Leveling & Rank Cards',
-            'Dyno AutoMod Suite',
-            'Powered by Krims Code AI Footer'
-          ]
+            '1 Custom-Branded Bot (100% Free Forever)',
+            'Full Krims Proprietary Neural AI Brain',
+            'MEE6-Grade Leveling & Custom Rank Cards',
+            'Dyno AutoMod Suite & Private Tickets',
+            '24/7 High-Speed Cloud Uptime',
+            'Founder 100 Slot (91/100 Claimed)'
+          ],
+          action: 'claim_free'
         },
         {
-          name: 'Pro Tier',
-          price: '$0 / 100% Free',
-          badge: 'UNLOCKED',
+          name: 'Pro Fleet',
+          price: '$4.99 / mo',
+          krPrice: '8,000 Kr',
+          badge: 'POPULAR FLEET',
           customBots: 5,
+          description: 'Up to 5 custom bots. Directly funds our krimscode.net domain renewal & dedicated cloud shards.',
           features: [
             'Up to 5 Custom Automated Bots',
-            'Custom AI Personality / Persona',
-            'Unlimited 0ms Neural AI Chat',
-            'Custom Embed & Rank Colors',
-            'Priority Uptime'
-          ]
+            'Dedicated High-Speed Cloud Compute Shards',
+            'Custom AI Personas & Deep Personality Studio',
+            'Custom Status & Activity Rotations',
+            'Funds krimscode.net Domain & Hosting',
+            'Priority 24/7 High-Availability Cluster'
+          ],
+          action: 'upgrade_pro'
         },
         {
-          name: 'Premium Tier',
-          price: '$0 / 100% Free',
-          badge: 'VIP FREE',
-          customBots: 10,
-          features: [
-            'Up to 10 Custom Bots',
-            'Multi-Gamemode Server Linking',
-            'Minecraft MySQL Economy Sync',
-            'VIP 24/7 Dedicated Priority',
-            'Custom Reaction Roles & Tickets'
-          ]
-        },
-        {
-          name: 'Enterprise',
-          price: '$0 / 100% Free',
-          badge: 'ENTERPRISE',
+          name: 'Enterprise Cluster',
+          price: '$14.99 / mo',
+          krPrice: '25,000 Kr',
+          badge: 'UNLIMITED & BRIDGES',
           customBots: 'Unlimited Bots',
+          description: 'For gaming networks & multi-server communities needing full white-labeling and Minecraft bridges.',
           features: [
             'Unlimited Custom Bot Fleet',
-            'Dedicated Cloud Cluster',
-            'Full White-Labeling (Zero watermarks)',
-            'Direct Developer Support & SLA',
-            'Custom In-Game Minecraft Bridges'
+            'Full White-Labeling (Zero Krims Watermarks)',
+            'Minecraft KryloSMP Chat & Economy Bridge',
+            'Dedicated Private Compute Instance',
+            'VIP Direct Developer SLA & Support',
+            'Custom In-Game Discord Roles & Economy'
           ],
           action: 'contact_support'
         }

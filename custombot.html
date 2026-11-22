@@ -969,7 +969,7 @@
               <div id="sb-bot-name" class="sidebar-bot-name">Custom Bot</div>
               <div class="sidebar-bot-badge">
                 <span class="status-dot-pulse"></span>
-                <span>Render Shard Active</span>
+                <span>Cloud Shard Active</span>
               </div>
             </div>
           </div>
@@ -1054,7 +1054,7 @@
             </div>
             <div class="stat-metric-block">
               <span class="stat-metric-num" style="color: #38bdf8;">~18ms</span>
-              <span class="stat-metric-name">Render Latency</span>
+              <span class="stat-metric-name">Shard Latency</span>
             </div>
             <div class="stat-metric-block">
               <span class="stat-metric-num" id="stat-unlocked-count" style="color: var(--gold);">2 / 8</span>
@@ -1103,7 +1103,7 @@
                   <span class="btn-active-badge">Active</span>
                 </div>
                 <div class="module-card-title">Krims 1-Mind Network</div>
-                <div class="module-card-desc">Your bot is attached to the collective Krims cloud fleet on Render with synchronized uptime and zero host downtime.</div>
+                <div class="module-card-desc">Your bot is attached to the collective Krims cloud fleet on dedicated compute shards with synchronized uptime and zero host downtime.</div>
               </div>
               <div class="module-card-footer">
                 <span style="font-size: 0.75rem; color: var(--text-dim);">Latency: ~18ms</span>
@@ -1216,7 +1216,7 @@
               </div>
 
               <button type="submit" class="btn-submit-action" style="max-width: 250px;">
-                <span>Save &amp; Sync to Render</span>
+                <span>Save &amp; Sync to Krims Cloud</span>
               </button>
             </form>
           </div>
@@ -1804,7 +1804,7 @@
       const addServerBtn = document.getElementById('btn-add-server');
       if (addServerBtn) addServerBtn.href = inviteUrl;
 
-      // Render Connected Discord Servers
+      // Populate Connected Discord Servers
       const serversContainer = document.getElementById('overview-servers-list');
       if (serversContainer) {
         const servers = bot.servers && bot.servers.length > 0 ? bot.servers : [
@@ -1877,7 +1877,7 @@
 
         const data = await res.json();
         if (res.ok && data.ok) {
-          showAlert('Configuration saved and synced to Render Cloud!', false, 'cfg-alert');
+          showAlert('Configuration saved and synced to Krims Cloud!', false, 'cfg-alert');
           fetchLiveLogs();
         } else {
           showAlert(data.error || 'Failed to save configuration.', true, 'cfg-alert');
