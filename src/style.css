@@ -713,6 +713,7 @@ body.in-dashboard .main-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .server-card-info {
@@ -816,6 +817,7 @@ body.in-dashboard .main-container {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex-shrink: 0;
 }
 
 .nav-category-header {
@@ -914,6 +916,7 @@ body.in-dashboard .main-container {
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
   text-align: center;
+  flex-shrink: 0;
 }
 
 .sidebar-brand-pill {
@@ -5311,6 +5314,9 @@ h1, h2, h3,
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
+  min-height: fit-content;
+  box-sizing: border-box;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -5333,6 +5339,7 @@ h1, h2, h3,
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   margin-bottom: 7px;
 }
 
@@ -5348,6 +5355,8 @@ h1, h2, h3,
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .priority-pill {
@@ -5359,6 +5368,8 @@ h1, h2, h3,
   letter-spacing: 0.04em;
   padding: 2px 7px;
   border-radius: 9999px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .priority-pill.active-gold {
