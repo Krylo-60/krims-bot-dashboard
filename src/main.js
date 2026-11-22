@@ -2414,7 +2414,7 @@ function initCustomBotPersonalizer() {
             botAvatarImg.src = data.botUser?.avatar || '/logo.png';
           }
           if (botNameEl) {
-            botNameEl.textContent = `Connected: ${data.botUser?.username || 'Custom Bot'} (Slot #${data.founderSlotAssigned || '8'})`;
+            botNameEl.textContent = `Connected: ${data.botUser?.username || 'Custom Bot'} (Slot #${data.founderSlotAssigned || '91'})`;
           }
           if (inviteBtn) {
             inviteBtn.href = data.inviteUrl || '#';
@@ -2428,8 +2428,8 @@ function initCustomBotPersonalizer() {
         // Update progress counter
         const claimedEl = document.getElementById('founder-claimed-slots');
         const progressBar = document.getElementById('founder-progress-bar');
-        if (claimedEl) claimedEl.textContent = (data.founderSlotAssigned || 8).toString();
-        if (progressBar) progressBar.style.width = `${data.founderSlotAssigned || 8}%`;
+        if (claimedEl) claimedEl.textContent = (data.founderSlotAssigned || 90).toString();
+        if (progressBar) progressBar.style.width = `${data.founderSlotAssigned || 90}%`;
 
       } catch (err) {
         console.error('Bot deploy error:', err);

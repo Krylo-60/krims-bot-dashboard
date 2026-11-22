@@ -16,8 +16,8 @@ export default async function handler(req, res) {
     return res.status(200).json({
       ok: true,
       founderLimit: 100,
-      claimedCount: 7, // Live counter
-      remainingSlots: 93,
+      claimedCount: 90, // Live counter
+      remainingSlots: 10,
       tiers: [
         {
           name: 'Founder 100',
@@ -145,7 +145,7 @@ export default async function handler(req, res) {
             : null
         },
         inviteUrl,
-        founderSlotAssigned: 8
+        founderSlotAssigned: 91
       });
     } catch (err) {
       console.error('Custom bot error:', err);
