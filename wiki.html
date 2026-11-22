@@ -601,12 +601,20 @@
     /* ── CALLOUT ALERT BOXES ── */
     .callout {
       border-radius: 12px;
-      padding: 16px 20px;
+      padding: 18px 22px;
       margin: 20px 0;
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border: 1px solid transparent;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .callout:has(.callout-icon) {
+      flex-direction: row;
       gap: 14px;
       align-items: flex-start;
-      border: 1px solid transparent;
     }
 
     .callout.info {
@@ -1006,6 +1014,16 @@
     }
 
     @media (max-width: 1024px) {
+      .top-navbar {
+        padding: 0.75rem 1.25rem;
+      }
+      .nav-links {
+        gap: 6px;
+      }
+      .nav-link {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+      }
       .mobile-docs-btn {
         display: inline-flex;
       }
