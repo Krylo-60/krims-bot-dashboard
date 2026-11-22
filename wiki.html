@@ -1013,6 +1013,7 @@
       pointer-events: auto;
     }
 
+    /* ── MOBILE FIRST ULTRA-RESPONSIVE STYLESHEET ── */
     @media (max-width: 1024px) {
       .top-navbar {
         padding: 0.75rem 1.25rem;
@@ -1029,15 +1030,24 @@
       }
       .wiki-sidebar {
         position: fixed;
-        left: -320px;
-        top: var(--header-height);
-        height: calc(100vh - var(--header-height));
-        z-index: 900;
+        left: -340px;
+        top: 0;
+        width: 84vw;
+        max-width: 320px;
+        height: 100vh;
+        z-index: 1000;
+        background: rgba(9, 13, 22, 0.98);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        padding: 24px 16px 40px;
         transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.75);
+        box-shadow: 12px 0 45px rgba(0, 0, 0, 0.9);
       }
       .wiki-sidebar.open {
         left: 0;
+      }
+      .sidebar-overlay {
+        z-index: 999;
       }
       .wiki-main {
         padding: 24px 20px 60px;
@@ -1045,12 +1055,232 @@
     }
 
     @media (max-width: 768px) {
-      .top-navbar { padding: 0.75rem 1rem; }
-      .brand-title { font-size: 0.95rem; }
-      .hero-title { font-size: 1.8rem; }
-      .wiki-hero { padding: 24px 20px; }
-      .feature-grid { grid-template-columns: 1fr; }
-      .cmd-directory-table th, .cmd-directory-table td { padding: 12px 14px; }
+      :root {
+        --header-height: auto;
+      }
+      body {
+        overflow-x: hidden;
+      }
+      .ambient-mesh {
+        height: 350px;
+      }
+      /* Clean 2-Row Mobile Header (Zero Overflow) */
+      .top-navbar {
+        padding: 0.65rem 0.85rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        row-gap: 8px;
+        position: sticky;
+        top: 0;
+        z-index: 950;
+        width: 100%;
+        background: rgba(7, 10, 18, 0.96);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .brand-group {
+        gap: 8px;
+        max-width: calc(100% - 130px);
+      }
+      .brand-logo-stroke {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+      }
+      .brand-title {
+        font-size: 0.86rem;
+        letter-spacing: 0.3px;
+      }
+      .mobile-docs-btn {
+        display: inline-flex;
+        padding: 6px 12px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        gap: 5px;
+        border-radius: 8px;
+        margin-left: auto;
+        background: rgba(0, 242, 255, 0.12);
+        border: 1px solid rgba(0, 242, 255, 0.4);
+      }
+      /* Horizontally Swipeable Nav Tabs on Mobile */
+      .nav-links {
+        order: 3;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 4px 2px 2px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .nav-links::-webkit-scrollbar {
+        display: none;
+      }
+      .nav-link {
+        font-size: 0.75rem;
+        padding: 5px 11px;
+        border-radius: 6px;
+        flex-shrink: 0;
+      }
+      .nav-btn-discord {
+        padding: 5px 11px;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+      }
+
+      /* Mobile Main Area */
+      .wiki-container {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      .wiki-main {
+        padding: 16px 12px 60px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+      }
+
+      /* Mobile Hero Section */
+      .wiki-hero {
+        padding: 18px 14px;
+        border-radius: 14px;
+        margin-bottom: 18px;
+      }
+      .hero-meta {
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+      .hero-pill {
+        font-size: 0.68rem;
+        padding: 4px 10px;
+      }
+      .hero-title {
+        font-size: 1.45rem;
+        line-height: 1.25;
+        margin-bottom: 8px;
+      }
+      .hero-desc {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 16px;
+      }
+      .hero-actions {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+      .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 11px 16px;
+        font-size: 0.86rem;
+      }
+
+      /* Mobile Feature Cards */
+      .feature-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .feature-card {
+        padding: 14px 12px;
+        border-radius: 12px;
+      }
+      .feature-card h3 {
+        font-size: 1rem;
+      }
+      .feature-card p {
+        font-size: 0.82rem;
+      }
+
+      /* Mobile Docs Sections */
+      .docs-section {
+        padding: 18px 12px;
+        margin-bottom: 18px;
+        border-radius: 14px;
+        overflow-x: hidden;
+      }
+      .docs-section h2 {
+        font-size: 1.3rem;
+        line-height: 1.3;
+        margin-bottom: 10px;
+      }
+      .docs-section h3 {
+        font-size: 1.05rem;
+        margin-top: 14px;
+        margin-bottom: 6px;
+      }
+      .docs-section p, .docs-section li {
+        font-size: 0.85rem;
+        line-height: 1.55;
+      }
+
+      /* Code Blocks & Command Directories */
+      .code-block, pre {
+        font-size: 0.74rem !important;
+        padding: 10px 12px !important;
+        border-radius: 10px;
+        max-width: 100%;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+
+      /* Tables with touch swipe indicator */
+      .table-container {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
+        margin: 10px 0 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      }
+      .table-container::after {
+        content: '↔ Swipe horizontally to view full table';
+        display: block;
+        padding: 5px 10px;
+        font-size: 0.68rem;
+        color: var(--cyan);
+        background: rgba(0, 242, 255, 0.08);
+        text-align: right;
+        font-family: var(--font-mono);
+      }
+      .cmd-directory-table th, .cmd-directory-table td,
+      table th, table td {
+        padding: 8px 10px !important;
+        font-size: 0.78rem !important;
+      }
+
+      /* Mobile Filter Tabs */
+      .cmd-filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .filter-btn {
+        font-size: 0.72rem;
+        padding: 6px 10px;
+        flex: 1 1 auto;
+        text-align: center;
+      }
+
+      /* Mobile Footer */
+      footer.wiki-footer {
+        padding: 24px 14px 40px;
+      }
+      .footer-links {
+        gap: 8px 14px;
+      }
+      .footer-links a {
+        font-size: 0.76rem;
+      }
     }
 </style>
 </head>
@@ -1113,6 +1343,13 @@
     
     <!-- Left Navigation Sidebar -->
     <aside class="wiki-sidebar">
+      <!-- Mobile Drawer Close Button -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);" class="sidebar-mobile-header">
+        <span style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 800; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.08em;">Wiki Navigation</span>
+        <button onclick="toggleSidebar()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+          ✕ Close
+        </button>
+      </div>
       <div class="search-wrapper">
         <span class="search-icon">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -4230,9 +4467,12 @@
   <footer class="wiki-footer">
     <div class="footer-links">
       <a href="/">Dashboard</a>
+      <a href="/custombot">Custom Bot</a>
+      <a href="/rewards">Krims Rewards</a>
       <a href="/wiki">Wiki Documentation</a>
-      <a href="https://krims-discord-bot-d57m.onrender.com/">Status Dashboard</a>
-      <a href="https://top.gg/bot/1523794466740371586/vote">Top.gg Vote</a>
+      <a href="/status">Live Status</a>
+      <a href="https://www.youtube.com/channel/UCAWVtKwWUgWOdA4bvjT0jZw" target="_blank" style="color: #ff3344; font-weight: 700;">YouTube</a>
+      <a href="https://top.gg/bot/1523794466740371586/vote" target="_blank">Top.gg Vote</a>
       <a href="https://discord.gg/sYaVJtXgQb" target="_blank">Support Discord</a>
       <a href="https://github.com/Krylo-60/krims-discord-bot" target="_blank">GitHub</a>
       <a href="/privacy">Privacy Policy</a>
