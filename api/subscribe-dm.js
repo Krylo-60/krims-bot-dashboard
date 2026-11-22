@@ -64,10 +64,10 @@ export default async function handler(req, res) {
         `2️⃣ Run \`/premium activate key:${licenseKey}\`\n` +
         `3️⃣ Enjoy 3.0x Server XP, Dedicated Neural Compute, and Custom Bot Spawner slots!\n\n` +
         `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-        `View your full key inventory in your [Rewards Vault](https://krims-bot-dashboard.vercel.app/rewards).`,
+        `View your full key inventory in your [Rewards Vault](https://krims-code.net/rewards).`,
       color: licenseKey.includes('LIFE') ? 0xF59E0B : 0x00F2FF,
       thumbnail: {
-        url: 'https://krims-bot-dashboard.vercel.app/logo.png'
+        url: 'https://krims-code.net/logo.png'
       },
       footer: {
         text: 'Krims Code AI • Krims Rewards Protocol • Secured by Neon Cloud'
@@ -83,7 +83,7 @@ export default async function handler(req, res) {
         '• ⛏️ **Mid November:** Notice when the **Minecraft KSMP In-Game Cosmetic Store** goes live.\n' +
         '• 🎁 **Bonus Multipliers:** Spontaneous 2x KR bonus events, voice lounge streak boosts, and Alpha bounties.\n\n' +
         '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
-        'Visit your dashboard rewards vault anytime: [krims-bot-dashboard.vercel.app/rewards](https://krims-bot-dashboard.vercel.app/rewards)',
+        'Visit your dashboard rewards vault anytime: [krims-code.net/rewards](https://krims-code.net/rewards)',
       color: 0x00F2FF,
       thumbnail: {
         url: 'https://cdn.discordapp.com/avatars/1523794466740371586/a_906dd0ce7ccf09e15e48c6a5bda79fa6.gif?size=256'
@@ -112,7 +112,7 @@ export default async function handler(req, res) {
                 style: 5,
                 label: 'Open Rewards Hub',
                 emoji: { name: '💎' },
-                url: 'https://krims-bot-dashboard.vercel.app/rewards'
+                url: 'https://krims-code.net/rewards'
               },
               {
                 type: 2,

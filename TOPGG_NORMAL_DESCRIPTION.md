@@ -2,7 +2,7 @@
 
 > **The ultra-fast AI coding companion built specifically for Discord communities.** Instant coding solutions, server administration, custom bot management, and intelligent moderation — zero paywalls, zero fluff.
 
-**[⚡ Add Krims Code™ to Discord](https://discord.com/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot+applications.commands)** • **[🌐 Web Dashboard](https://krims-bot-dashboard.vercel.app)** • **[💎 KR Rewards Vault](https://krims-bot-dashboard.vercel.app/rewards)** • **[💬 Support Discord](https://discord.gg/sYaVJtXgQb)**
+**[⚡ Add Krims Code™ to Discord](https://discord.com/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot+applications.commands)** • **[🌐 Web Dashboard](https://krims-code.net)** • **[💎 KR Rewards Vault](https://krims-code.net/rewards)** • **[💬 Support Discord](https://discord.gg/sYaVJtXgQb)**
 
 ---
 
@@ -25,7 +25,7 @@ That was the exact moment the core engine evolved into **Krims Code AI™** — 
 To keep the entire platform 100% free and fair for every member, we created the **Krims Rewards™ (KR)** ecosystem:
 * **The 1:1 Migration:** The legacy economy currency (*KryloCoins*) officially transitioned into **Krims Rewards™ (KR)** with an automated 1:1 conversion. Every coin community members held was preserved.
 * **No Credit Cards, Ever:** You never have to pay real money to access premium capabilities. Spending **Krims Rewards™ (KR)** earned through community activity, daily web streaks, and server participation is the **only** way to unlock extra custom bot slots and VIP season passes.
-* **The Web Vault:** Every user can log into the live [Krims Rewards Vault](https://krims-bot-dashboard.vercel.app/rewards) to claim their daily bonus (+250 KR), track their balance, and manage their unlocked perks.
+* **The Web Vault:** Every user can log into the live [Krims Rewards Vault](https://krims-code.net/rewards) to claim their daily bonus (+250 KR), track their balance, and manage their unlocked perks.
 
 ### 🤝 Community Compute & API Key Donations
 Krims Code is dedicated to staying 100% free for everyone without ads or paywalls. If you have spare API keys (free tier or paid provider keys) and would like to support the bot's compute power, donations are always deeply appreciated!
@@ -39,8 +39,8 @@ Krims Code is dedicated to staying 100% free for everyone without ads or paywall
 * **💻 Complete, Uncapped Code:** Generates full, working code blocks in Python, JavaScript, TypeScript, Rust, C++, Java, and Go without hitting awkward token limits.
 * **⚡ Sub-Second Response Latency:** Tuned for lightning-fast execution so discussions and coding sessions never lag.
 * **🛡️ Phoenix Security & Jail Containment:** Proprietary guardrails that automatically catch and isolate abusive prompts, raid attempts, and malicious attacks.
-* **🤖 White-Label Custom Bot Launcher:** Deploy and customize your own bot instances directly from the [Custom Bot Portal](https://krims-bot-dashboard.vercel.app/custombot).
-* **🎛️ Unified Web Dashboard:** Configure auto-roles, custom embeds, welcome cards, and moderation rules visually from [krims-bot-dashboard.vercel.app](https://krims-bot-dashboard.vercel.app).
+* **🤖 White-Label Custom Bot Launcher:** Deploy and customize your own bot instances directly from the [Custom Bot Portal](https://krims-code.net/custombot).
+* **🎛️ Unified Web Dashboard:** Configure auto-roles, custom embeds, welcome cards, and moderation rules visually from [krims-code.net](https://krims-code.net).
 
 ---
 
@@ -88,11 +88,11 @@ Krims Code is dedicated to staying 100% free for everyone without ads or paywall
 ## 🔗 Official Links & Hubs
 
 * 🤖 **[Add Krims Code AI to Your Discord Server](https://discord.com/oauth2/authorize?client_id=1523794466740371586&permissions=8&scope=bot+applications.commands)**
-* 🌐 **[Official Web Dashboard](https://krims-bot-dashboard.vercel.app)**
-* 💎 **[Krims Rewards (KR) Web Vault](https://krims-bot-dashboard.vercel.app/rewards)**
-* 🤖 **[Custom Bot Control Room](https://krims-bot-dashboard.vercel.app/custombot)**
+* 🌐 **[Official Web Dashboard](https://krims-code.net)**
+* 💎 **[Krims Rewards (KR) Web Vault](https://krims-code.net/rewards)**
+* 🤖 **[Custom Bot Control Room](https://krims-code.net/custombot)**
 * 💬 **[Join Official Community & Support Discord](https://discord.gg/sYaVJtXgQb)**
-* 📖 **[Command Documentation & Wiki](https://krims-bot-dashboard.vercel.app/wiki)**
+* 📖 **[Command Documentation & Wiki](https://krims-code.net/wiki)**
 
 ---
 

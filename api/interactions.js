@@ -87,7 +87,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         type: 4,
         data: {
-          content: '🏓 **Pong!** Krims AI v5 is online with latency: `~10ms`. Web Dashboard: https://krims-bot-dashboard.vercel.app'
+          content: '🏓 **Pong!** Krims AI v5 is online with latency: `~10ms`. Web Dashboard: https://krims-code.net'
         }
       });
     }
@@ -96,7 +96,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         type: 4,
         data: {
-          content: '⚡ **Krims Command AI v5**\nConfigure server features, leveling, economy, and AI at https://krims-bot-dashboard.vercel.app\nTry `/ping`, `/rank`, or check the dashboard simulator!'
+          content: '⚡ **Krims Command AI v5**\nConfigure server features, leveling, economy, and AI at https://krims-code.net\nTry `/ping`, `/rank`, or check the dashboard simulator!'
         }
       });
     }
@@ -104,7 +104,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       type: 4,
       data: {
-        content: `⚡ Krims Command AI received \`/${commandName || 'command'}\`! Manage modules live at https://krims-bot-dashboard.vercel.app`
+        content: `⚡ Krims Command AI received \`/${commandName || 'command'}\`! Manage modules live at https://krims-code.net`
       }
     });
   }

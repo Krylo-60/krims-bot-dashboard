@@ -10,7 +10,7 @@ async function main() {
   await page.setViewport({ width: 1440, height: 900 });
 
   console.log('Navigating to dashboard...');
-  await page.goto('https://krims-bot-dashboard.vercel.app', { waitUntil: 'networkidle2' });
+  await page.goto('https://krims-code.net', { waitUntil: 'networkidle2' });
 
   // Wait a moment for rendering
   await new Promise(r => setTimeout(r, 1500));

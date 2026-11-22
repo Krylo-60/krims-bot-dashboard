@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         code,
         discord_id: discordId,
-        redirect_uri: 'https://krims-bot-dashboard.vercel.app/api/auth/github/callback'
+        redirect_uri: 'https://krims-code.net/api/auth/github/callback'
       })
     });
 
