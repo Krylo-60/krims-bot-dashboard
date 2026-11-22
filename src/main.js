@@ -744,6 +744,25 @@ function renderGuilds() {
   });
 }
 
+
+async function fetchAndApplyCloudSettings(guildId) {
+  if (!guildId || isDemo) return;
+  try {
+    const res = await fetch(`/api/guild-settings?guild_id=${guildId}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.settings && selectedGuildId === guildId) {
+        console.log('[Cloud DB Sync] Loaded live configuration from Neon PostgreSQL for guild:', guildId);
+        applySettingsToUI(data.settings);
+        localStorage.setItem(`krims_settings_${guildId}`, JSON.stringify(data.settings));
+        currentLoadedSettings = { ...data.settings };
+      }
+    }
+  } catch (err) {
+    console.debug('[Cloud DB Sync notice]:', err.message);
+  }
+}
+
 function selectGuild(guildId) {
   selectedGuildId = guildId;
   localStorage.setItem('krims_last_guild_id', guildId);
@@ -1142,12 +1161,12 @@ function initOverviewTogglesSync() {
 
     oEl?.addEventListener('change', () => {
       if (tEl) tEl.checked = oEl.checked;
-      showUnsavedChangesBar();
+      triggerAutoSave();
     });
 
     tEl?.addEventListener('change', () => {
       if (oEl) oEl.checked = tEl.checked;
-      showUnsavedChangesBar();
+      triggerAutoSave();
     });
   });
 }
@@ -1324,6 +1343,154 @@ function resetSettings() {
   showToast('↩️ Changes reset to last saved state');
 }
 
+
+// ==========================================
+// AUTOMATED CLOUD DB AUTO-SAVE SYSTEM
+// ==========================================
+let autoSaveDebounceTimeout = null;
+
+function triggerAutoSave() {
+  clearTimeout(autoSaveDebounceTimeout);
+  autoSaveDebounceTimeout = setTimeout(() => {
+    if (!selectedGuildId) return;
+    const settings = gatherCurrentSettings();
+    currentLoadedSettings = { ...settings };
+    const settingsKey = `krims_settings_${selectedGuildId}`;
+    localStorage.setItem(settingsKey, JSON.stringify(settings));
+
+    const unsavedBar = document.getElementById('unsaved-changes-bar');
+    if (unsavedBar) unsavedBar.style.display = 'none';
+
+    if (!isDemo) {
+      fetch('/api/guild-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guildId: selectedGuildId, settings, autoSave: true })
+      })
+      .then(r => r.json())
+      .then(() => {
+        showToast('⚡ Auto-saved to Cloud Database!');
+      })
+      .catch(err => {
+        console.warn('Auto-save network error:', err);
+      });
+    }
+  }, 400);
+}
+
+
+function gatherCurrentSettings() {
+  const prefix = document.getElementById('bot-prefix')?.value || '!';
+  const botEmbedFooter = document.getElementById('bot-embed-footer')?.value || 'Krims Code AI • Operations Platform';
+
+  const automodEnabled = document.getElementById('overview-toggle-automod')?.checked ?? (document.getElementById('toggle-automod')?.checked ?? true);
+  const antiInvite = document.getElementById('toggle-anti-invite')?.checked ?? true;
+  const antiSpam = document.getElementById('toggle-anti-spam')?.checked ?? true;
+  const antiCaps = document.getElementById('toggle-anti-caps')?.checked ?? false;
+  const badWords = document.getElementById('toggle-bad-words')?.checked ?? true;
+  const modLogChannel = document.getElementById('mod-log-channel')?.value || 'none';
+  const automodAction = document.getElementById('automod-action')?.value || 'timeout-5';
+
+  const welcomeEnabled = document.getElementById('overview-toggle-welcome')?.checked ?? (document.getElementById('toggle-welcome-master')?.checked ?? true);
+  const welcomeChannel = document.getElementById('welcome-channel')?.value || 'none';
+  const welcomeMessage = document.getElementById('welcome-message')?.value || 'Welcome to the server, {user}!';
+  const welcomeDm = document.getElementById('toggle-welcome-dm')?.checked ?? false;
+
+  const ticketsEnabled = document.getElementById('overview-toggle-tickets')?.checked ?? (document.getElementById('toggle-tickets')?.checked ?? false);
+  const ticketChannel = document.getElementById('ticket-channel')?.value || 'none';
+
+  const levelingEnabled = document.getElementById('overview-toggle-levels')?.checked ?? (document.getElementById('toggle-levels-master')?.checked ?? true);
+  const voiceLeveling = document.getElementById('toggle-voice-xp')?.checked ?? true;
+  const textLeveling = document.getElementById('toggle-text-xp')?.checked ?? true;
+  const levelChannel = document.getElementById('level-channel')?.value || 'none';
+  const levelMessage = document.getElementById('level-message')?.value || '🎉 GG {user}, you just leveled up to **Level {level}**!';
+
+  const aiEnabled = document.getElementById('overview-toggle-chat')?.checked ?? (document.getElementById('toggle-chat')?.checked ?? true);
+  const model = document.getElementById('ai-model')?.value || 'auto';
+  const sysPrompt = document.getElementById('system-instruction')?.value || '';
+
+  const primaryColor = document.getElementById('primary-color-picker')?.value || '#00f2ff';
+  const rankColor = document.getElementById('rank-color-picker')?.value || '#00f2ff';
+
+  const embedChannel = document.getElementById('embed-channel')?.value || '';
+  const embedTitle = document.getElementById('embed-title')?.value || '📢 Important Community Announcement';
+  const embedDesc = document.getElementById('embed-description')?.value || 'Welcome to our official community server!';
+  const embedFooter = document.getElementById('embed-footer')?.value || botEmbedFooter;
+
+  const economyEnabled = document.getElementById('toggle-economy-master')?.checked ?? true;
+  const currencyName = document.getElementById('eco-currency-name')?.value.trim() || 'Coins';
+  const currencySymbol = document.getElementById('eco-currency-symbol')?.value.trim() || '🪙';
+  const requireOwnerApproval = document.getElementById('eco-require-approval')?.checked ?? true;
+  const ecoMsgReward = parseInt(document.getElementById('eco-msg-reward')?.value) || 10;
+  const ecoVoiceReward = parseInt(document.getElementById('eco-voice-reward')?.value) || 25;
+  const ecoDailyStreak = parseInt(document.getElementById('eco-daily-streak')?.value) || 100;
+  const ecoCasinoMax = parseInt(document.getElementById('eco-casino-max')?.value) || 1000;
+
+  const welcomeCardTheme = document.getElementById('welcome-card-theme')?.value || 'cyber-cyan';
+  const welcomeCardHeading = document.getElementById('welcome-card-heading')?.value || 'WELCOME TO KSMP';
+  const welcomeCardSub = document.getElementById('welcome-card-sub')?.value || 'You are our #{count}th Member!';
+  const welcomeAvatarGlow = document.getElementById('welcome-avatar-glow')?.checked ?? true;
+
+  const quarantineKeywords = document.getElementById('quarantine-keywords')?.value || 'raid, nuke, scam, token-grab, grabber, mass-dm';
+  const reactionRolesEnabled = document.getElementById('toggle-reaction-roles')?.checked ?? true;
+  const reactionRoleTitle = document.getElementById('reaction-role-title')?.value || '';
+  const reactionRoleDesc = document.getElementById('reaction-role-desc')?.value || '';
+
+  return {
+    prefix,
+    botEmbedFooter,
+    automodEnabled,
+    antiInvite,
+    antiSpam,
+    antiCaps,
+    badWords,
+    modLogChannel,
+    automodAction,
+    quarantineKeywords,
+    welcomeEnabled,
+    welcomeChannel,
+    welcomeMessage,
+    welcomeDm,
+    welcomeCardTheme,
+    welcomeCardHeading,
+    welcomeCardSub,
+    welcomeAvatarGlow,
+    ticketsEnabled,
+    ticketChannel,
+    levelingEnabled,
+    voiceLeveling,
+    textLeveling,
+    levelChannel,
+    levelMessage,
+    aiEnabled,
+    model,
+    sysPrompt,
+    primaryColor,
+    rankColor,
+    embedChannel,
+    embedTitle,
+    embedDesc,
+    embedFooter,
+    economyEnabled,
+    currencyName,
+    currencySymbol,
+    requireOwnerApproval,
+    ecoMsgReward,
+    ecoVoiceReward,
+    ecoDailyStreak,
+    ecoCasinoMax,
+    storeItems: currentStoreItems,
+    reactionRolesEnabled,
+    reactionRoleTitle,
+    reactionRoleDesc,
+    reactionRoles: currentReactionRoles,
+    milestoneRewards: currentRoleRewards,
+    guildTier: currentGuildTier,
+    customCommands,
+    openTickets: openTicketsList
+  };
+}
+
 function saveSettings() {
   if (!selectedGuildId) {
     selectedGuildId = localStorage.getItem('krims_last_guild_id') || (guilds[0] ? guilds[0].id : '111111');
@@ -1448,12 +1615,22 @@ function saveSettings() {
   const settingsKey = `krims_settings_${selectedGuildId}`;
   localStorage.setItem(settingsKey, JSON.stringify(settings));
 
+  // Persist directly to Neon Lakebase PostgreSQL & Live Bot Backend
   if (!isDemo) {
-    fetch('https://krims-code-chatbot.vercel.app/api/chat', {
+    fetch('/api/guild-settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'save_config', guildId: selectedGuildId, config: settings })
-    }).catch(e => console.warn("Cloud save sync warning:", e));
+      body: JSON.stringify({ guildId: selectedGuildId, settings, autoSave: false })
+    })
+    .then(r => r.json())
+    .then(data => {
+      console.log('[Cloud DB Sync] Saved successfully:', data);
+      showToast('🟢 Settings saved to Cloud DB & Bot!');
+    })
+    .catch(e => {
+      console.warn('[Cloud DB Sync Warning]:', e);
+      showToast('⚠️ Local saved (Cloud sync error)');
+    });
   }
 
   hideUnsavedChangesBar();
