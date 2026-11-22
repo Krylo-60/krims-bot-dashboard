@@ -1,3 +1,6 @@
+// Live Founder Slots Counter (Base: 91)
+let liveClaimedSlots = 91;
+
 export default async function handler(req, res) {
   // CORS Headers support
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -16,8 +19,8 @@ export default async function handler(req, res) {
     return res.status(200).json({
       ok: true,
       founderLimit: 100,
-      claimedCount: 90, // Live counter
-      remainingSlots: 10,
+      claimedCount: liveClaimedSlots, // Live counter
+      remainingSlots: Math.max(0, 100 - liveClaimedSlots),
       tiers: [
         {
           name: 'Founder 100',
@@ -145,7 +148,8 @@ export default async function handler(req, res) {
             : null
         },
         inviteUrl,
-        founderSlotAssigned: 91
+        founderSlotAssigned: liveClaimedSlots,
+        remainingSlots: Math.max(0, 100 - (++liveClaimedSlots))
       });
     } catch (err) {
       console.error('Custom bot error:', err);

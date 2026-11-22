@@ -106,7 +106,68 @@ const mockGuilds = [
   { id: 'demo_solstice_net', name: 'Solstice Network', icon: null, botActive: false, memberCount: 125 }
 ];
 
+
+// ==========================================
+// AUTOMATED FOUNDER SLOTS LIVE SYNC (91/100)
+// ==========================================
+function updateFounderSlotUI(claimed) {
+  const claimedCount = Math.min(100, Math.max(91, Number(claimed) || 91));
+  const remaining = Math.max(0, 100 - claimedCount);
+  
+  const claimedEl = document.getElementById('founder-claimed-slots');
+  const progressBar = document.getElementById('founder-progress-bar');
+  const badgeEl = document.getElementById('founder-remaining-badge');
+  
+  if (claimedEl) {
+    claimedEl.textContent = claimedCount.toString();
+  }
+  if (progressBar) {
+    progressBar.style.width = `${claimedCount}%`;
+  }
+  if (badgeEl) {
+    badgeEl.textContent = remaining > 0 ? `🔥 Only ${remaining} Free Slots Remaining!` : '⚡ All 100 Founder Slots Claimed!';
+  }
+}
+
+async function initFounderSlotsAutoSync() {
+  // Check cached or default
+  const cached = localStorage.getItem('krims_founder_claimed');
+  if (cached) {
+    updateFounderSlotUI(cached);
+  } else {
+    updateFounderSlotUI(91);
+  }
+
+  // Fetch live from server
+  try {
+    const res = await fetch('/api/custom-bots');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.claimedCount) {
+        updateFounderSlotUI(data.claimedCount);
+        localStorage.setItem('krims_founder_claimed', data.claimedCount);
+      }
+    }
+  } catch (err) {
+    console.debug('Founder slots sync fallback to default:', err);
+  }
+
+  // Poll periodically every 45s for live updates
+  setInterval(async () => {
+    try {
+      const res = await fetch('/api/custom-bots');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.claimedCount) {
+          updateFounderSlotUI(data.claimedCount);
+        }
+      }
+    } catch (e) {}
+  }, 45000);
+}
+
 function initDashboardApp() {
+  initFounderSlotsAutoSync();
   // Bind Static Controls FIRST (Guaranteed to work immediately)
   document.getElementById('login-btn')?.addEventListener('click', loginWithDiscord);
   document.getElementById('top-nav-login-btn')?.addEventListener('click', loginWithDiscord);
@@ -2428,8 +2489,7 @@ function initCustomBotPersonalizer() {
         // Update progress counter
         const claimedEl = document.getElementById('founder-claimed-slots');
         const progressBar = document.getElementById('founder-progress-bar');
-        if (claimedEl) claimedEl.textContent = (data.founderSlotAssigned || 90).toString();
-        if (progressBar) progressBar.style.width = `${data.founderSlotAssigned || 90}%`;
+        updateFounderSlotUI(data.founderSlotAssigned || (Number(document.getElementById('founder-claimed-slots')?.textContent || 91) + 1));
 
       } catch (err) {
         console.error('Bot deploy error:', err);
