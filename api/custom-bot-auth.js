@@ -229,7 +229,7 @@ export default async function handler(req, res) {
             bot_id: seed.botId,
             event_type: 'status',
             user_name: 'Heartbeat',
-            message: `Active on Render Cloud. Shard ping: ~18ms. 0 errors detected.`,
+            message: `Active on Krims Cloud Cluster. Shard ping: ~18ms. 0 errors detected.`,
             created_at: new Date(now - 30000).toISOString()
           }
         ];
@@ -243,7 +243,7 @@ export default async function handler(req, res) {
         });
       }
 
-      return res.status(500).json({ ok: false, error: 'Unable to reach Render log pipeline.' });
+      return res.status(500).json({ ok: false, error: 'Unable to reach Krims Cloud log pipeline.' });
     }
 
     // 5. AI LOG OBSERVER & DIAGNOSTICS (Scoped to single person's bot)
