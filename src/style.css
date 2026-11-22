@@ -5683,3 +5683,55 @@ h1, h2, h3,
   margin: 10px 0;
 }
 
+
+
+/* ── MOBILE RESPONSIVE TOP NAV (<= 768px) ── */
+@media (max-width: 768px) {
+  .top-nav {
+    flex-wrap: wrap !important;
+    padding: 0.65rem 0.85rem !important;
+    row-gap: 8px !important;
+    height: auto !important;
+  }
+  .nav-left {
+    max-width: calc(100% - 60px) !important;
+    gap: 8px !important;
+  }
+  .brand-title {
+    font-size: 0.86rem !important;
+  }
+  .brand-status-dot {
+    display: none !important;
+  }
+  .nav-right {
+    width: 100% !important;
+    order: 3 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .notifyme-nav-links {
+    display: flex !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 6px !important;
+    padding: 4px 2px 2px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  }
+  .notifyme-nav-links::-webkit-scrollbar {
+    display: none !important;
+  }
+  .notifyme-nav-link {
+    font-size: 0.75rem !important;
+    padding: 5px 10px !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-radius: 6px !important;
+  }
+  .nav-actions-group {
+    display: none !important;
+  }
+}

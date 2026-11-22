@@ -1588,6 +1588,77 @@
       .roadmap-date-col { min-width: unset; }
       .sub-form { flex-direction: column; }
     }
+
+    /* ── MOBILE FIRST OPTIMIZATIONS (<= 768px) ── */
+    @media (max-width: 768px) {
+      body {
+        overflow-x: hidden;
+      }
+      .top-navbar {
+        padding: 0.65rem 0.85rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        row-gap: 8px;
+        position: sticky;
+        top: 0;
+        z-index: 950;
+        width: 100%;
+        background: rgba(7, 10, 18, 0.96);
+      }
+      .brand-group {
+        gap: 8px;
+        max-width: calc(100% - 110px);
+      }
+      .brand-logo-stroke {
+        width: 32px;
+        height: 32px;
+      }
+      .brand-title {
+        font-size: 0.86rem;
+      }
+      .nav-links {
+        order: 3;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 4px 2px 2px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .nav-links::-webkit-scrollbar {
+        display: none;
+      }
+      .nav-link {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+        flex-shrink: 0;
+      }
+      .nav-btn-discord {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+      }
+      .rewards-container, .main-container, .container {
+        padding: 16px 12px 60px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .stats-grid, .rewards-grid, .perks-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .reward-card, .stat-card {
+        padding: 16px 14px;
+        border-radius: 14px;
+      }
+    }
+
 </style>
 </head>
 <body>
