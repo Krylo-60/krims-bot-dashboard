@@ -4,7 +4,7 @@
 
 **The next-generation operations dashboard, white-label bot launcher, and rewards ecosystem for Discord communities and Minecraft SMP networks.**
 
-[![Vercel Deployment](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://krims-code.net)
+[![Cloud Deployment](https://img.shields.io/badge/Hosted%20on-Krims%20Cloud-00f2ff?style=for-the-badge)](https://krims-code.net)
 [![Vite](https://img.shields.io/badge/Built%20with-Vite%208-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
 [![Discord](https://img.shields.io/badge/Discord-Bot%20Fleet-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/sYaVJtXgQb)
 [![Top.gg](https://img.shields.io/badge/Top.gg-Verified%20Listing-FF3366?style=for-the-badge&logo=discord)](https://top.gg/discord/servers/899749083532460032)
@@ -54,7 +54,7 @@
 
 ```
 krims-bot-dashboard/
-├── api/                           # Serverless Edge APIs (Vercel Node runtime)
+├── api/                           # Serverless Edge APIs (Node.js runtime)
 │   ├── interactions.js            # Discord Interactions Endpoint (tweetnacl crypto)
 │   ├── rewards.js                 # KR Rewards balance and vault lookups
 │   ├── subscribe-dm.js            # Automated Discord DM alert dispatcher
@@ -79,9 +79,9 @@ krims-bot-dashboard/
 
 * **Frontend:** Vanilla JavaScript (ES Modules), HTML5, CSS3 with GPU acceleration (`translate3d`, `contain: paint layout`).
 * **Build Tool:** [Vite 8](https://vitejs.dev) with Rollup Multi-Page Application (MPA) bundling.
-* **Backend / APIs:** Node.js Serverless Functions deployed on Vercel.
+* **Backend / APIs:** Node.js Serverless Edge Functions.
 * **Security & Auth:** Discord OAuth2 (Implicit & Code Grant), `tweetnacl` cryptographic signature verification for Discord Interactions.
-* **Hosting & CDN:** Vercel Global Edge Network with instant automated GitHub CI/CD.
+* **Hosting & CDN:** Krims Global Edge Network with automated GitHub CI/CD.
 
 ---
 
@@ -121,7 +121,7 @@ krims-bot-dashboard/
 ## 🔒 Security & Verification
 
 * **Interaction Signature Verification:** All incoming requests from Discord's interaction gateway are verified using public-key Ed25519 signatures via `tweetnacl`.
-* **Zero Credential Leaks:** Client credentials, Discord bot tokens, and webhooks are strictly managed via Vercel Environment Variables.
+* **Zero Credential Leaks:** Client credentials, Discord bot tokens, and webhooks are strictly managed via encrypted Cloud Environment Variables.
 
 ---
 
