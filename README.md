@@ -8,9 +8,10 @@
 [![Vite](https://img.shields.io/badge/Built%20with-Vite%208-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
 [![Discord](https://img.shields.io/badge/Discord-Bot%20Fleet-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/sYaVJtXgQb)
 [![Top.gg](https://img.shields.io/badge/Top.gg-Verified%20Listing-FF3366?style=for-the-badge&logo=discord)](https://top.gg/discord/servers/899749083532460032)
+[![DiscordBotList](https://img.shields.io/badge/DiscordBotList-Krims%20Code%20AI-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discordbotlist.com/bots/krims-code-ai)
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary%20All%20Rights%20Reserved-00f2ff?style=for-the-badge)](./LICENSE)
 
-[**🌐 Live Dashboard**](https://krims-code.net) • [**💎 Krims Rewards Hub**](https://krims-code.net/rewards) • [**🤖 Custom Bot Portal**](https://krims-code.net/custombot) • [**📖 Documentation & Wiki**](https://krims-code.net/wiki) • [**💬 Discord Support**](https://discord.gg/sYaVJtXgQb)
+[**🌐 Live Dashboard**](https://krims-code.net) • [**🤖 Discord Bot**](https://github.com/Krylo-60/krims-discord-bot) • [**🗳️ DiscordBotList**](https://discordbotlist.com/bots/krims-code-ai) • [**💎 Krims Rewards Hub**](https://krims-code.net/rewards) • [**🤖 Custom Bot Portal**](https://krims-code.net/custombot) • [**📖 Documentation & Wiki**](https://krims-code.net/wiki) • [**💬 Discord Support**](https://discord.gg/sYaVJtXgQb)
 
 ---
 
