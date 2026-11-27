@@ -18,7 +18,7 @@
 
 ## 📌 Overview
 
-**Krims Command Dashboard** is the official web portal for the Krims Discord Bot Fleet and the KryloSMP gaming network. Engineered for high performance, mobile responsiveness, and zero-latency real-time operations, this repository houses both the client application and serverless edge functions powering the community economy.
+**Krims Command Dashboard** is the official web portal for the Krims Discord Bot Fleet and the KryloSMP gaming network. Engineered for high performance, mobile responsiveness, and fast real-time operations, this repository houses both the client application and serverless edge functions powering the community economy.
 
 ---
 
@@ -42,10 +42,10 @@
 
 ### 3. 🤖 White-Label Custom Bot Portal (`/custombot`)
 * Deploy branded instances of Krims Command under your community's name and avatar.
-* Dedicated token authentication, isolated server configurations, and 0ms response latency.
+* Dedicated token authentication and isolated server configurations.
 
 ### 4. 📖 Official Wiki & Command Matrix (`/wiki`)
-* Searchable encyclopedia covering all **100 Production Slash Commands**.
+* Searchable encyclopedia covering all **91 Curated Slash Commands**.
 * Category filtering for Moderation, Economy, KSMP Bedrock/Java Sync, AI Systems, and Voice Lounges.
 
 ---
