@@ -1,4 +1,5 @@
 import './style.css';
+import './botid-init.js';
 import { inject } from '@vercel/analytics';
 import { KRYLO_CHANNELS } from './channelsData.js';
 import { initPriorityComputeSystem } from './priorityComputeManager.js';

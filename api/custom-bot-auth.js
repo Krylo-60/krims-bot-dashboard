@@ -1,3 +1,16 @@
+import { verifyBotId } from './_botid.js';
+
+const ANTI_CHALLENGE_PATTERNS = [
+  /bypass\s+(botid|captcha|firewall|security|krims)/i,
+  /(attack|ddos|raid|spam|scrape|flood|challenge)\s+.*(krims-code\.net|dash\.krims-code\.net|krims\s*code)/i,
+];
+
+function hasProhibitedChallengeContent(...fields) {
+  return fields.some((value) =>
+    typeof value === 'string' && ANTI_CHALLENGE_PATTERNS.some((re) => re.test(value))
+  );
+}
+
 export default async function handler(req, res) {
   // CORS Headers support
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -7,6 +20,10 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
+  }
+
+  if (req.method === 'POST') {
+    if (!(await verifyBotId(req, res))) return;
   }
 
   const RENDER_BASE = process.env.RENDER_BOT_WEBHOOK_URL 
@@ -31,7 +48,7 @@ export default async function handler(req, res) {
       servers: [
         { id: '1341829676641161247', name: 'Phoenix Den', icon: '🔥', description: 'Official Community Guild', status: 'Connected & Active' }
       ],
-      validPasswords: ['phoenix2026', 'phoenixden', 'krimscode', 'admin', '123456']
+      validPasswords: ['phoenix2026', 'phoenixden', 'krims-code', 'admin', '123456']
     },
     '1565848105277067414': {
       botId: '1565848105277067414',
@@ -48,7 +65,7 @@ export default async function handler(req, res) {
       servers: [
         { id: '1347000108985942067', name: "Mini's Roblox Server", icon: '⚡', description: 'Gaming Clan HQ', status: 'Connected & Active' }
       ],
-      validPasswords: ['minix2026', 'mini', 'phoenix2026', 'krimscode', 'admin', '123456']
+      validPasswords: ['minix2026', 'mini', 'phoenix2026', 'krims-code', 'admin', '123456']
     }
   };
 
@@ -92,6 +109,11 @@ export default async function handler(req, res) {
     // 2. UPDATE BOT CONFIGURATION
     if (action === 'update_config') {
       const appid = (req.body && req.body.appid ? req.body.appid : '').trim();
+      if (hasProhibitedChallengeContent(req.body?.aiPersona, req.body?.activityName)) {
+        return res.status(403).json({
+          error: 'Custom bots cannot be configured to challenge, attack, or bypass Krims Code security.',
+        });
+      }
       if (SEED_BOTS[appid]) {
         const seed = SEED_BOTS[appid];
         if (req.body.aiPersona) seed.aiPersona = req.body.aiPersona;

@@ -1,4 +1,5 @@
 import pg from 'pg';
+import { verifyBotId } from './_botid.js';
 
 const { Pool } = pg;
 
@@ -81,6 +82,8 @@ export default async function handler(req, res) {
 
   // 2. POST: Upsert Guild Settings into Neon PostgreSQL and sync with live Discord Bot
   if (req.method === 'POST') {
+    if (!(await verifyBotId(req, res))) return;
+
     const { guildId, settings, autoSave } = req.body || {};
 
     if (!guildId || !settings) {

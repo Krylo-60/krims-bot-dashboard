@@ -6,8 +6,8 @@
   <title>Krims Rewards • Economy Protocol & Premium Hub</title>
   <meta name="description" content="Discover Krims Rewards (KR) — the exclusive currency evolution powering Krims Code Premium passes, custom bot features, and community perks.">
   <link rel="icon" type="image/png" href="/logo.png">
+  <script type="module" src="/src/botid-init.js"></script>
   <!-- 🍋 Lemon Squeezy Merchant of Record Checkout Engine -->
-  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1855,135 +1855,13 @@
       </div>
     </section>
 
-    <!-- 🍋 BUY KRIMS REWARDS (KR) POINTS - POWERED BY LEMON SQUEEZY -->
-    <section class="section-container" id="buy-points-section">
-      <div class="section-header">
-        <div class="section-eyebrow">Instant Point Top-Up • Merchant of Record</div>
-        <h2 class="section-title">Buy Krims Rewards (KR) Points</h2>
-        <p style="color: var(--text-muted); max-width: 650px; margin: 10px auto 0; font-size: 0.95rem; line-height: 1.55;">
-          Power your custom bot fleet, unlock instant 0ms Neural AI reasoning, and purchase passes with global checkout.
-          Points are automatically credited to your Discord account within seconds via our verified webhook!
-        </p>
-      </div>
-
-      <div class="passes-grid">
-        <!-- 1,000 KR Package -->
-        <div class="pass-card">
-          <div class="pass-badge">Starter Stash</div>
-          <h3 class="pass-name">1,000 KR Points</h3>
-          <div class="pass-price-wrap">
-            <span class="pass-price">$1.99</span>
-            <span class="pass-currency">USD</span>
-          </div>
-          <ul class="pass-features-list">
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Instant credit to Discord Account</span>
-            </li>
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Deploy custom bot commands</span>
-            </li>
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Safe UPI &amp; Card via Lemon Squeezy</span>
-            </li>
-          </ul>
-          <button class="pass-unlock-btn" onclick="openLemonCheckout(1000, 1.99, 'Starter Stash (1,000 KR)')">
-            <span>🛒 Buy 1,000 KR ($1.99)</span>
-          </button>
-        </div>
-
-        <!-- 5,000 KR Package (Most Popular) -->
-        <div class="pass-card featured">
-          <div class="pass-badge">Most Popular • 25% Bonus</div>
-          <h3 class="pass-name">5,000 KR Points</h3>
-          <div class="pass-price-wrap">
-            <span class="pass-price" style="color: var(--cyan);">$4.99</span>
-            <span class="pass-currency">USD</span>
-          </div>
-          <ul class="pass-features-list">
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Enough for 2x 7-Day Sprint Passes</span>
-            </li>
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Instant Priority AI token balance</span>
-            </li>
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Automated Webhook confirmation DM</span>
-            </li>
-          </ul>
-          <button class="pass-unlock-btn" style="background: var(--cyan); color: #000; font-weight: 700;" onclick="openLemonCheckout(5000, 4.99, 'Pro Booster (5,000 KR)')">
-            <span>⚡ Buy 5,000 KR ($4.99)</span>
-          </button>
-        </div>
-
-        <!-- 15,000 KR Package -->
-        <div class="pass-card">
-          <div class="pass-badge">Pro Builder • 40% Bonus</div>
-          <h3 class="pass-name">15,000 KR Points</h3>
-          <div class="pass-price-wrap">
-            <span class="pass-price">$12.99</span>
-            <span class="pass-currency">USD</span>
-          </div>
-          <ul class="pass-features-list">
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Unlock 30-Day Pro Season Pass instantly</span>
-            </li>
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Host multiple 24/7 custom bot fleet slots</span>
-            </li>
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Lifetime Neon Lakebase ledger entry</span>
-            </li>
-          </ul>
-          <button class="pass-unlock-btn" onclick="openLemonCheckout(15000, 12.99, 'Executive Treasury (15,000 KR)')">
-            <span>💎 Buy 15,000 KR ($12.99)</span>
-          </button>
-        </div>
-
-        <!-- 50,000 KR Whale Vault -->
-        <div class="pass-card elite">
-          <div class="pass-badge">Whale Fleet • 65% Bonus</div>
-          <h3 class="pass-name">50,000 KR Points</h3>
-          <div class="pass-price-wrap">
-            <span class="pass-price" style="color: var(--gold);">$34.99</span>
-            <span class="pass-currency" style="color: var(--gold);">USD</span>
-          </div>
-          <ul class="pass-features-list">
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Double Enterprise Lifetime Access pass</span>
-            </li>
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>VIP Executive Lounge &amp; Bot Forge</span>
-            </li>
-            <li class="pass-feature-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Direct Discord DM receipt &amp; VIP role</span>
-            </li>
-          </ul>
-          <button class="pass-unlock-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 700;" onclick="openLemonCheckout(50000, 34.99, 'Enterprise Whale Vault (50,000 KR)')">
-            <span>👑 Buy 50,000 KR ($34.99)</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
     <!-- Official Premium Passes & KryloSMP Funding -->
     <section class="section-container" id="premium-passes-section">
       <div class="section-header">
-        <div class="section-eyebrow">Dual Checkout Matrix • KR Points or Real Money</div>
+        <div class="section-eyebrow">100% Community Economy • Earn with KR</div>
         <h2 class="section-title">Krims Code Premium Passes</h2>
         <p style="color: var(--text-muted); max-width: 700px; margin: 10px auto 0; font-size: 0.95rem; line-height: 1.55;">
-          Unlock dedicated 0ms Neural AI compute, custom bot slots, and prestige perks. Pay with your earned <strong>KR Points</strong> or directly with <strong>Real Money via Lemon Squeezy</strong> to support our Minecraft SMP server!
+          Unlock dedicated 0ms Neural AI compute, custom bot slots, and prestige perks. Unlock everything 100% free using <strong>Krims Rewards (KR)</strong> earned through Discord activity, daily streaks, and voting!
         </p>
       </div>
 
@@ -1992,28 +1870,26 @@
         <div style="font-size: 2.4rem;">🎮 ⛏️</div>
         <div style="flex: 1; min-width: 260px;">
           <h4 style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
-            <span>100% Direct Funding for KryloSMP Minecraft Server</span>
-            <span class="badge-pill-cyan" style="font-size: 0.72rem; padding: 3px 8px;">play.krylosmp.net</span>
+            <span>Official KryloSMP Network Perks</span>
+            <span class="badge-pill-cyan" style="font-size: 0.72rem; padding: 3px 8px;">🔒 IP Classified • Drops at Launch</span>
           </h4>
           <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.55;">
-            Every single dollar and KR point spent on Krims Code Premium directly funds high-performance 24/7 dedicated hosting on FalixNodes, custom 3D crate models, anti-cheat, and lag-free servers for KryloSMP. Premium tiers also automatically unlock cross-platform Minecraft in-game prestige ranks, keys, and currency!
+            Krims Code Premium is powered by Krims Dedicated Cloud Shards and integrates directly with the KryloSMP Minecraft network. Premium tiers also automatically unlock cross-platform Minecraft in-game prestige ranks, keys, and currency!
           </p>
         </div>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <a href="#buy-points-section" class="badge-pill-cyan" style="text-decoration: none; padding: 10px 18px; font-weight: 700; background: var(--cyan); color: #000;">⚡ Top Up KR</a>
+          <a href="#earn-kr-section" class="badge-pill-cyan" style="text-decoration: none; padding: 10px 18px; font-weight: 700; background: var(--cyan); color: #000;">🎁 How to Earn KR</a>
         </div>
       </div>
 
       <div class="passes-grid">
         <!-- 7-Day Sprint -->
         <div class="pass-card">
-          <div class="pass-badge">Starter Sprint • Funds KryloSMP</div>
+          <div class="pass-badge">Starter Sprint • KR Pass</div>
           <h3 class="pass-name">7-Day Premium Pass</h3>
           <div class="pass-price-wrap" style="display: flex; align-items: baseline; gap: 8px;">
             <span class="pass-price">2,500</span>
             <span class="pass-currency">KR</span>
-            <span style="font-size: 0.88rem; color: var(--text-dim); margin: 0 4px;">or</span>
-            <span class="pass-price" style="font-size: 1.4rem; color: #38bdf8;">$2.99</span>
           </div>
           <ul class="pass-features-list">
             <li class="pass-feature-item">
@@ -2040,20 +1916,15 @@
           <button class="pass-unlock-btn" onclick="unlockPass('pass_7d', '7-Day Premium Sprint', 2500, 7)">
             <span>✨ Unlock with 2,500 KR</span>
           </button>
-          <button class="pass-unlock-btn" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(0, 242, 255, 0.35); margin-top: 8px;" onclick="openLemonCheckout(2500, 2.99, '7-Day Sprint Pass')">
-            <span>🍋 Pay $2.99 with Money</span>
-          </button>
         </div>
 
         <!-- 30-Day Pro Pass -->
         <div class="pass-card featured">
-          <div class="pass-badge">Most Popular • Funds KryloSMP</div>
+          <div class="pass-badge">Most Popular • KR Pass</div>
           <h3 class="pass-name">30-Day Pro Season Pass</h3>
           <div class="pass-price-wrap" style="display: flex; align-items: baseline; gap: 8px;">
             <span class="pass-price" style="color: var(--cyan);">8,000</span>
             <span class="pass-currency">KR</span>
-            <span style="font-size: 0.88rem; color: var(--text-dim); margin: 0 4px;">or</span>
-            <span class="pass-price" style="font-size: 1.4rem; color: #38bdf8;">$7.99</span>
           </div>
           <ul class="pass-features-list">
             <li class="pass-feature-item">
@@ -2080,9 +1951,6 @@
           <button class="pass-unlock-btn" style="background: var(--cyan); color: #000; font-weight: 700;" onclick="unlockPass('pass_30d', '30-Day Pro Season Pass', 8000, 30)">
             <span>👑 Unlock with 8,000 KR</span>
           </button>
-          <button class="pass-unlock-btn" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(0, 242, 255, 0.45); margin-top: 8px;" onclick="openLemonCheckout(8000, 7.99, '30-Day Pro Season Pass')">
-            <span>🍋 Pay $7.99 with Money</span>
-          </button>
         </div>
 
         <!-- Lifetime Access -->
@@ -2092,8 +1960,6 @@
           <div class="pass-price-wrap" style="display: flex; align-items: baseline; gap: 8px;">
             <span class="pass-price" style="color: var(--gold);">25,000</span>
             <span class="pass-currency" style="color: var(--gold);">KR</span>
-            <span style="font-size: 0.88rem; color: var(--text-dim); margin: 0 4px;">or</span>
-            <span class="pass-price" style="font-size: 1.4rem; color: var(--gold);">$19.99</span>
           </div>
           <ul class="pass-features-list">
             <li class="pass-feature-item">
@@ -2120,15 +1986,12 @@
           <button class="pass-unlock-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 700;" onclick="unlockPass('pass_lifetime', 'Enterprise Lifetime Access', 25000, null)">
             <span>⚡ Unlock with 25,000 KR</span>
           </button>
-          <button class="pass-unlock-btn" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(245, 158, 11, 0.45); margin-top: 8px;" onclick="openLemonCheckout(25000, 19.99, 'Enterprise Lifetime Access')">
-            <span>🍋 Pay $19.99 with Money</span>
-          </button>
         </div>
       </div>
     </section>
 
     <!-- Ways to Earn KR -->
-    <section class="section-container">
+    <section class="section-container" id="earn-kr-section">
       <div class="section-header">
         <div class="section-eyebrow">Community Economy</div>
         <h2 class="section-title">How to Earn Krims Rewards</h2>
@@ -2679,52 +2542,6 @@
     };
 
     // Backward-compatibility shim
-    
-    // 🍋 Official Lemon Squeezy Checkout Handler
-    window.openLemonCheckout = function(points, priceUsd, tierName) {
-      let discordId = currentUser?.id || localStorage.getItem('krims_discord_user_id') || '';
-
-      if (!discordId) {
-        const entered = prompt(
-          '👋 Discord User ID Required for Instant Points Delivery:\n\n' +
-          'Please enter your Discord User ID so your KR points are instantly credited after payment.\n' +
-          '(Tip: In Discord, right-click your profile -> "Copy User ID", or login with Discord above!)'
-        );
-        if (!entered || !entered.trim()) {
-          showToast('Checkout paused: Discord User ID is required to credit points.', '⚠️');
-          return;
-        }
-        discordId = entered.trim();
-        localStorage.setItem('krims_discord_user_id', discordId);
-      }
-
-      showToast(`Launching Lemon Squeezy checkout for ${tierName}...`, '🍋');
-
-      // Base Lemon Squeezy Store Checkout URL
-      const defaultStoreUrl = 'https://krimscode.lemonsqueezy.com/buy';
-      const baseUrl = window.LEMON_SQUEEZY_CHECKOUT_URL || defaultStoreUrl;
-
-      // Append checkout[custom][discord_id] as required by Lemon Squeezy Webhook
-      const checkoutUrl = new URL(baseUrl);
-      checkoutUrl.searchParams.set('checkout[custom][discord_id]', discordId);
-      checkoutUrl.searchParams.set('checkout[custom][points]', String(points));
-      checkoutUrl.searchParams.set('checkout[custom][tier]', tierName);
-
-      if (currentUser?.email) {
-        checkoutUrl.searchParams.set('checkout[email]', currentUser.email);
-      }
-      if (currentUser?.global_name || currentUser?.username) {
-        checkoutUrl.searchParams.set('checkout[name]', currentUser.global_name || currentUser.username);
-      }
-
-      // Check if Lemon Squeezy overlay is available
-      if (window.LemonSqueezy && typeof window.LemonSqueezy.Url?.Open === 'function') {
-        window.LemonSqueezy.Url.Open(checkoutUrl.toString());
-      } else {
-        window.open(checkoutUrl.toString(), '_blank');
-      }
-    };
-
     window.triggerPassNotice = function(passName, cost) {
       if (passName.includes('7-Day')) window.unlockPass('pass_7d', passName, cost, 7);
       else if (passName.includes('30-Day')) window.unlockPass('pass_30d', passName, cost, 30);

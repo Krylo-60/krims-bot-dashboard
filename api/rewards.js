@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { verifyBotId } from './_botid.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -12,6 +13,8 @@ export default async function handler(req, res) {
 
   // 1. POST: Mint and Issue Cryptographic License Key for Unlocked Passes
   if (req.method === 'POST') {
+    if (!(await verifyBotId(req, res))) return;
+
     try {
       const { action, passId, passName, cost, userId, userName, currentBalance, sendDm } = req.body || {};
       

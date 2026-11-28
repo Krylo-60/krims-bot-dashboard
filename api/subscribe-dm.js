@@ -1,3 +1,5 @@
+import { verifyBotId } from './_botid.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -11,6 +13,8 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
+
+  if (!(await verifyBotId(req, res))) return;
 
   const { userId, licenseKey, passName } = req.body || {};
   if (!userId || typeof userId !== 'string' || userId.trim().length === 0) {

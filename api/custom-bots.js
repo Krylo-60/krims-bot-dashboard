@@ -1,3 +1,21 @@
+import { verifyBotId } from './_botid.js';
+
+const OFFICIAL_KRIMS_BOT_IDS = new Set([
+  '1523794466740371586', // Krims Code AI
+  '1572758718091890818', // Krims Code Pro
+]);
+
+const ANTI_CHALLENGE_PATTERNS = [
+  /bypass\s+(botid|captcha|firewall|security|krims)/i,
+  /(attack|ddos|raid|spam|scrape|flood|challenge)\s+.*(krims-code\.net|dash\.krims-code\.net|krims\s*code)/i,
+];
+
+function hasProhibitedChallengeContent(...fields) {
+  return fields.some((value) =>
+    typeof value === 'string' && ANTI_CHALLENGE_PATTERNS.some((re) => re.test(value))
+  );
+}
+
 // Live Founder Slots Counter (Base: 91)
 let liveClaimedSlots = 91;
 
@@ -44,13 +62,13 @@ export default async function handler(req, res) {
           krPrice: '8,000 Kr',
           badge: 'POPULAR FLEET',
           customBots: 5,
-          description: 'Up to 5 custom bots. Directly funds our krimscode.net domain renewal & dedicated cloud shards.',
+          description: 'Up to 5 custom bots. Directly funds our krims-code.net domain renewal & dedicated cloud shards.',
           features: [
             'Up to 5 Custom Automated Bots',
             'Dedicated High-Speed Cloud Compute Shards',
             'Custom AI Personas & Deep Personality Studio',
             'Custom Status & Activity Rotations',
-            'Funds krimscode.net Domain & Hosting',
+            'Funds krims-code.net Domain & Hosting',
             'Priority 24/7 High-Availability Cluster'
           ],
           action: 'upgrade_pro'
@@ -78,10 +96,18 @@ export default async function handler(req, res) {
 
   // 2. POST: Register & Validate Custom Bot Token
   if (req.method === 'POST') {
+    if (!(await verifyBotId(req, res))) return;
+
     const { token, guildId, ownerId, botName, aiPersona, activityName } = req.body || {};
 
     if (!token || !token.trim()) {
       return res.status(400).json({ error: 'Discord Bot Token is required!' });
+    }
+
+    if (hasProhibitedChallengeContent(botName, aiPersona, activityName)) {
+      return res.status(403).json({
+        error: 'Custom bots cannot be configured to challenge, impersonate, or bypass Krims Code security.',
+      });
     }
 
     try {
@@ -99,6 +125,12 @@ export default async function handler(req, res) {
       }
 
       const botUser = await discordRes.json();
+
+      if (OFFICIAL_KRIMS_BOT_IDS.has(botUser.id)) {
+        return res.status(403).json({
+          error: 'Official Krims Code fleet bots cannot be registered or overwritten as custom bots.',
+        });
+      }
 
       // Generate 1-Click Bot Invite URL with Administrator or full permissions
       const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${botUser.id}&permissions=8&scope=bot%20applications.commands`;

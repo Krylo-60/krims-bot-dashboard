@@ -1,3 +1,5 @@
+import { verifyBotId } from './_botid.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,6 +15,8 @@ export default async function handler(req, res) {
     res.status(405).json({ error: 'Method not allowed' });
     return;
   }
+
+  if (!(await verifyBotId(req, res))) return;
 
   const token = process.env.DISCORD_TOKEN;
   if (!token) {
