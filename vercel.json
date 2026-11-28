@@ -38,6 +38,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/status",
+      "destination": "/api/bot-guilds?mode=status"
+    },
+    {
       "source": "/api/dbl/webhook",
       "destination": "/api/bot-guilds?mode=dbl_webhook"
     },
