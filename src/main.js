@@ -537,6 +537,86 @@ function startDemoMode() {
   }
 }
 
+function getDiscordAvatarUrl(userData) {
+  if (userData?.avatar) {
+    return `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`;
+  }
+  const index = userData?.id ? Number((BigInt(userData.id) >> 22n) % 6n) : 0;
+  return `https://cdn.discordapp.com/embed/avatars/${index}.png`;
+}
+
+function applySignedInUI(userData) {
+  if (!userData) return;
+  const displayName = userData.global_name || userData.username || 'Discord User';
+  const avatarUrl = userData.avatarUrl || getDiscordAvatarUrl(userData);
+
+  const avatarEl = document.getElementById('header-avatar');
+  const usernameEl = document.getElementById('header-username');
+  const profileEl = document.getElementById('header-profile');
+  const topLoginBtn = document.getElementById('top-nav-login-btn');
+  const loginBtnSpan = document.querySelector('#login-btn span');
+
+  if (avatarEl) avatarEl.src = avatarUrl;
+  if (usernameEl) usernameEl.innerText = displayName;
+  if (profileEl) {
+    profileEl.style.display = 'flex';
+    profileEl.style.cursor = 'pointer';
+    profileEl.title = 'Open Dashboard';
+    profileEl.onclick = (e) => {
+      if (e.target && e.target.closest('#logout-btn')) return;
+      if (!document.body.classList.contains('in-dashboard')) {
+        openDashboard();
+      }
+    };
+  }
+  if (topLoginBtn) topLoginBtn.style.display = 'none';
+  if (loginBtnSpan) loginBtnSpan.textContent = `Open Dashboard (Signed in as ${displayName})`;
+}
+
+async function syncLandingAuthState() {
+  const token = localStorage.getItem('discord_access_token');
+  const headerProfile = document.getElementById('header-profile');
+  const topLoginBtn = document.getElementById('top-nav-login-btn');
+  const loginBtnSpan = document.querySelector('#login-btn span');
+
+  if (!token) {
+    if (headerProfile) headerProfile.style.display = 'none';
+    if (topLoginBtn) topLoginBtn.style.display = 'inline-flex';
+    if (loginBtnSpan) loginBtnSpan.textContent = 'Login with Discord (OAuth2)';
+    return;
+  }
+
+  // Immediately render cached real user profile to avoid flashing "Login"
+  try {
+    const cached = JSON.parse(localStorage.getItem('krims_discord_user') || 'null');
+    if (cached && cached.username) {
+      applySignedInUI(cached);
+    }
+  } catch (_) {}
+
+  // Verify token & refresh profile from Discord API
+  try {
+    const userRes = await fetch('https://discord.com/api/users/@me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (userRes.status === 401) {
+      logout();
+      return;
+    }
+    if (userRes.ok) {
+      const userData = await userRes.json();
+      const cachedProfile = {
+        id: userData.id,
+        username: userData.username,
+        global_name: userData.global_name || userData.username,
+        avatarUrl: getDiscordAvatarUrl(userData)
+      };
+      localStorage.setItem('krims_discord_user', JSON.stringify(cachedProfile));
+      applySignedInUI(cachedProfile);
+    }
+  } catch (_) {}
+}
+
 function returnToLanding() {
   localStorage.removeItem('demo_mode_active');
   document.body.classList.remove('in-dashboard');
@@ -556,10 +636,7 @@ function returnToLanding() {
   const headerServerPill = document.getElementById('header-server-pill');
   if (headerServerPill) headerServerPill.style.display = 'none';
   
-  const headerProfile = document.getElementById('header-profile');
-  if (headerProfile) headerProfile.style.display = 'none';
-  const topLoginBtn = document.getElementById('top-nav-login-btn');
-  if (topLoginBtn) topLoginBtn.style.display = 'inline-flex';
+  syncLandingAuthState();
   
   const bottomFooter = document.querySelector('.bottom-footer');
   if (bottomFooter) bottomFooter.style.display = 'none';
@@ -627,16 +704,17 @@ async function loadDiscordData(token) {
     }
 
     const userData = await userRes.json();
-    const avatarUrl = userData.avatar 
-      ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
-      : `https://cdn.discordapp.com/embed/avatars/${userData.discriminator % 5}.png`;
-    
+    const avatarUrl = getDiscordAvatarUrl(userData);
+    const cachedProfile = {
+      id: userData.id,
+      username: userData.username,
+      global_name: userData.global_name || userData.username,
+      avatarUrl
+    };
+    localStorage.setItem('krims_discord_user', JSON.stringify(cachedProfile));
+
     document.body.classList.add('in-dashboard');
-    document.getElementById('header-avatar').src = avatarUrl;
-    document.getElementById('header-username').innerText = userData.username;
-    document.getElementById('header-profile').style.display = 'flex';
-    const topLoginBtn = document.getElementById('top-nav-login-btn');
-    if (topLoginBtn) topLoginBtn.style.display = 'none';
+    applySignedInUI(cachedProfile);
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard-screen').style.display = 'grid';
     
@@ -2556,6 +2634,7 @@ function updateLivePreviews(primaryColor, rankColor) {
 
 function logout() {
   localStorage.removeItem('discord_access_token');
+  localStorage.removeItem('krims_discord_user');
   localStorage.removeItem('demo_mode_active');
   document.body.classList.remove('in-dashboard');
   isDemo = false;
@@ -2571,6 +2650,8 @@ function logout() {
   document.getElementById('header-profile').style.display = 'none';
   const topLoginBtn = document.getElementById('top-nav-login-btn');
   if (topLoginBtn) topLoginBtn.style.display = 'inline-flex';
+  const loginBtnSpan = document.querySelector('#login-btn span');
+  if (loginBtnSpan) loginBtnSpan.textContent = 'Login with Discord (OAuth2)';
   document.getElementById('dashboard-screen').style.display = 'none';
   document.getElementById('header-server-pill').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
