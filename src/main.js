@@ -54,11 +54,11 @@ const TIER_CONFIG = {
   free: {
     name: 'Free Tier',
     badgeClass: 'tier-free',
-    maxMilestones: 2,
+    maxMilestones: 3,
     canStack: false,
     canBoostXP: false,
     canDMNotify: false,
-    summary: 'Basic milestone rewards (Up to 2 roles). Switch to Pro for 10 slots + stacking, or Premium for unlimited + XP boosters!'
+    summary: 'Basic milestone rewards (Up to 3 roles). Switch to Pro for 25 slots + stacking, or Premium for unlimited + XP boosters!'
   },
   pro: {
     name: 'Krims Code Pro (Enterprise)',
@@ -76,7 +76,7 @@ const TIER_CONFIG = {
     canStack: true,
     canBoostXP: true,
     canDMNotify: true,
-    summary: '👑 Dedicated 0ms Neural Compute, 3.0x XP multiplier, unlimited milestone roles, and all 100 slash commands unlocked — 100% Free!'
+    summary: '👑 Dedicated Neural Compute, 3.0x XP multiplier, unlimited milestone roles, and all 91+ slash commands unlocked — 100% Free!'
   }
 };
 
