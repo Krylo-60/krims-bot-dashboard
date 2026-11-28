@@ -653,10 +653,10 @@
       <div class="countdown-meta">
         <div class="countdown-tag" style="color: #fbbf24; display: flex; align-items: center; gap: 8px;">
           <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 10px #f59e0b;"></span>
-          FOUNDER NOTICE // AUTOMATED TIMERS PAUSED
+          FOUNDER NOTICE // ON-DEMAND RELEASE &amp; MAINTENANCE
         </div>
         <div class="countdown-date-badge" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
-          MODE: 100% MANUAL COMMUNITY DROPS
+          EST. WINDOW: DEC 5–6, 2026 (PENDING TOP.GG &amp; DISCORD VERIFICATION) • 4H MAINTENANCE
         </div>
       </div>
 
@@ -666,6 +666,19 @@
       <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.7; max-width: 880px; margin-bottom: 1.5rem;">
         All automated scheduled release timers across the Krims ecosystem have been paused. Moving forward, updates will be pushed <strong>manually</strong> based directly on community feedback, feature requests, and suggestions. I feel bored with robotic scheduled drops—I want real feedback and ideas from you guys on what to build next! Tell us what features, bot tools, and integrations you want to see, and we'll craft them together.
       </p>
+
+      <!-- Live 4-Hour Maintenance Countdown (Hidden until triggered on-demand or via ?maintenance=now) -->
+      <div id="maintenance-4h-box" style="display: none; margin: 1.25rem 0 1.75rem; padding: 1.25rem 1.5rem; border-radius: 14px; background: rgba(0, 242, 255, 0.06); border: 1px solid rgba(0, 242, 255, 0.35); text-align: center;">
+        <div style="font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; color: #00f2ff; letter-spacing: 0.08em; margin-bottom: 6px;">
+          ⚡ 4-HOUR MAINTENANCE WINDOW ACTIVE • DASH.KRIMS-CODE.NET
+        </div>
+        <div id="maintenance-4h-timer" style="font-family: var(--font-display); font-size: 2.3rem; font-weight: 900; color: #fff; letter-spacing: 0.06em;">
+          04:00:00
+        </div>
+        <div style="font-size: 0.82rem; color: #94a3b8; margin-top: 4px;">
+          Systems upgrading • Watch the Comeback Trailer while we bring the new dashboard online.
+        </div>
+      </div>
 
       <!-- Feedback Telemetry Stats Row -->
       <div class="feedback-stats-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 1.5rem 0 2rem;">
@@ -1068,6 +1081,45 @@
         tag: '🚀 NEXT GENERATION // 2027 ECOSYSTEM REVOLUTION'
       }
     ];
+
+    // ── On-Demand 4-Hour Maintenance Trigger (Say "now" to flip active: true) ──
+    const MAINTENANCE_CONFIG = {
+      active: false,
+      endTimestamp: null, // e.g. Date.UTC(2026, 11, 5, 22, 0, 0)
+      durationHours: 4
+    };
+
+    (function initMaintenanceTimer() {
+      const box = document.getElementById('maintenance-4h-box');
+      const timerEl = document.getElementById('maintenance-4h-timer');
+      if (!box || !timerEl) return;
+
+      const params = new URLSearchParams(window.location.search);
+      const previewNow = params.get('maintenance') === 'now';
+
+      let targetEnd = MAINTENANCE_CONFIG.active ? MAINTENANCE_CONFIG.endTimestamp : null;
+      if (previewNow && !targetEnd) {
+        const stored = Number(sessionStorage.getItem('krims_preview_maint_end') || 0);
+        targetEnd = stored > Date.now() ? stored : Date.now() + MAINTENANCE_CONFIG.durationHours * 3600 * 1000;
+        sessionStorage.setItem('krims_preview_maint_end', String(targetEnd));
+      }
+
+      if (!targetEnd) return;
+      box.style.display = 'block';
+
+      function tick() {
+        const remaining = Math.max(0, targetEnd - Date.now());
+        const hrs = Math.floor(remaining / 3600000);
+        const mins = Math.floor((remaining % 3600000) / 60000);
+        const secs = Math.floor((remaining % 60000) / 1000);
+        timerEl.textContent =
+          String(hrs).padStart(2, '0') + ':' +
+          String(mins).padStart(2, '0') + ':' +
+          String(secs).padStart(2, '0');
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
 
     // ── Automated Countdowns Paused by Founder Krylo 亗 ──
     // Releases are now pushed manually based on community suggestions and feedback!
