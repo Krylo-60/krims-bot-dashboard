@@ -1,4 +1,5 @@
 import { initBotId } from 'botid/client/core';
+import './vercel-telemetry.js';
 
 let botIdInitialized = false;
 

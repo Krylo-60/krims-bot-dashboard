@@ -1,11 +1,7 @@
 import './style.css';
 import './botid-init.js';
-import { inject } from '@vercel/analytics';
 import { KRYLO_CHANNELS } from './channelsData.js';
 import { initPriorityComputeSystem } from './priorityComputeManager.js';
-
-// Initialize Vercel Analytics (page view tracking)
-inject();
 
 const CLIENT_ID = '1523794466740371586';
 
