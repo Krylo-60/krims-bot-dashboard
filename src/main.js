@@ -554,6 +554,12 @@ function applySignedInUI(userData) {
 
   if (avatarEl) avatarEl.src = avatarUrl;
   if (usernameEl) usernameEl.innerText = displayName;
+  const rankSimAvatar = document.getElementById('rank-sim-avatar');
+  const rankSimUser = document.getElementById('rank-sim-user');
+  const rankSimDiscrim = document.getElementById('rank-sim-discrim');
+  if (rankSimAvatar) rankSimAvatar.src = avatarUrl;
+  if (rankSimUser) rankSimUser.innerText = displayName;
+  if (rankSimDiscrim) rankSimDiscrim.innerText = userData.username ? `@${userData.username}` : '';
   if (profileEl) {
     profileEl.style.display = 'flex';
     profileEl.style.cursor = 'pointer';
